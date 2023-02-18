@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.Heroes.TwoTowers.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.Heroes.TwoTowers.Tests", "Selenium.Heroes.TwoTowers.Tests\Selenium.Heroes.TwoTowers.Tests.csproj", "{97F2B87D-8ED0-4B03-BC7D-7294BAB72A27}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bestcaptchasolverapi", "BestCaptchaSolverAPI\bestcaptchasolverapi.csproj", "{91E2718D-BE3F-4893-A663-80B5FF34DCBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{97F2B87D-8ED0-4B03-BC7D-7294BAB72A27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97F2B87D-8ED0-4B03-BC7D-7294BAB72A27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97F2B87D-8ED0-4B03-BC7D-7294BAB72A27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91E2718D-BE3F-4893-A663-80B5FF34DCBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91E2718D-BE3F-4893-A663-80B5FF34DCBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91E2718D-BE3F-4893-A663-80B5FF34DCBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91E2718D-BE3F-4893-A663-80B5FF34DCBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

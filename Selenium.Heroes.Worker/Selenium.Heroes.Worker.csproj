@@ -19,13 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BestCaptchaSolverAPI\bestcaptchasolverapi.csproj" />
     <ProjectReference Include="..\Selenium.Heroes.Common\Selenium.Heroes.Common.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Reference Include="BestCaptchaSolverAPI">
-      <HintPath>..\..\bestcaptchasolver-csharp.git\bin\BestCaptchaSolverAPI.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
