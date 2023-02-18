@@ -6,7 +6,7 @@ using System;
 namespace Selenium.Heroes.TwoTowers;
 
 
-public static class Coefficients
+public static class BasePowerCoefficients
 {
     public static decimal GetDamageCoefficient(DamageEffect damageEffect, Player player, Player enemy, List<ICardDescriptor> cardDescriptors)
     {
@@ -146,8 +146,10 @@ public static class Coefficients
 
     private static decimal GetProductionCoefficient(ResourceEffect resourceEffect, Player unknown, List<ICardDescriptor> cardDescriptors)
     {
-        var productionValue = resourceEffect.ResourceType.GetResourceValue(unknown);
-        var resourceValue = resourceEffect.ResourceType.GetProductionDependentResourceValue(unknown);
+        var productionValue = unknown.GetResourceValue(resourceEffect.ResourceType);
+
+        var producedResourceType = resourceEffect.ResourceType.ToProducedType();
+        var resourceValue = unknown.GetResourceValue(producedResourceType);
 
         var coefficient = (2 - productionValue / 10m) - resourceValue / 150m;
         coefficient = coefficient < 0.5m ? 0.5m : coefficient;
@@ -177,7 +179,8 @@ public static class Coefficients
             x.BaseCardEffect.Card.CardType.GetResourceType() == resourceEffect.ResourceType && 
             !x.IsEnabled(player)).ToList();
 
-        var nextTurn = player.Apply(resourceEffect);
+        var productionResourceType = resourceEffect.ResourceType.ToProductionType();
+        var nextTurn = player.Apply(resourceEffect).Produce(productionResourceType);
         var enabledCards = disabledCards.Where(x => 
             x.BaseCardEffect.Card.CardType.GetResourceType() == resourceEffect.ResourceType && 
             x.IsEnabled(nextTurn)).ToList();
@@ -189,20 +192,33 @@ public static class Coefficients
 
     private static decimal GetNegativePlayerCoinCoefficient(ResourceEffect resourceEffect, Player player, List<ICardDescriptor> cardDescriptors)
     {
-        var playerResourceValue = resourceEffect.ResourceType.GetResourceValue(player);
+        var productionType = resourceEffect.ResourceType.ToProductionType();
+        var playerResourceProductionValue = player.GetResourceValue(productionType);
+
+        var playerResourceValue = player.GetResourceValue(resourceEffect.ResourceType);
 
         var resourceEffectValue = Math.Abs(resourceEffect.Value);
 
         var actual = Math.Min(playerResourceValue, resourceEffectValue);
+        var delta = (actual / (decimal)resourceEffectValue);
 
-        var delta = actual / resourceEffectValue;
+        var enabledCards = cardDescriptors.Where(x =>
+            x.BaseCardEffect.Card.CardType.GetResourceType() == resourceEffect.ResourceType &&
+            x.IsEnabled(player)).ToList();
+
+        var nextTurn = player.Apply(resourceEffect);
+        var disabledCards = enabledCards.Where(x =>
+            x.BaseCardEffect.Card.CardType.GetResourceType() == resourceEffect.ResourceType &&
+            !x.IsEnabled(nextTurn)).ToList();
+
+        delta += disabledCards.Count / 10m;
 
         return 1m + delta;
     }
 
     private static decimal GetNegativeEnemyCoinCoefficient(ResourceEffect resourceEffect, Player enemy, List<ICardDescriptor> cardDescriptors)
     {
-        var enemyResourceValue = resourceEffect.ResourceType.GetResourceValue(enemy);
+        var enemyResourceValue = enemy.GetResourceValue(resourceEffect.ResourceType);
 
         var resourceEffectValue = Math.Abs(resourceEffect.Value);
 

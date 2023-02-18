@@ -139,7 +139,7 @@ public class HeroesTwoTowersEngine : HeroesEngineBase
         }
     }
 
-    internal void Discard(Card card)
+    public void Discard(Card card)
     {
         var cardDivs = Awaiter.Until(x => x.FindElements(By.XPath("//div[@class='cardDiscardBtn_in' and not(contains(@style, 'display: none;'))]/..")));
 

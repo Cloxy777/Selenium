@@ -4,31 +4,25 @@ namespace Selenium.Heroes.Common.Extensions;
 
 public static class ResourceTypeExtensions
 {
-
-    public static int GetResourceValue(this ResourceType resourceType, Player player)
+    public static ResourceType ToProductionType(this ResourceType resourceType)
     {
         switch (resourceType)
         {
-            case ResourceType.Ore: return player.Ore;
-            case ResourceType.Mana: return player.Mana;
-            case ResourceType.Stacks: return player.Stacks;
-            case ResourceType.Mines: return player.Mines;
-            case ResourceType.Monasteries: return player.Monasteries;
-            case ResourceType.Barracks: return player.Barracks;
-            case ResourceType.Wall: return player.Wall;
-            case ResourceType.Tower: return player.Tower;
-            default: throw new NotSupportedException($"{nameof(GetResourceValue)} not support {resourceType} resource type.");
+            case ResourceType.Ore: return ResourceType.Mines;
+            case ResourceType.Mana: return ResourceType.Monasteries;
+            case ResourceType.Stacks: return ResourceType.Barracks;
+            default: throw new NotSupportedException($"{nameof(ToProductionType)} not support {resourceType} resource type.");
         }
     }
 
-    public static int GetProductionDependentResourceValue(this ResourceType resourceType, Player player)
+    public static ResourceType ToProducedType(this ResourceType resourceType)
     {
         switch (resourceType)
         {
-            case ResourceType.Mines: return player.Ore;
-            case ResourceType.Monasteries: return player.Mana;
-            case ResourceType.Barracks: return player.Stacks;
-            default: throw new NotSupportedException($"{nameof(GetProductionDependentResourceValue)} not support {resourceType} resource type.");
+            case ResourceType.Mines: return ResourceType.Ore;
+            case ResourceType.Monasteries: return ResourceType.Mana;
+            case ResourceType.Barracks: return ResourceType.Stacks;
+            default: throw new NotSupportedException($"{nameof(ToProducedType)} not support {resourceType} resource type.");
         }
     }
 

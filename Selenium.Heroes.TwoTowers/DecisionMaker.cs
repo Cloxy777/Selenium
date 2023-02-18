@@ -127,7 +127,7 @@ public class DecisionMaker
         var value = resourceEffect.TransformedValue;
         var invert = resourceEffect.Side == Side.Player ? 1 : -1;
 
-        var resourceCoefficient = Coefficients.GetResourceCoefficient(resourceEffect, Player, Enemy, CardDescriptors);
+        var resourceCoefficient = BasePowerCoefficients.GetResourceCoefficient(resourceEffect, Player, Enemy, CardDescriptors);
 
         var weight = value * resourceCoefficient * invert;
 
@@ -151,7 +151,7 @@ public class DecisionMaker
         var value = damageEffect.TransformedValue;
         var invert = damageEffect.Side == Side.Player ? -1 : 1;
 
-        var damageCoefficient = Coefficients.GetDamageCoefficient(damageEffect, Player, Enemy, CardDescriptors);
+        var damageCoefficient = BasePowerCoefficients.GetDamageCoefficient(damageEffect, Player, Enemy, CardDescriptors);
 
         var weight = value * damageCoefficient * invert;
 

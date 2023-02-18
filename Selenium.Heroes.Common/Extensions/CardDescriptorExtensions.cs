@@ -9,7 +9,7 @@ public static class CardDescriptorExtensions
     {
         var cardType = cardDescriptor.BaseCardEffect.Card.CardType;
         var resourceType = cardType.GetResourceType();
-        var resourceValue = resourceType.GetResourceValue(player);
+        var resourceValue = player.GetResourceValue(resourceType);
         return cardDescriptor.BaseCardEffect.Card.Cost <= resourceValue;
     }
 
@@ -17,8 +17,8 @@ public static class CardDescriptorExtensions
     {
         var cost = cardDescriptor.BaseCardEffect.Card.Cost;
 
-        var resouceType = cardDescriptor.BaseCardEffect.Card.CardType.GetResourceType();
-        var resourceValue = resouceType.GetResourceValue(player);
+        var resourceType = cardDescriptor.BaseCardEffect.Card.CardType.GetResourceType();
+        var resourceValue = player.GetResourceValue(resourceType);
 
         return cost - resourceValue;
     }
