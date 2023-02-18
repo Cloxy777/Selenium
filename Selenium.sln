@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.Heroes.Worker", "Selenium.Heroes.Worker\Selenium.Heroes.Worker.csproj", "{6D80B99B-1449-4B0B-BC05-5B2D1A69F16F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.Heroes.TwoTowers.CardCollector", "Selenium.Heroes.TwoTowers.CardCollector\Selenium.Heroes.TwoTowers.CardCollector.csproj", "{F97D7F16-8D81-48FB-9235-8EC56BB9F1C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F0122B3D-6DD4-446E-85C0-695A9CD6E144}"
+	ProjectSection(SolutionItems) = preProject
+		appsettings.json = appsettings.json
+		cards.json = cards.json
+		generated_card_effects.json = generated_card_effects.json
+		manual_card_effects.json = manual_card_effects.json
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.Heroes.Common", "Selenium.Heroes.Common\Selenium.Heroes.Common.csproj", "{94FBF5F4-E1B3-4038-BA96-0DB0DC129E33}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.Heroes.TwoTowers", "Selenium.Heroes.TwoTowers\Selenium.Heroes.TwoTowers.csproj", "{F8B9553E-C002-4CD6-89EC-6817E050AE68}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.Heroes.TwoTowers.CardAnalysis", "Selenium.Heroes.TwoTowers.CardAnalysis\Selenium.Heroes.TwoTowers.CardAnalysis.csproj", "{C402BA73-C86C-4B8E-9225-0F2A4516DC29}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.Heroes.TwoTowers.Tests", "Selenium.Heroes.TwoTowers.Tests\Selenium.Heroes.TwoTowers.Tests.csproj", "{97F2B87D-8ED0-4B03-BC7D-7294BAB72A27}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6D80B99B-1449-4B0B-BC05-5B2D1A69F16F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D80B99B-1449-4B0B-BC05-5B2D1A69F16F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D80B99B-1449-4B0B-BC05-5B2D1A69F16F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D80B99B-1449-4B0B-BC05-5B2D1A69F16F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F97D7F16-8D81-48FB-9235-8EC56BB9F1C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F97D7F16-8D81-48FB-9235-8EC56BB9F1C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F97D7F16-8D81-48FB-9235-8EC56BB9F1C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F97D7F16-8D81-48FB-9235-8EC56BB9F1C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94FBF5F4-E1B3-4038-BA96-0DB0DC129E33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94FBF5F4-E1B3-4038-BA96-0DB0DC129E33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94FBF5F4-E1B3-4038-BA96-0DB0DC129E33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94FBF5F4-E1B3-4038-BA96-0DB0DC129E33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8B9553E-C002-4CD6-89EC-6817E050AE68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8B9553E-C002-4CD6-89EC-6817E050AE68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8B9553E-C002-4CD6-89EC-6817E050AE68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8B9553E-C002-4CD6-89EC-6817E050AE68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C402BA73-C86C-4B8E-9225-0F2A4516DC29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C402BA73-C86C-4B8E-9225-0F2A4516DC29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C402BA73-C86C-4B8E-9225-0F2A4516DC29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C402BA73-C86C-4B8E-9225-0F2A4516DC29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97F2B87D-8ED0-4B03-BC7D-7294BAB72A27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97F2B87D-8ED0-4B03-BC7D-7294BAB72A27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97F2B87D-8ED0-4B03-BC7D-7294BAB72A27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97F2B87D-8ED0-4B03-BC7D-7294BAB72A27}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5C7C3668-DB99-43A8-BAAE-7B152A2E6922}
+	EndGlobalSection
+EndGlobal

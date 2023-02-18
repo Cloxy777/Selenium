@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Selenium.Heroes": {
+      "commandName": "Project",
+      //"commandLineArgs": "-useCaptchaControl"
+    }
+  }
+}

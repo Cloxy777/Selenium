@@ -1,0 +1,620 @@
+[
+  {
+    "Header": "DEFECTIVE ORE",
+    "Description": "-8 ore to all players",
+    "Cost": 0,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "EARTHQUAKE",
+    "Description": "-1 to all mines",
+    "Cost": 0,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "LUCKY COIN",
+    "Description": "+2 ore, +2 mana, play again",
+    "Cost": 0,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "MINE COLLAPSE",
+    "Description": "-1 to mine, +10 to wall, +5 mana",
+    "Cost": 0,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "ABUNDANT SOIL",
+    "Description": "+1 to wall, play again",
+    "Cost": 1,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "STONE GARDEN",
+    "Description": "+1 to wall, +1 to tower, +2 stacks",
+    "Cost": 1,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "INNOVATION",
+    "Description": "+1 to all mines, +4 mana",
+    "Cost": 2,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "ORDINARY WALL",
+    "Description": "+3 to wall",
+    "Cost": 2,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "OVERTIME",
+    "Description": "+5 to wall, -6 mana",
+    "Cost": 2,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "FOUNDATION",
+    "Description": "If wall = 0, +6 to wall, else +3 to wall",
+    "Cost": 3,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "LARGE WALL",
+    "Description": "+4 to wall",
+    "Cost": 3,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "MINERS",
+    "Description": "+1 to mine",
+    "Cost": 3,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "BIG VEIN",
+    "Description": "If mine < enemy mine, +2 to mine, else +1 to mine",
+    "Cost": 4,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "COLLAPSE",
+    "Description": "-1 to enemy mine",
+    "Cost": 4,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "FORTIFIED WALL",
+    "Description": "+6 to wall",
+    "Cost": 5,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "STEAL TECHNOLOGY",
+    "Description": "If mine < enemy mine, mine becomes equal to enemy mine",
+    "Cost": 5,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "NEW EQUIPMENT",
+    "Description": "+2 to mine",
+    "Cost": 6,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "SUBSOIL WATERS",
+    "Description": "Player with lower wall gets -1 to barracks and 2 damage to tower",
+    "Cost": 6,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "DWARF MINERS",
+    "Description": "+4 to wall, +1 to mine",
+    "Cost": 7,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "SLAVE LABOR",
+    "Description": "+9 to wall, -5 stacks",
+    "Cost": 7,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "TREMOR",
+    "Description": "All walls take 5 damage, play again",
+    "Cost": 7,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "GREAT WALL",
+    "Description": "+8 to wall",
+    "Cost": 8,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "SECRET CAVERN",
+    "Description": "+1 to monastery, play again",
+    "Cost": 8,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "GALLERIES",
+    "Description": "+5 to wall, +1 to barracks",
+    "Cost": 9,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "MAGIC MOUNT",
+    "Description": "+7 to wall, +7 mana",
+    "Cost": 9,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "BARRACKS",
+    "Description": "+6 stacks, +6 to wall, if barracks < enemy barracks, +1 to barracks",
+    "Cost": 10,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "SINGING COAL",
+    "Description": "+6 to wall, +3 to tower",
+    "Cost": 11,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "BASTION",
+    "Description": "+12 to wall",
+    "Cost": 13,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "FORTIFICATION",
+    "Description": "+7 to wall, 6 damage",
+    "Cost": 14,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "NEW SUCCESSES",
+    "Description": "+8 to wall, +5 to tower",
+    "Cost": 15,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "GREATER WALL",
+    "Description": "+15 to wall",
+    "Cost": 16,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "SHIFT",
+    "Description": "Players switch walls",
+    "Cost": 17,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "ROCKCASTER",
+    "Description": "+6 to wall, 10 damage",
+    "Cost": 18,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "DRAGON'S HEART",
+    "Description": "+20 to wall, +8 to tower",
+    "Cost": 24,
+    "CardType": "Ore"
+  },
+  {
+    "Header": "JEWELLERY",
+    "Description": "If tower < enemy tower, +2 to tower, else +1 to tower",
+    "Cost": 0,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "RAINBOW",
+    "Description": "+1 to all towers, you get 3 mana",
+    "Cost": 0,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "QUARTZ",
+    "Description": "+1 to tower, play again",
+    "Cost": 1,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "AMETHYST",
+    "Description": "+3 to tower",
+    "Cost": 2,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "CRACK",
+    "Description": "3 damage to enemy tower",
+    "Cost": 2,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "PRISM",
+    "Description": "Draw a card, discard a card, play again",
+    "Cost": 2,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "SMOKY QUARTZ",
+    "Description": "1 damage to enemy tower, play again",
+    "Cost": 2,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "POWER EXPLOSION",
+    "Description": "5 damage to your tower, +2 to monastery",
+    "Cost": 3,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "RUBY",
+    "Description": "+5 to tower",
+    "Cost": 3,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "SPELL WEAVERS",
+    "Description": "+1 to monastery",
+    "Cost": 3,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "COLLABORATION",
+    "Description": "+7 to tower, -10 ore",
+    "Cost": 4,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "ECLIPSE",
+    "Description": "+2 to tower, 2 damage to enemy tower",
+    "Cost": 4,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "SPEAR",
+    "Description": "5 damage to enemy tower",
+    "Cost": 4,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "DISSENSION",
+    "Description": "7 damage to all towers, -1 to all monasteries",
+    "Cost": 5,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "INITIATION",
+    "Description": "+4 to tower, -3 stacks, 2 damage to enemy tower",
+    "Cost": 5,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "ORE VEIN",
+    "Description": "+8 to tower",
+    "Cost": 5,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "DIE MOULD",
+    "Description": "+1 to monastery, +3 to tower, +1 to enemy tower",
+    "Cost": 6,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "EMERALD",
+    "Description": "+8 to tower",
+    "Cost": 6,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "HARMONY",
+    "Description": "+1 to monastery, +3 to tower, +3 to wall",
+    "Cost": 7,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "MILD STONE",
+    "Description": "+5 to tower, -6 ore to enemy",
+    "Cost": 7,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "PARITY",
+    "Description": "All monasteries tie up for highest",
+    "Cost": 7,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "FISSION",
+    "Description": "-1 to monastery, 9 damage to enemy tower",
+    "Cost": 8,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "SOLIDIFICATION",
+    "Description": "+11 to tower, -6 to wall",
+    "Cost": 8,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "WISDOM PEARL",
+    "Description": "+5 to tower, +1 to monastery",
+    "Cost": 9,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "SAPPHIRE",
+    "Description": "+11 to tower",
+    "Cost": 10,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "LIGHTNING",
+    "Description": "If tower > enemy wall, 8 damage to enemy tower, else 8 damage to all",
+    "Cost": 11,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "CRYSTAL SHIELD",
+    "Description": "+8 to tower, +3 to wall",
+    "Cost": 12,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "FIRE RUBY",
+    "Description": "+6 to tower, 4 damage to enemy tower",
+    "Cost": 13,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "",
+    "Description": "",
+    "Cost": 14,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "EMPATHY",
+    "Description": "+8 to tower, +1 to barracks",
+    "Cost": 14,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "SANCTUARY",
+    "Description": "+10 to tower, +5 to wall, +5 stacks",
+    "Cost": 15,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "DIAMOND",
+    "Description": "+15 to tower",
+    "Cost": 16,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "SHINING STONE",
+    "Description": "+12 to tower, 6 damage",
+    "Cost": 17,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "MEDITATION",
+    "Description": "+13 to tower, +6 stacks, +6 ore",
+    "Cost": 18,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "DRAGON'S EYE",
+    "Description": "+20 to tower",
+    "Cost": 21,
+    "CardType": "Mana"
+  },
+  {
+    "Header": "COW RABIES",
+    "Description": "-6 stacks to all players",
+    "Cost": 0,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "FULL MOON",
+    "Description": "+1 barracks to all players, +3 stacks",
+    "Cost": 0,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "GOBLINS",
+    "Description": "4 damage, -3 mana",
+    "Cost": 1,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "SPRITE",
+    "Description": "2 damage, play again",
+    "Cost": 1,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "DWARF",
+    "Description": "3 damage, +1 mana",
+    "Cost": 2,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "ELVEN SCOUTS",
+    "Description": "Draw a card, discard a card, play again",
+    "Cost": 2,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "SPEARMAN",
+    "Description": "If wall > enemy wall, 3 damage, else 2 damage",
+    "Cost": 2,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "GOBLIN ARMY",
+    "Description": "6 damage, 3 damage to you",
+    "Cost": 3,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "MINOTAUR",
+    "Description": "+1 to barracks",
+    "Cost": 3,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "ORC",
+    "Description": "5 damage",
+    "Cost": 3,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "BERSERKER",
+    "Description": "8 damage, 3 damage to your tower",
+    "Cost": 4,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "GOBLIN ARCHERS",
+    "Description": "3 damage to enemy tower, 1 damage to you",
+    "Cost": 4,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "CRUSHER",
+    "Description": "6 damage",
+    "Cost": 5,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "FAMILIAR",
+    "Description": "6 damage, -5 ore, mana and stacks to all players",
+    "Cost": 5,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "GNOMES",
+    "Description": "4 damage, +3 to wall",
+    "Cost": 5,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "GHOST FAIRY",
+    "Description": "2 damage to enemy tower, play again",
+    "Cost": 6,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "OGRE",
+    "Description": "7 damage",
+    "Cost": 6,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "RABID SHEEP",
+    "Description": "6 damage, -3 stacks to enemy",
+    "Cost": 6,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "TINY SNAKES",
+    "Description": "4 damage to enemy tower",
+    "Cost": 6,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "TROLL INSTRUCTOR",
+    "Description": "+2 to barracks",
+    "Cost": 7,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "BEETLE",
+    "Description": "If enemy wall = 0, 10 damage, else 6 damage",
+    "Cost": 8,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "TOWER GREMLIN",
+    "Description": "2 damage, +4 to wall, +2 to tower",
+    "Cost": 8,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "UNICORN",
+    "Description": "If monastery > enemy monastery, 12 damage, else 8 damage",
+    "Cost": 9,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "WEREWOLF",
+    "Description": "9 damage",
+    "Cost": 9,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "ELVEN ARCHERS",
+    "Description": "If wall > enemy wall, 6 damage to enemy tower, else 6 damage",
+    "Cost": 10,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "CAUSTIC CLOUD",
+    "Description": "If enemy wall > 10, 10 damage, else 7 damage",
+    "Cost": 11,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "STONE DEVOURERS",
+    "Description": "8 damage, -1 to enemy mine",
+    "Cost": 11,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "THIEF",
+    "Description": "-10 mana to enemy, -5 ore to enemy, you get half that much",
+    "Cost": 12,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "WARRIOR",
+    "Description": "13 damage, -3 mana",
+    "Cost": 13,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "SUCCUBI",
+    "Description": "5 damage to enemy tower, -8 stacks to enemy",
+    "Cost": 14,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "STONE GIANT",
+    "Description": "10 damage, +4 to wall",
+    "Cost": 15,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "VAMPIRE",
+    "Description": "10 damage, -5 stacks to enemy, -1 to enemy barracks",
+    "Cost": 17,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "PEGASUS RIDER",
+    "Description": "12 damage to enemy tower",
+    "Cost": 18,
+    "CardType": "Stacks"
+  },
+  {
+    "Header": "DRAGON",
+    "Description": "20 damage, -10 mana to enemy, -1 to enemy barracks",
+    "Cost": 25,
+    "CardType": "Stacks"
+  }
+]
