@@ -31,32 +31,49 @@ public class DecisionMaker
 
     public List<ICardDescriptor> CardDescriptors { get; }
 
+    //public Decision MakeDecision()
+    //{
+    //    var canPlay = CardDescriptors.Any(x => x.IsEnabled(PlayerManager));
+    //    var actionType = canPlay ? ActionType.Play : ActionType.Discard;
+
+    //    if (canPlay)
+    //    {
+    //        var strategy = new SimpleTwoTowerStrategy(PlayerManager, EnemyManager, CardDescriptors);    
+    //        var cardWeight = strategy.GetMostEffectiveCardDescriptor();
+
+    //        if (cardWeight.Weight > WEIGHT_THRESHOLD)
+    //        {
+    //            var decision = new Decision
+    //            {
+    //                ActionType = ActionType.Play,
+    //                CardDescriptor = cardWeight.CardDescriptor
+    //            };
+    //            return decision;
+    //        }
+    //    }
+
+    //    return new Decision
+    //    {
+    //        ActionType = ActionType.Discard,
+    //        CardDescriptor = GetCardDescriptorToDiscard(),
+    //    };
+    //}
+
     public Decision MakeDecision()
     {
-        var canPlay = CardDescriptors.Any(x => x.IsEnabled(PlayerManager));
-        var actionType = canPlay ? ActionType.Play : ActionType.Discard;
+        var analysis = new RecursiveAnalysis(PlayerManager, EnemyManager, CardDescriptors);
+        analysis.Build();
 
-        if (canPlay)
-        {
-            var strategy = new TwoTowerStrategy(PlayerManager, EnemyManager, CardDescriptors);    
-            var cardWeight = strategy.GetMostEffectiveCardDescriptor();
+        var leaves = new List<RecursiveAnalysis>();
+        analysis.Extract(ref leaves);
 
-            if (cardWeight.Weight > WEIGHT_THRESHOLD)
-            {
-                var decision = new Decision
-                {
-                    ActionType = ActionType.Play,
-                    CardDescriptor = cardWeight.CardDescriptor
-                };
-                return decision;
-            }
-        }
+        var effectiveAnalysis = leaves.MaxBy(x => x.Rating);
 
-        return new Decision
-        {
-            ActionType = ActionType.Discard,
-            CardDescriptor = GetCardDescriptorToDiscard(),
-        };
+        var ordered = leaves.OrderByDescending(x => x.Rating).ToList();
+
+        var move = effectiveAnalysis.Moves.First();
+
+        return new Decision { ActionType = move.ActionType, CardDescriptor = move.CardDescriptor };
     }
 
     private ICardDescriptor GetCardDescriptorToDiscard()

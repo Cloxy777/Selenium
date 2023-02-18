@@ -6,9 +6,12 @@ public class PlayerManager
 {
     public Player Player { get; set; }
 
+    public PlayerManager(PlayerManager playerManager) : this(playerManager.Player)
+    { }
+
     public PlayerManager(Player player)
     {
-        Player = player;
+        Player = new Player(player);
     }
 
     public PlayerManager Apply(ResourceEffect resourceEffect)
@@ -45,6 +48,25 @@ public class PlayerManager
                 throw new NotSupportedException($"{nameof(Apply)} not support {resourceEffect.ResourceType} resource type.");
         }
 
+
+        return new PlayerManager(player);
+    }
+
+    public PlayerManager Apply(DamageEffect damageEffect)
+    {
+        var player = new Player(Player);
+
+        switch (damageEffect.DamageType)
+        {
+            case DamageType.Pure:
+                player.ApplyPureDamage(damageEffect.Value);
+                break;
+            case DamageType.Tower:
+                player.Tower = player.Tower - damageEffect.Value;
+                break;
+            default:
+                throw new NotSupportedException($"{nameof(Apply)} not support {damageEffect.DamageType} damage type.");
+        }
 
         return new PlayerManager(player);
     }

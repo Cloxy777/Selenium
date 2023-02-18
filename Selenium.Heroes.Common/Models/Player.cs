@@ -40,6 +40,19 @@ public class Player
         var json = JsonConvert.SerializeObject(this, Formatting.Indented);
         return json;
     }
+
+    public void ApplyPureDamage(int damage)
+    {
+        if (damage > Wall)
+        {
+            var towerDamage = damage - Wall;
+            Wall = Wall - damage;
+            Tower = Tower - towerDamage;
+            return;
+        }
+
+        Wall = Wall - damage;
+    }
 }
 
 

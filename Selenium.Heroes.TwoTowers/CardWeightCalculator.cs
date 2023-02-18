@@ -6,6 +6,8 @@ namespace Selenium.Heroes.TwoTowers;
 
 public class CardWeightCalculator
 {
+    private List<CardWeight> _cardWeights = null;
+
     public CardWeightCalculator(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
         PlayerManager = playerManager;
@@ -19,7 +21,9 @@ public class CardWeightCalculator
 
     public List<ICardDescriptor> CardDescriptors { get; }
 
-    public IEnumerable<CardWeight> GetCardWeights()
+    public IEnumerable<CardWeight> CardWeights => _cardWeights ?? (_cardWeights = GetCardWeights());
+
+    private List<CardWeight> GetCardWeights()
     {
         var cardWights = new List<CardWeight>();
         foreach (var cardDescriptor in CardDescriptors)
@@ -35,7 +39,8 @@ public class CardWeightCalculator
         {
             cardWight.Weight += cardWights
                 .Where(x => x.CardDescriptor.BaseCardEffect.PlayType != PlayType.PlayAgain)
-                .MaxBy(x => x.Weight)!.Weight;
+                ?.MaxBy(x => x.Weight)
+                ?.Weight ?? 1;
         }
 
         foreach (var cardWight in cardWights)

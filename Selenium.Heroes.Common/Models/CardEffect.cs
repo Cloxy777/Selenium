@@ -97,6 +97,11 @@ public class ResourceEffect
             Value.Equals(resourceEffect.Value) && 
             Side.Equals(resourceEffect.Side);
     }
+
+    public override int GetHashCode()
+    {
+        return ResourceType.GetHashCode() ^ Value.GetHashCode() ^ Side.GetHashCode();
+    }
 }
 
 public class DamageEffect
@@ -144,6 +149,11 @@ public class DamageEffect
         return DamageType.Equals(damageEffect.DamageType) &&
             Value.Equals(damageEffect.Value) &&
             Side.Equals(damageEffect.Side);
+    }
+
+    public override int GetHashCode()
+    {
+        return DamageType.GetHashCode() ^ Value.GetHashCode() ^ Side.GetHashCode();
     }
 }
 
