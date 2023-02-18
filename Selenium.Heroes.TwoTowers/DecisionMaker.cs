@@ -106,8 +106,7 @@ public class DecisionMaker
 
         var weight = (resourceWeight + damageWeight - cost) * conditionWeightCoefficient * playAgainCoefficient;
 
-        return weight;
-
+        return Math.Round(weight, 2);
     }
 
     private decimal CalculateWeight(Player player, Player enemy, List<ResourceEffect> resourceEffects)
