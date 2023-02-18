@@ -1,5 +1,6 @@
 ﻿using Selenium.Heroes.Common.CardDescriptors;
 using Selenium.Heroes.Common.Extensions;
+using Selenium.Heroes.Common.Managers;
 using Selenium.Heroes.Common.Models;
 using System;
 
@@ -8,50 +9,50 @@ namespace Selenium.Heroes.TwoTowers;
 
 public static class BasePowerCoefficients
 {
-    public static decimal GetDamageCoefficient(DamageEffect damageEffect, Player player, Player enemy, List<ICardDescriptor> cardDescriptors)
+    public static decimal GetDamageCoefficient(DamageEffect damageEffect, PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
         switch (damageEffect.DamageType)
         {
             case DamageType.Pure: 
-                return GetPureDamageCoefficient(damageEffect, player, enemy, cardDescriptors);
+                return GetPureDamageCoefficient(damageEffect, playerManager, enemyManager, cardDescriptors);
             case DamageType.Tower: 
-                return GetTowerDamageCoefficient(damageEffect, player, enemy, cardDescriptors);
+                return GetTowerDamageCoefficient(damageEffect, playerManager, enemyManager, cardDescriptors);
             default: 
                 throw new NotSupportedException($"{nameof(GetDamageCoefficient)} not support {damageEffect.DamageType} damage type.");
         }
     }
 
-    private static decimal GetPureDamageCoefficient(DamageEffect damageEffect, Player player, Player enemy, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetPureDamageCoefficient(DamageEffect damageEffect, PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
         switch (damageEffect.Side)
         {
             case Side.Player:
-                return GetPlayerPureDamageCoefficient(damageEffect, player, cardDescriptors);
+                return GetPlayerPureDamageCoefficient(damageEffect, playerManager, cardDescriptors);
             case Side.Enemy:
-                return GetEnemyPureDamageCoefficient(damageEffect, enemy, cardDescriptors);
+                return GetEnemyPureDamageCoefficient(damageEffect, enemyManager, cardDescriptors);
             default: 
                 throw new NotSupportedException($"{nameof(GetPureDamageCoefficient)} not support {damageEffect.Side} side.");
         }
     }
 
-    private static decimal GetPlayerPureDamageCoefficient(DamageEffect damageEffect, Player player, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetPlayerPureDamageCoefficient(DamageEffect damageEffect, PlayerManager playerManager, List<ICardDescriptor> cardDescriptors)
     {
-        if (player.Wall - damageEffect.Value > 7)
+        if (playerManager.Player.Wall - damageEffect.Value > 7)
         {
             return 2m;
         }
 
-        if (player.Wall - damageEffect.Value > 0 && player.Tower > 20)
+        if (playerManager.Player.Wall - damageEffect.Value > 0 && playerManager.Player.Tower > 20)
         {
             return 1.7m;
         }
 
-        if (player.Wall - damageEffect.Value > -3 && player.Tower > 20)
+        if (playerManager.Player.Wall - damageEffect.Value > -3 && playerManager.Player.Tower > 20)
         {
             return 1.5m;
         }
 
-        if (player.Tower < 20)
+        if (playerManager.Player.Tower < 20)
         {
             return 0.5m;
         }
@@ -59,35 +60,35 @@ public static class BasePowerCoefficients
         return 1m;
     }
 
-    private static decimal GetEnemyPureDamageCoefficient(DamageEffect damageEffect, Player enemy, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetEnemyPureDamageCoefficient(DamageEffect damageEffect, PlayerManager playerManager, List<ICardDescriptor> cardDescriptors)
     {
-        var wallDamage = enemy.Wall - damageEffect.Value;
+        var wallDamage = playerManager.Player.Wall - damageEffect.Value;
         var effect = wallDamage / (decimal)damageEffect.Value;
 
         return 1 + effect;
     }
 
-    private static decimal GetTowerDamageCoefficient(DamageEffect damageEffect, Player player, Player enemy, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetTowerDamageCoefficient(DamageEffect damageEffect, PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
         switch (damageEffect.Side)
         {
             case Side.Player:
-                return GetPlayerTowerDamageCoefficient(damageEffect, player, cardDescriptors);
+                return GetPlayerTowerDamageCoefficient(damageEffect, playerManager, cardDescriptors);
             case Side.Enemy:
-                return GetEnemyTowerDamageCoefficient(damageEffect, enemy, cardDescriptors);
+                return GetEnemyTowerDamageCoefficient(damageEffect, enemyManager, cardDescriptors);
             default:
                 throw new NotSupportedException($"{nameof(GetPureDamageCoefficient)} not support {damageEffect.Side} side.");
         }
     }
 
-    private static decimal GetPlayerTowerDamageCoefficient(DamageEffect damageEffect, Player player, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetPlayerTowerDamageCoefficient(DamageEffect damageEffect, PlayerManager playerManager, List<ICardDescriptor> cardDescriptors)
     {
-        if (player.Tower - damageEffect.Value > 14)
+        if (playerManager.Player.Tower - damageEffect.Value > 14)
         {
             return 1m;
         }
 
-        if (player.Tower - damageEffect.Value > 0)
+        if (playerManager.Player.Tower - damageEffect.Value > 0)
         {
             return 1.5m;
         }
@@ -95,14 +96,14 @@ public static class BasePowerCoefficients
         return 2m;
     }
 
-    private static decimal GetEnemyTowerDamageCoefficient(DamageEffect damageEffect, Player enemy, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetEnemyTowerDamageCoefficient(DamageEffect damageEffect, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
-        if (enemy.Tower - damageEffect.Value > 14)
+        if (enemyManager.Player.Tower - damageEffect.Value > 14)
         {
             return 1m;
         }
 
-        if (enemy.Tower - damageEffect.Value > 0)
+        if (enemyManager.Player.Tower - damageEffect.Value > 0)
         {
             return 1.3m;
         }
@@ -110,77 +111,77 @@ public static class BasePowerCoefficients
         return 10m;
     }
 
-    public static decimal GetResourceCoefficient(ResourceEffect resourceEffect, Player player, Player enemy, List<ICardDescriptor> cardDescriptors)
+    public static decimal GetResourceCoefficient(ResourceEffect resourceEffect, PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
         switch (resourceEffect.ResourceType)
         {
             case ResourceType.Mines: 
             case ResourceType.Monasteries: 
             case ResourceType.Barracks: 
-                return GetProductionCoefficient(resourceEffect, player, enemy, cardDescriptors);
+                return GetProductionCoefficient(resourceEffect, playerManager, enemyManager, cardDescriptors);
             case ResourceType.Ore:
             case ResourceType.Mana:
             case ResourceType.Stacks:
-                return GetCoinCoefficient(resourceEffect, player, enemy, cardDescriptors);
+                return GetCoinCoefficient(resourceEffect, playerManager, enemyManager, cardDescriptors);
             case ResourceType.Tower: 
-                return GetTowerCoefficient(resourceEffect, player, enemy, cardDescriptors);
+                return GetTowerCoefficient(resourceEffect, playerManager, enemyManager, cardDescriptors);
             case ResourceType.Wall:
-                return GetWallCoefficient(resourceEffect, player, enemy, cardDescriptors);
+                return GetWallCoefficient(resourceEffect, playerManager, enemyManager, cardDescriptors);
             default:
                 throw new NotSupportedException($"{nameof(GetResourceCoefficient)} not support {resourceEffect.ResourceType} resource type.");
         }
     }
 
-    private static decimal GetProductionCoefficient(ResourceEffect resourceEffect, Player player, Player enemy, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetProductionCoefficient(ResourceEffect resourceEffect, PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
         switch (resourceEffect.Side)
         {
             case Side.Player:
-                return GetProductionCoefficient(resourceEffect, player, cardDescriptors);
+                return GetProductionCoefficient(resourceEffect, playerManager, cardDescriptors);
             case Side.Enemy:
-                return GetProductionCoefficient(resourceEffect, enemy, cardDescriptors);
+                return GetProductionCoefficient(resourceEffect, enemyManager, cardDescriptors);
             default:
                 throw new NotSupportedException($"{nameof(GetProductionCoefficient)} not support {resourceEffect.Side} side.");
         }
     }
 
-    private static decimal GetProductionCoefficient(ResourceEffect resourceEffect, Player unknown, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetProductionCoefficient(ResourceEffect resourceEffect, PlayerManager unknownManager, List<ICardDescriptor> cardDescriptors)
     {
-        var productionValue = unknown.GetResourceValue(resourceEffect.ResourceType);
+        var productionValue = unknownManager.GetResourceValue(resourceEffect.ResourceType);
 
         var producedResourceType = resourceEffect.ResourceType.ToProducedType();
-        var resourceValue = unknown.GetResourceValue(producedResourceType);
+        var resourceValue = unknownManager.GetResourceValue(producedResourceType);
 
         var coefficient = (2 - productionValue / 10m) - resourceValue / 150m;
         coefficient = coefficient < 0.5m ? 0.5m : coefficient;
         return coefficient;
     }
 
-    private static decimal GetCoinCoefficient(ResourceEffect resourceEffect, Player player, Player enemy, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetCoinCoefficient(ResourceEffect resourceEffect, PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
         switch (resourceEffect.Side)
         {
             case Side.Player when resourceEffect.Value >= 0:
-                return GetPositivePlayerCoinCoefficient(resourceEffect, player, cardDescriptors);
+                return GetPositivePlayerCoinCoefficient(resourceEffect, playerManager, cardDescriptors);
             case Side.Player when resourceEffect.Value < 0:
-                return GetNegativePlayerCoinCoefficient(resourceEffect, player, cardDescriptors);
+                return GetNegativePlayerCoinCoefficient(resourceEffect, playerManager, cardDescriptors);
             case Side.Enemy when resourceEffect.Value >= 0:
                 return 1m;
             case Side.Enemy when resourceEffect.Value < 0:
-                return GetNegativeEnemyCoinCoefficient(resourceEffect, enemy, cardDescriptors);
+                return GetNegativeEnemyCoinCoefficient(resourceEffect, enemyManager, cardDescriptors);
             default:
                 throw new NotSupportedException($"{nameof(GetCoinCoefficient)} not support {resourceEffect.Side} side.");
         }
     }
 
-    private static decimal GetPositivePlayerCoinCoefficient(ResourceEffect resourceEffect, Player player, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetPositivePlayerCoinCoefficient(ResourceEffect resourceEffect, PlayerManager playerManager, List<ICardDescriptor> cardDescriptors)
     {
         var disabledCards = cardDescriptors.Where(x => 
             x.BaseCardEffect.Card.CardType.GetResourceType() == resourceEffect.ResourceType && 
-            !x.IsEnabled(player)).ToList();
+            !x.IsEnabled(playerManager)).ToList();
 
         var productionResourceType = resourceEffect.ResourceType.ToProductionType();
-        var nextTurn = player.Apply(resourceEffect).Produce(productionResourceType);
+        var nextTurn = playerManager.Apply(resourceEffect).Produce(productionResourceType);
         var enabledCards = disabledCards.Where(x => 
             x.BaseCardEffect.Card.CardType.GetResourceType() == resourceEffect.ResourceType && 
             x.IsEnabled(nextTurn)).ToList();
@@ -190,12 +191,12 @@ public static class BasePowerCoefficients
         return 1m + delta;
     }
 
-    private static decimal GetNegativePlayerCoinCoefficient(ResourceEffect resourceEffect, Player player, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetNegativePlayerCoinCoefficient(ResourceEffect resourceEffect, PlayerManager playerManager, List<ICardDescriptor> cardDescriptors)
     {
         var productionType = resourceEffect.ResourceType.ToProductionType();
-        var playerResourceProductionValue = player.GetResourceValue(productionType);
+        var playerResourceProductionValue = playerManager.GetResourceValue(productionType);
 
-        var playerResourceValue = player.GetResourceValue(resourceEffect.ResourceType);
+        var playerResourceValue = playerManager.GetResourceValue(resourceEffect.ResourceType);
 
         var resourceEffectValue = Math.Abs(resourceEffect.Value);
 
@@ -204,9 +205,9 @@ public static class BasePowerCoefficients
 
         var enabledCards = cardDescriptors.Where(x =>
             x.BaseCardEffect.Card.CardType.GetResourceType() == resourceEffect.ResourceType &&
-            x.IsEnabled(player)).ToList();
+            x.IsEnabled(playerManager)).ToList();
 
-        var nextTurn = player.Apply(resourceEffect);
+        var nextTurn = playerManager.Apply(resourceEffect);
         var disabledCards = enabledCards.Where(x =>
             x.BaseCardEffect.Card.CardType.GetResourceType() == resourceEffect.ResourceType &&
             !x.IsEnabled(nextTurn)).ToList();
@@ -216,9 +217,9 @@ public static class BasePowerCoefficients
         return 1m + delta;
     }
 
-    private static decimal GetNegativeEnemyCoinCoefficient(ResourceEffect resourceEffect, Player enemy, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetNegativeEnemyCoinCoefficient(ResourceEffect resourceEffect, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
-        var enemyResourceValue = enemy.GetResourceValue(resourceEffect.ResourceType);
+        var enemyResourceValue = enemyManager.GetResourceValue(resourceEffect.ResourceType);
 
         var resourceEffectValue = Math.Abs(resourceEffect.Value);
 
@@ -229,51 +230,51 @@ public static class BasePowerCoefficients
         return 0.5m + delta;
     }
 
-    private static decimal GetTowerCoefficient(ResourceEffect resourceEffect, Player player, Player enemy, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetTowerCoefficient(ResourceEffect resourceEffect, PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
         switch (resourceEffect.Side)
         {
             case Side.Player when resourceEffect.Value >= 0:
-                return GetPositivePlayerTowerCoefficient(resourceEffect, player, cardDescriptors);
+                return GetPositivePlayerTowerCoefficient(resourceEffect, playerManager, cardDescriptors);
             case Side.Player when resourceEffect.Value < 0:
-                return GetNegativePlayerTowerCoefficient(resourceEffect, player, cardDescriptors);
+                return GetNegativePlayerTowerCoefficient(resourceEffect, playerManager, cardDescriptors);
             case Side.Enemy when resourceEffect.Value >= 0:
                 return 1m;
             case Side.Enemy when resourceEffect.Value < 0:
-                return GetNegativeEnemyTowerCoefficient(resourceEffect, enemy, cardDescriptors);
+                return GetNegativeEnemyTowerCoefficient(resourceEffect, enemyManager, cardDescriptors);
             default:
                 throw new NotSupportedException($"{nameof(GetTowerCoefficient)} not support {resourceEffect.Side} side.");
         }
     }
 
-    private static decimal GetPositivePlayerTowerCoefficient(ResourceEffect resourceEffect, Player player, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetPositivePlayerTowerCoefficient(ResourceEffect resourceEffect, PlayerManager playerManager, List<ICardDescriptor> cardDescriptors)
     {
-        if (player.Tower < 50)
+        if (playerManager.Player.Tower < 50)
         {
             return 1.5m;
         }
 
-        if (player.Tower < 40)
+        if (playerManager.Player.Tower < 40)
         {
             return 1.2m;
         }
 
-        if (player.Tower < 35)
+        if (playerManager.Player.Tower < 35)
         {
             return 1m;
         }
 
-        if (player.Tower < 25)
+        if (playerManager.Player.Tower < 25)
         {
             return 1.2m;
         }
 
-        if (player.Tower < 14)
+        if (playerManager.Player.Tower < 14)
         {
             return 1.5m;
         }
 
-        if (player.Tower < 7)
+        if (playerManager.Player.Tower < 7)
         {
             return 10m;
         }
@@ -281,19 +282,19 @@ public static class BasePowerCoefficients
         return 10m;
     }
 
-    private static decimal GetNegativePlayerTowerCoefficient(ResourceEffect resourceEffect, Player player, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetNegativePlayerTowerCoefficient(ResourceEffect resourceEffect, PlayerManager playerManager, List<ICardDescriptor> cardDescriptors)
     {
-        if (player.Tower < 50)
+        if (playerManager.Player.Tower < 50)
         {
             return 1m;
         }
 
-        if (player.Tower < 14)
+        if (playerManager.Player.Tower < 14)
         {
             return 0.7m;
         }
 
-        if (player.Tower < 7)
+        if (playerManager.Player.Tower < 7)
         {
             return 0.3m;
         }
@@ -301,19 +302,19 @@ public static class BasePowerCoefficients
         return 0.3m;
     }
 
-    private static decimal GetNegativeEnemyTowerCoefficient(ResourceEffect resourceEffect, Player enemy, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetNegativeEnemyTowerCoefficient(ResourceEffect resourceEffect, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
-        if (enemy.Tower < 50)
+        if (enemyManager.Player.Tower < 50)
         {
             return 1m;
         }
 
-        if (enemy.Tower < 14)
+        if (enemyManager.Player.Tower < 14)
         {
             return 1.3m;
         }
 
-        if (enemy.Tower < 7)
+        if (enemyManager.Player.Tower < 7)
         {
             return 1.5m;
         }
@@ -321,31 +322,31 @@ public static class BasePowerCoefficients
         return 1.5m;
     }
 
-    private static decimal GetWallCoefficient(ResourceEffect resourceEffect, Player player, Player enemy, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetWallCoefficient(ResourceEffect resourceEffect, PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
         switch (resourceEffect.Side)
         {
             case Side.Player when resourceEffect.Value >= 0:
-                return GetPositivePlayerWallCoefficient(resourceEffect, player, cardDescriptors);
+                return GetPositivePlayerWallCoefficient(resourceEffect, playerManager, cardDescriptors);
             case Side.Player when resourceEffect.Value < 0:
-                return GetNegativePlayerWallCoefficient(resourceEffect, player, cardDescriptors);
+                return GetNegativePlayerWallCoefficient(resourceEffect, playerManager, cardDescriptors);
             case Side.Enemy when resourceEffect.Value >= 0:
                 return 1m;
             case Side.Enemy when resourceEffect.Value < 0:
-                return GetNegativeEnemyWallCoefficient(resourceEffect, enemy, cardDescriptors);
+                return GetNegativeEnemyWallCoefficient(resourceEffect, enemyManager, cardDescriptors);
             default:
                 throw new NotSupportedException($"{nameof(GetWallCoefficient)} not support {resourceEffect.Side} side.");
         }
     }
 
-    private static decimal GetPositivePlayerWallCoefficient(ResourceEffect resourceEffect, Player player, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetPositivePlayerWallCoefficient(ResourceEffect resourceEffect, PlayerManager playerManager, List<ICardDescriptor> cardDescriptors)
     {
-        if (player.Wall > 20)
+        if (playerManager.Player.Wall > 20)
         {
             return 1m;
         }
 
-        if (player.Wall > 7)
+        if (playerManager.Player.Wall > 7)
         {
             return 1.1m;
         }
@@ -353,14 +354,14 @@ public static class BasePowerCoefficients
         return 1.2m;
     }
 
-    private static decimal GetNegativePlayerWallCoefficient(ResourceEffect resourceEffect, Player player, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetNegativePlayerWallCoefficient(ResourceEffect resourceEffect, PlayerManager playerManager, List<ICardDescriptor> cardDescriptors)
     {
-        if (player.Wall - Math.Abs(resourceEffect.Value) > 7)
+        if (playerManager.Player.Wall - Math.Abs(resourceEffect.Value) > 7)
         {
             return 1.2m;
         }
 
-        if (player.Wall - Math.Abs(resourceEffect.Value) > 0)
+        if (playerManager.Player.Wall - Math.Abs(resourceEffect.Value) > 0)
         {
             return 1.1m;
         }
@@ -368,9 +369,9 @@ public static class BasePowerCoefficients
         return 0.9m;
     }
 
-    private static decimal GetNegativeEnemyWallCoefficient(ResourceEffect resourceEffect, Player enemy, List<ICardDescriptor> cardDescriptors)
+    private static decimal GetNegativeEnemyWallCoefficient(ResourceEffect resourceEffect, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
-        if (enemy.Wall - Math.Abs(resourceEffect.Value) > 0)
+        if (enemyManager.Player.Wall - Math.Abs(resourceEffect.Value) > 0)
         {
             return 1m;
         }

@@ -1,0 +1,183 @@
+﻿using Selenium.Heroes.Common.Models;
+
+namespace Selenium.Heroes.Common.Managers;
+
+public class PlayerManager
+{
+    public Player Player { get; set; }
+
+    public PlayerManager(Player player)
+    {
+        Player = player;
+    }
+
+    public PlayerManager Apply(ResourceEffect resourceEffect)
+    {
+        var player = new Player(Player);
+
+        switch (resourceEffect.ResourceType)
+        {
+            case ResourceType.Mines:
+                player.Mines = player.Mines + resourceEffect.Value;
+                break;
+            case ResourceType.Ore:
+                player.Ore = player.Ore + resourceEffect.Value;
+                break;
+            case ResourceType.Monasteries:
+                player.Monasteries = player.Monasteries + resourceEffect.Value;
+                break;
+            case ResourceType.Mana:
+                player.Mana = player.Mana + resourceEffect.Value;
+                break;
+            case ResourceType.Barracks:
+                player.Barracks = player.Barracks + resourceEffect.Value;
+                break;
+            case ResourceType.Stacks:
+                player.Stacks = player.Stacks + resourceEffect.Value;
+                break;
+            case ResourceType.Tower:
+                player.Tower = player.Tower + resourceEffect.Value;
+                break;
+            case ResourceType.Wall:
+                player.Wall = player.Wall + resourceEffect.Value;
+                break;
+            default:
+                throw new NotSupportedException($"{nameof(Apply)} not support {resourceEffect.ResourceType} resource type.");
+        }
+
+
+        return new PlayerManager(player);
+    }
+
+    public PlayerManager Produce(ResourceType resourceType)
+    {
+        var player = new Player(Player);
+
+        switch (resourceType)
+        {
+            case ResourceType.Mines:
+                player.Ore = player.Ore + player.Mines;
+                break;
+            case ResourceType.Monasteries:
+                player.Mana = player.Mana + player.Monasteries;
+                break;
+            case ResourceType.Barracks:
+                player.Stacks = player.Stacks + player.Barracks;
+                break;
+            default:
+                throw new NotSupportedException($"{nameof(Produce)} not support {resourceType} resource type.");
+        }
+
+        return new PlayerManager(player);
+    }
+
+    public PlayerManager Wait()
+    {
+        var player = new Player(Player);
+
+        player.Ore = player.Ore + player.Mines;
+
+        player.Mana = player.Mana + player.Monasteries;
+
+        player.Stacks = player.Stacks + player.Barracks;
+
+        return new PlayerManager(player);
+    }
+
+    public int GetResourceValue(ResourceType resourceType)
+    {
+        switch (resourceType)
+        {
+            case ResourceType.Ore: return Player.Ore;
+            case ResourceType.Mana: return Player.Mana;
+            case ResourceType.Stacks: return Player.Stacks;
+            case ResourceType.Mines: return Player.Mines;
+            case ResourceType.Monasteries: return Player.Monasteries;
+            case ResourceType.Barracks: return Player.Barracks;
+            case ResourceType.Wall: return Player.Wall;
+            case ResourceType.Tower: return Player.Tower;
+            default: throw new NotSupportedException($"{nameof(GetResourceValue)} not support {resourceType} resource type.");
+        }
+    }
+
+    public decimal GetPower()
+    {
+        var resourcePower = CalculatePlayerResourcePower(ResourceType.Ore) +
+            CalculatePlayerResourcePower(ResourceType.Mana) +
+            CalculatePlayerResourcePower(ResourceType.Stacks);
+
+        var productionPower = CalculatePlayerProductionPower(ResourceType.Mines) +
+            CalculatePlayerProductionPower(ResourceType.Monasteries) +
+            CalculatePlayerProductionPower(ResourceType.Barracks);
+
+        var towerPower = CalculateTowerPower();
+
+        var wallPower = CalculateWallPower();
+
+        return resourcePower + productionPower + towerPower + wallPower;
+    }
+
+    private decimal CalculatePlayerProductionPower(ResourceType resourceType)
+    {
+        if (resourceType is not (ResourceType.Mines or ResourceType.Monasteries or ResourceType.Barracks))
+        {
+            throw new NotSupportedException($"{nameof(CalculatePlayerResourcePower)} not support {resourceType} resource type.");
+        }
+
+        var resourceValue = GetResourceValue(resourceType);
+        return resourceValue * 20m;
+    }
+
+    private decimal CalculatePlayerResourcePower(ResourceType resourceType)
+    {
+        if (resourceType is not (ResourceType.Ore or ResourceType.Mana or ResourceType.Stacks))
+        {
+            throw new NotSupportedException($"{nameof(CalculatePlayerResourcePower)} not support {resourceType} resource type.");
+        }
+
+        var resourceValue = GetResourceValue(resourceType);
+
+        var resourcePower = 0m;
+        if (resourceValue <= 7)
+        {
+            resourcePower = resourceValue * 2;
+        }
+
+        if (resourceValue <= 15)
+        {
+            resourcePower = (7 * 2) + ((resourceValue - 7) * 1.5m);
+        }
+
+        if (resourceValue <= 25)
+        {
+            resourcePower = (7 * 2m) + (8 * 1.5m) + (resourceValue - 15);
+        }
+
+        if (resourceValue > 25)
+        {
+            resourcePower = (7 * 2m) + (8 * 1.5m) + 10 + ((resourceValue - 25) * 0.5m);
+        }
+
+        return resourcePower;
+    }
+
+    private decimal CalculateTowerPower()
+    {
+        return Player.Tower * 2;
+    }
+
+    private decimal CalculateWallPower()
+    {
+        if (Player.Wall <= 7)
+        {
+            return Player.Wall * 2;
+        }
+
+        if (Player.Wall <= 15)
+        {
+            return (7 * 2) + ((Player.Wall - 7) * 1.5m);
+        }
+
+        return (7 * 2m) + (8 * 1.5m) + (Player.Wall - 15);
+    }
+}

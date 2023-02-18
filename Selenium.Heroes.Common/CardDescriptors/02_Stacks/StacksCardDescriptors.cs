@@ -1,4 +1,5 @@
-﻿using Selenium.Heroes.Common.Models;
+﻿using Selenium.Heroes.Common.Managers;
+using Selenium.Heroes.Common.Models;
 
 namespace Selenium.Heroes.Common.CardDescriptors;
 
@@ -136,11 +137,11 @@ public class SPEARMAN_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        if (player.Wall > enemy.Wall)
+        if (playerManager.Player.Wall > enemyManager.Player.Wall)
         {
             actualCardEffect.DamageEffects = new List<DamageEffect>
             {
@@ -426,11 +427,11 @@ public class BEETLE_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        if (enemy.Wall == 0)
+        if (enemyManager.Player.Wall == 0)
         {
             actualCardEffect.DamageEffects = new List<DamageEffect>
             {
@@ -482,11 +483,11 @@ public class UNICORN_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        if (player.Monasteries > enemy.Monasteries)
+        if (playerManager.Player.Monasteries > enemyManager.Player.Monasteries)
         {
             actualCardEffect.DamageEffects = new List<DamageEffect>
             {
@@ -533,11 +534,11 @@ public class ELVEN_ARCHERS_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        if (player.Wall > enemy.Wall)
+        if (playerManager.Player.Wall > enemyManager.Player.Wall)
         {
             actualCardEffect.DamageEffects = new List<DamageEffect>
             {
@@ -566,11 +567,11 @@ public class CAUSTIC_CLOUD_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        if (enemy.Wall > 10)
+        if (enemyManager.Player.Wall > 10)
         {
             actualCardEffect.DamageEffects = new List<DamageEffect>
             {
@@ -617,12 +618,12 @@ public class THIEF_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        var enemyManaDraw = enemy.Mana % 10;
-        var enemyOreDraw = enemy.Ore % 5;
+        var enemyManaDraw = enemyManager.Player.Mana % 10;
+        var enemyOreDraw = enemyManager.Player.Ore % 5;
         var playerMana = enemyManaDraw / 2;
         var playerOre = enemyOreDraw / 2;
 

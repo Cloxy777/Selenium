@@ -1,4 +1,5 @@
-﻿using Selenium.Heroes.Common.Models;
+﻿using Selenium.Heroes.Common.Managers;
+using Selenium.Heroes.Common.Models;
 
 namespace Selenium.Heroes.Common.CardDescriptors;
 
@@ -19,11 +20,11 @@ public class JEWELLERY_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        if (player.Tower < enemy.Tower)
+        if (playerManager.Player.Tower < enemyManager.Player.Tower)
         {
             actualCardEffect.ResourceEffects = new List<ResourceEffect>
             {
@@ -416,11 +417,11 @@ public class PARITY_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        var difference = enemy.Monasteries - player.Monasteries;
+        var difference = enemyManager.Player.Monasteries - playerManager.Player.Monasteries;
         if (difference != 0) 
         {
             var side = difference > 0 ? Side.Player : Side.Enemy;
@@ -531,11 +532,11 @@ public class LIGHTNING_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        if (player.Tower > enemy.Wall)
+        if (playerManager.Player.Tower > enemyManager.Player.Wall)
         {
             actualCardEffect.DamageEffects = new List<DamageEffect>
             {

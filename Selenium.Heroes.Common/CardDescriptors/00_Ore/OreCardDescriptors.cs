@@ -1,4 +1,5 @@
-﻿using Selenium.Heroes.Common.Models;
+﻿using Selenium.Heroes.Common.Managers;
+using Selenium.Heroes.Common.Models;
 
 namespace Selenium.Heroes.Common.CardDescriptors;
 
@@ -193,11 +194,11 @@ public class FOUNDATION_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        if (player.Wall == 0)
+        if (playerManager.Player.Wall == 0)
         {
             actualCardEffect.ResourceEffects = new List<ResourceEffect>
             {
@@ -262,11 +263,11 @@ public class BIG_VEIN_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        if (player.Mana > enemy.Mines)
+        if (playerManager.Player.Mana > enemyManager.Player.Mines)
         {
             actualCardEffect.ResourceEffects = new List<ResourceEffect>
             {
@@ -327,11 +328,11 @@ public class STEAL_TECHNOLOGY_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        var difference = enemy.Mines - player.Mines;
+        var difference = enemyManager.Player.Mines - playerManager.Player.Mines;
         if (difference > 0)
         {
             actualCardEffect.ResourceEffects = new List<ResourceEffect>
@@ -380,11 +381,11 @@ public class SUBSOIL_WATERS_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
     
-        if (player.Wall == enemy.Wall)
+        if (playerManager.Player.Wall == enemyManager.Player.Wall)
         {
             actualCardEffect.ResourceEffects = new List<ResourceEffect>
             {
@@ -395,7 +396,7 @@ public class SUBSOIL_WATERS_CardDescriptor : CardDescriptor
             };
         }
 
-        if (player.Wall > enemy.Wall)
+        if (playerManager.Player.Wall > enemyManager.Player.Wall)
         {
             actualCardEffect.ResourceEffects = new List<ResourceEffect>
             {
@@ -560,11 +561,11 @@ public class BARRACKS_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
         
-        if (player.Barracks < enemy.Barracks)
+        if (playerManager.Player.Barracks < enemyManager.Player.Barracks)
         {
             actualCardEffect.ResourceEffects.Add(new ResourceEffect(ResourceType.Barracks, 1, Side.Player));
         }
@@ -682,16 +683,16 @@ public class SHIFT_CardDescriptor : CardDescriptor
         }
     };
 
-    public override CardEffect GetActualCardEffect(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
-        var actualCardEffect = base.GetActualCardEffect(player, enemy, cardDescriptors, cardDescriptor);
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
         actualCardEffect.ResourceEffects = new List<ResourceEffect>
         {
-            new ResourceEffect(ResourceType.Wall, -1 * player.Wall, Side.Player),
-            new ResourceEffect(ResourceType.Wall, enemy.Wall, Side.Player),
-            new ResourceEffect(ResourceType.Wall, -1 * enemy.Wall, Side.Enemy),
-            new ResourceEffect(ResourceType.Wall, player.Wall, Side.Enemy),
+            new ResourceEffect(ResourceType.Wall, -1 * playerManager.Player.Wall, Side.Player),
+            new ResourceEffect(ResourceType.Wall, enemyManager.Player.Wall, Side.Player),
+            new ResourceEffect(ResourceType.Wall, -1 * enemyManager.Player.Wall, Side.Enemy),
+            new ResourceEffect(ResourceType.Wall, playerManager.Player.Wall, Side.Enemy),
         };
 
         return actualCardEffect;
