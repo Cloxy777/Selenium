@@ -18,7 +18,7 @@ public class Startup
         int seconds = 3;
         while (true)
         {
-            //Console.ReadLine();
+            Console.ReadLine();
 
             var isCardGamePage = engine.IsCardGamePage();
 

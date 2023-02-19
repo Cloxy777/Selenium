@@ -225,12 +225,12 @@ public class PlayerManager
     {
         if (Player.Wall <= 7)
         {
-            return Player.Wall * 1.3m;
+            return Player.Wall * 2m;
         }
 
         if (Player.Wall <= 15)
         {
-            return (7 * 2) + ((Player.Wall - 7) * 1.2m);
+            return (7 * 2) + ((Player.Wall - 7) * 1.5m);
         }
 
         return (7 * 2m) + (8 * 1.5m) + (Player.Wall - 15);
