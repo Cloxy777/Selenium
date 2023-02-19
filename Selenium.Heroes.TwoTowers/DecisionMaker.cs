@@ -2,6 +2,7 @@
 using Selenium.Heroes.Common.Extensions;
 using Selenium.Heroes.Common.Managers;
 using Selenium.Heroes.Common.Models;
+using System.Data.Common;
 
 namespace Selenium.Heroes.TwoTowers;
 
@@ -61,17 +62,18 @@ public class DecisionMaker
 
     public Decision MakeDecision()
     {
-        var analysis = new RecursiveAnalysis(PlayerManager, EnemyManager, CardDescriptors);
+        var board = new Board(PlayerManager, EnemyManager, CardDescriptors);
+        var analysis = new RecursiveAnalysis(board);
         analysis.Build();
 
         var leaves = new List<RecursiveAnalysis>();
         analysis.Extract(ref leaves);
 
-        var effectiveAnalysis = leaves.MaxBy(x => x.Rating);
+        var effectiveAnalysis = leaves.MaxBy(x => x.Ratings.Sum());
 
-        var ordered = leaves.OrderByDescending(x => x.Rating).ToList();
+        var ordered = leaves.OrderByDescending(x => x.Ratings.Sum()).ToList();
 
-        var move = effectiveAnalysis.Moves.First();
+        var move = effectiveAnalysis.Turnes.First();
 
         return new Decision { ActionType = move.ActionType, CardDescriptor = move.CardDescriptor };
     }

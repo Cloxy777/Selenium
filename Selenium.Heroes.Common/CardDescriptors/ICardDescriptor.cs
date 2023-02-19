@@ -18,4 +18,19 @@ public abstract class CardDescriptor : ICardDescriptor
     {
         return BaseCardEffect;
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is CardDescriptor)
+        {
+            return Equals((CardDescriptor)obj);
+        }
+
+        return false;
+    }
+
+    public bool Equals(CardDescriptor cardDescriptor)
+    {
+        return BaseCardEffect.Card.Header == cardDescriptor.BaseCardEffect.Card.Header;
+    }
 }

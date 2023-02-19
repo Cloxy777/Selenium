@@ -8,6 +8,9 @@ public class CardWeightCalculator
 {
     private List<CardWeight> _cardWeights = null;
 
+    public CardWeightCalculator(Board board) : this(board.PlayerManager, board.EnemyManager, board.CardDescriptors)
+    {  }
+
     public CardWeightCalculator(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
         PlayerManager = playerManager;

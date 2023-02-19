@@ -46,7 +46,7 @@ public class Player
         if (damage > Wall)
         {
             var towerDamage = damage - Wall;
-            Wall = Wall - damage;
+            Wall = 0;
             Tower = Tower - towerDamage;
             return;
         }

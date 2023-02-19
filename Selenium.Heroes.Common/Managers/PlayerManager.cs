@@ -1,4 +1,6 @@
-﻿using Selenium.Heroes.Common.Models;
+﻿using Selenium.Heroes.Common.CardDescriptors;
+using Selenium.Heroes.Common.Extensions;
+using Selenium.Heroes.Common.Models;
 
 namespace Selenium.Heroes.Common.Managers;
 
@@ -69,6 +71,13 @@ public class PlayerManager
         }
 
         return new PlayerManager(player);
+    }
+
+    public PlayerManager ApplyCosts(ICardDescriptor cardDescriptor)
+    {
+        var resourcetype = cardDescriptor.BaseCardEffect.Card.CardType.GetResourceType();
+        var resourceEffect = new ResourceEffect(resourcetype, -1 * cardDescriptor.BaseCardEffect.Card.Cost, Side.Player);
+        return Apply(resourceEffect);
     }
 
     public PlayerManager Produce(ResourceType resourceType)
@@ -162,12 +171,12 @@ public class PlayerManager
         var resourcePower = 0m;
         if (resourceValue <= 7)
         {
-            resourcePower = resourceValue * 2;
+            resourcePower = resourceValue * 1.3m;
         }
 
         if (resourceValue <= 15)
         {
-            resourcePower = (7 * 2) + ((resourceValue - 7) * 1.5m);
+            resourcePower = (7 * 2) + ((resourceValue - 7) * 1.2m);
         }
 
         if (resourceValue <= 25)
@@ -177,7 +186,7 @@ public class PlayerManager
 
         if (resourceValue > 25)
         {
-            resourcePower = (7 * 2m) + (8 * 1.5m) + 10 + ((resourceValue - 25) * 0.5m);
+            resourcePower = (7 * 2m) + (8 * 1.5m) + 10 + ((resourceValue - 25) * 0.9m);
         }
 
         return resourcePower;
@@ -192,12 +201,12 @@ public class PlayerManager
     {
         if (Player.Wall <= 7)
         {
-            return Player.Wall * 2;
+            return Player.Wall * 1.3m;
         }
 
         if (Player.Wall <= 15)
         {
-            return (7 * 2) + ((Player.Wall - 7) * 1.5m);
+            return (7 * 2) + ((Player.Wall - 7) * 1.2m);
         }
 
         return (7 * 2m) + (8 * 1.5m) + (Player.Wall - 15);
