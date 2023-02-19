@@ -85,6 +85,8 @@ public class Board
 
         var actualEffect = move.CardDescriptor.GetActualCardEffect(playerManager, enemyManager, CardDescriptors, move.CardDescriptor);
 
+        playerManager = playerManager.ApplyCosts(move.CardDescriptor);
+
         foreach (var resourceEffect in actualEffect.ResourceEffects)
         {
             if (resourceEffect.Side == Side.Player)
@@ -110,8 +112,6 @@ public class Board
                 enemyManager = enemyManager.Apply(damageEffect);
             }
         }
-
-        playerManager = playerManager.ApplyCosts(move.CardDescriptor);
 
         if (move.IsProduce)
         {

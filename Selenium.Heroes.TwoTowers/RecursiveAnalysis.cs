@@ -12,6 +12,9 @@ public class Round
 // TODO:
 // Adjust power to FINISH the game if possible (Tower adjust !!!)
 // Adjust to not discard with play again if possible
+// Still doesn't attack tower
+// Still plays SUBSOIL WATERS
+// Still plays ELVEN SCOUTS bad (discards third card)
 
 public class RecursiveAnalysis
 {
@@ -45,7 +48,7 @@ public class RecursiveAnalysis
         var combinationBonus = 1 + (Rounds.OrderBy(x => x.Order)
             ?.LastOrDefault()
             ?.Turn
-            ?.Moves?.Count ?? 0) / 10m;
+            ?.Moves?.Count(x => x.ActionType == ActionType.Play) ?? 0) / 10m;
 
         var positivePart = playerPower * playerCoefficient * combinationBonus * playerWinnerCoefficient;
         var negativePart = (enemyPower * enemyCoefficient + disabledCardsPower) * enemyWinnerCoefficient;

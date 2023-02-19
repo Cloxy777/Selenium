@@ -9,6 +9,7 @@ public class Startup
         var isLocal = false;
 
         var engine = new HeroesTwoTowersEngine();
+        engine.Authenticate();
         engine.NavigateToMain();
 
         //engine.NavigateToLocal();
