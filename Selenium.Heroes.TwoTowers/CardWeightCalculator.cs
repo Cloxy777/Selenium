@@ -4,6 +4,13 @@ using Selenium.Heroes.Common.Models;
 
 namespace Selenium.Heroes.TwoTowers;
 
+public class CardWeight
+{
+    public decimal Weight { get; set; }
+
+    public ICardDescriptor CardDescriptor { get; set; } = default!;
+}
+
 public class CardWeightCalculator
 {
     private List<CardWeight> _cardWeights = null;

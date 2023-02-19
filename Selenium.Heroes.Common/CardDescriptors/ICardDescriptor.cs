@@ -33,4 +33,9 @@ public abstract class CardDescriptor : ICardDescriptor
     {
         return BaseCardEffect.Card.Header == cardDescriptor.BaseCardEffect.Card.Header;
     }
+
+    public override int GetHashCode()
+    {
+        return BaseCardEffect.Card.Header.GetHashCode();
+    }
 }

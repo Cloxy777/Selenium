@@ -32,34 +32,6 @@ public class DecisionMaker
 
     public List<ICardDescriptor> CardDescriptors { get; }
 
-    //public Decision MakeDecision()
-    //{
-    //    var canPlay = CardDescriptors.Any(x => x.IsEnabled(PlayerManager));
-    //    var actionType = canPlay ? ActionType.Play : ActionType.Discard;
-
-    //    if (canPlay)
-    //    {
-    //        var strategy = new SimpleTwoTowerStrategy(PlayerManager, EnemyManager, CardDescriptors);    
-    //        var cardWeight = strategy.GetMostEffectiveCardDescriptor();
-
-    //        if (cardWeight.Weight > WEIGHT_THRESHOLD)
-    //        {
-    //            var decision = new Decision
-    //            {
-    //                ActionType = ActionType.Play,
-    //                CardDescriptor = cardWeight.CardDescriptor
-    //            };
-    //            return decision;
-    //        }
-    //    }
-
-    //    return new Decision
-    //    {
-    //        ActionType = ActionType.Discard,
-    //        CardDescriptor = GetCardDescriptorToDiscard(),
-    //    };
-    //}
-
     public Decision MakeDecision()
     {
         var board = new Board(PlayerManager, EnemyManager, CardDescriptors);
@@ -87,4 +59,17 @@ public class DecisionMaker
             .OrderByDescending(x => x.ResourceLackNumber(future))
             .First();
     }
+}
+
+public class Decision
+{
+    public ActionType ActionType { get; set; }
+
+    public ICardDescriptor CardDescriptor { get; set; } = default!;
+}
+
+public enum ActionType
+{
+    Play,
+    Discard
 }

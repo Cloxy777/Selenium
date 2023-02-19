@@ -5,22 +5,40 @@ using Selenium.Heroes.Common.Models;
 
 namespace Selenium.Heroes.TwoTowers;
 
+public class Turn
+{
+    public Turn()
+    {
+
+    }
+
+    public Turn(Turn turn)
+    {
+        Moves = new List<Move>(turn.Moves);
+    }
+
+    public List<Move> Moves { get; set; } = new List<Move>();
+}
+
+public class Move
+{
+    public ActionType ActionType { get; set; }
+
+    public bool IsProduce { get; set; } = true;
+
+    public ICardDescriptor CardDescriptor { get; set; } = default!;
+}
+
 public class Board
 {
-    public Board(Board board)
-    {
-        PlayerManager = new PlayerManager(board.PlayerManager);
-        EnemyManager = new PlayerManager(board.EnemyManager);
-        CardDescriptors = new List<ICardDescriptor>(CardDescriptors!);
-
-        Calculator = new CardWeightCalculator(this);
-    }
+    public Board(Board board) : this (board.PlayerManager, board.EnemyManager, board.CardDescriptors)
+    {  }
 
     public Board(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
-        PlayerManager = playerManager;
-        EnemyManager = enemyManager;
-        CardDescriptors = cardDescriptors;
+        PlayerManager = new PlayerManager(playerManager);
+        EnemyManager = new PlayerManager(enemyManager);
+        CardDescriptors = new List<ICardDescriptor>(cardDescriptors!);
 
         Calculator = new CardWeightCalculator(this);
     }
@@ -35,6 +53,19 @@ public class Board
 
     public IEnumerable<CardWeight> CardWeights => Calculator.CardWeights;
 
+    public decimal PlayerPower => PlayerManager.GetPower();
+
+    public decimal EnemyPower => EnemyManager.GetPower();
+
+    public decimal GetDisabledCardsPower()
+    {
+        var future = PlayerManager.Wait().Wait().Wait();
+        var disabledCardsPower = CardWeights
+            .Where(x => !x.CardDescriptor.IsEnabled(future))
+            .Sum(x => x.CardDescriptor.ResourceLackNumber(future));
+
+        return disabledCardsPower;
+    }
 
     public Board Play(ICardDescriptor cardDescriptor, bool isProduce = true)
     {
@@ -85,7 +116,7 @@ public class Board
         }
 
         var cardDescriptors = CardDescriptors
-            .Where(x => x.BaseCardEffect.Card.Header != cardDescriptor.BaseCardEffect.Card.Header)
+            .Where(x => !x.Equals(cardDescriptor))
             .ToList();
 
         return new Board(playerManager, enemyManager, cardDescriptors);
@@ -110,7 +141,7 @@ public class Board
         }
 
         var cardDescriptors = CardDescriptors
-            .Where(x => x.BaseCardEffect.Card.Header != cardDescriptor.BaseCardEffect.Card.Header)
+            .Where(x => !x.Equals(cardDescriptor))
             .ToList();
 
         return new Board(playerManager, enemyManager, cardDescriptors);
@@ -185,6 +216,73 @@ public class Board
         return turnes;
     }
 
+    public IEnumerable<Turn> GetPossibleDrawDiscardAndPlayAgainTurnes(ICardDescriptor cardDescriptor)
+    {
+        var turnes = new List<Turn>();
+
+        var board = Play(cardDescriptor, false);
+
+        foreach (var cardDescriptorItem in CardDescriptors.Where(x => !x.Equals(cardDescriptor)))
+        {
+            var discardedBoard = board.Discard(cardDescriptor, false);
+
+            var turn = new Turn
+            {
+                Moves = new List<Move>
+                {
+                    new Move
+                    {
+                        ActionType = ActionType.Play,
+                        CardDescriptor = cardDescriptor,
+                        IsProduce = false
+                    },
+                    new Move
+                    {
+                        ActionType = ActionType.Discard,
+                        CardDescriptor = cardDescriptorItem,
+                        IsProduce = false
+                    },
+                }
+            };
+
+            turnes.AddRange(discardedBoard.GetPossibleDrawDiscardAndPlayAgainTurnes(turn));
+        }
+
+
+        return turnes;
+    }
+
+    private IEnumerable<Turn> GetPossibleDrawDiscardAndPlayAgainTurnes(Turn turn)
+    {
+        var turnes = new List<Turn>();
+
+        foreach (var cardDescriptor in CardDescriptors)
+        {
+            var extendedTurn = new Turn(turn);
+            extendedTurn.Moves.Add(new Move
+            {
+                ActionType = ActionType.Discard,
+                CardDescriptor = cardDescriptor,
+                IsProduce = true
+            });
+            turnes.Add(extendedTurn);
+
+            if (cardDescriptor.IsEnabled(PlayerManager))
+            {
+                extendedTurn = new Turn(turn);
+                extendedTurn.Moves.Add(new Move
+                {
+                    ActionType = ActionType.Play,
+                    CardDescriptor = cardDescriptor,
+                    IsProduce = true
+                });
+                turnes.Add(extendedTurn);
+            }
+        }
+
+        return turnes;
+    }
+
     public IEnumerable<Turn> GetPossiblePlayAgainTurnes(ICardDescriptor cardDescriptor)
     {
         var turnes = new List<Turn>();
@@ -203,11 +301,13 @@ public class Board
                         {
                             ActionType = ActionType.Play,
                             CardDescriptor = cardDescriptor,
+                            IsProduce = false
                         },
                         new Move
                         {
                             ActionType = ActionType.Play,
                             CardDescriptor = cardDescriptorItem,
+                            IsProduce = true
                         },
                     }
                 });
@@ -221,11 +321,13 @@ public class Board
                     {
                         ActionType = ActionType.Play,
                         CardDescriptor = cardDescriptor,
+                        IsProduce = false
                     },
                     new Move
                     {
                         ActionType = ActionType.Discard,
                         CardDescriptor = cardDescriptorItem,
+                        IsProduce = true
                     },
                 }
             });
@@ -234,37 +336,5 @@ public class Board
         return turnes;
     }
 
-    public IEnumerable<Turn> GetPossibleDrawDiscardAndPlayAgainTurnes(ICardDescriptor cardDescriptor)
-    {
-        throw new NotImplementedException();
-    }
-
-    public decimal PlayerPower => PlayerManager.GetPower();
-
-    public decimal EnemyPower => EnemyManager.GetPower();
-
-    public decimal GetDisabledCardsPower()
-    {
-        var future = PlayerManager.Wait().Wait().Wait();
-        var disabledCardsPower = CardWeights
-            .Where(x => !x.CardDescriptor.IsEnabled(future))
-            .Sum(x => x.CardDescriptor.ResourceLackNumber(future));
-
-        return disabledCardsPower;
-    }
+    
 }
-
-public class Turn
-{
-    public List<Move> Moves { get; set; } = new List<Move>();
-}
-
-public class Move
-{
-    public ActionType ActionType { get; set; }
-
-    public bool IsProduce { get; set; } = true;
-
-    public ICardDescriptor CardDescriptor { get; set; } = default!;
-}
-
