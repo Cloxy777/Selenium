@@ -37,6 +37,9 @@ public class RecursiveAnalysis
         var playerPower = Board.PlayerPower;
         var enemyPower = Board.EnemyPower;
 
+        var playerWinnerCoefficient = (Board.PlayerManager.IsWinner || Board.EnemyManager.IsDestroed) ? 10 : 1;
+        var enemyWinnerCoefficient = (Board.EnemyManager.IsWinner || Board.PlayerManager.IsDestroed) ? 10 : 1;
+
         var disabledCardsPower = Board.GetMaxDisabledCardDebuff();
 
         var combinationBonus = 1 + (Rounds.OrderBy(x => x.Order)
@@ -44,8 +47,8 @@ public class RecursiveAnalysis
             ?.Turn
             ?.Moves?.Count ?? 0) / 10m;
 
-        var positivePart = playerPower * playerCoefficient * combinationBonus;
-        var negativePart = enemyPower * enemyCoefficient + disabledCardsPower;
+        var positivePart = playerPower * playerCoefficient * combinationBonus * playerWinnerCoefficient;
+        var negativePart = (enemyPower * enemyCoefficient + disabledCardsPower) * enemyWinnerCoefficient;
 
         return positivePart - negativePart;
     }

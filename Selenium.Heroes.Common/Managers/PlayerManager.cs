@@ -131,6 +131,10 @@ public class PlayerManager
         }
     }
 
+    public bool IsDestroed => Player.Tower <= 0;
+
+    public bool IsWinner => Player.Tower >= 50;
+
     public decimal GetPower()
     {
         var resourcePower = CalculatePlayerResourcePower(ResourceType.Ore) +
@@ -194,7 +198,27 @@ public class PlayerManager
 
     private decimal CalculateTowerPower()
     {
-        return Player.Tower * 2;
+        if (Player.Tower <= 14)
+        {
+            return Player.Tower * 2.5m;
+        }
+
+        if (Player.Tower <= 25)
+        {
+            return (14 * 2.5m) + ((Player.Tower - 14) * 2m);
+        }
+
+        if (Player.Tower <= 35)
+        {
+            return (14 * 2.5m) + (11 * 2m) + ((Player.Tower - 25) * 1.5m);
+        }
+
+        if (Player.Tower <= 40)
+        {
+            return (14 * 2.5m) + (11 * 2m) + (10 * 1.5m) + ((Player.Tower - 35) * 2m);
+        }
+
+        return (14 * 2.5m) + (11 * 2m) + (10 * 1.5m) + (5 * 2m) + ((Player.Tower - 40) * 2.5m);
     }
 
     private decimal CalculateWallPower()

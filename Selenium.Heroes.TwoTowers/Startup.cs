@@ -1,5 +1,7 @@
 ﻿namespace Selenium.Heroes.TwoTowers;
 
+
+// TODO: finish and start new game
 public class Startup
 {
     public static void Run() 
