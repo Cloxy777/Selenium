@@ -50,6 +50,19 @@ public class HeroesTwoTowersEngine : HeroesEngineBase
         startGame.Click();
     }
 
+    public bool IsOurTurn()
+    {
+        var elements = Awaiter.Until(x => x.FindElements(By.XPath("//div[@id='turn_text']")));
+        if (elements.Any())
+        {
+            var div = elements.First();
+            var text = div.Text;
+            return text.ToLowerInvariant().Contains("your turn");
+        }
+
+        return false;
+    }
+
     public Player GetPlayerInfo()
     {
         var player = new Player("Player");

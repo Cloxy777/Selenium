@@ -14,7 +14,7 @@ public class Startup
         //engine.NavigateToLocal();
         //isLocal = true;
 
-        int seconds = 5;
+        int seconds = 3;
         while (true)
         {
             //Console.ReadLine();
@@ -44,6 +44,13 @@ public class Startup
                 }
 
                 Console.WriteLine("Not in the card game.");
+                Thread.Sleep(seconds * 1000);
+                continue;
+            }
+
+            if (!engine.IsOurTurn())
+            {
+                Console.WriteLine("Not our turn.");
                 Thread.Sleep(seconds * 1000);
                 continue;
             }
