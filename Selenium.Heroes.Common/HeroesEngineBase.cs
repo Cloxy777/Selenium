@@ -9,13 +9,15 @@ namespace Selenium.Heroes.Common;
 
 public abstract class HeroesEngineBase
 {
-    protected const string LocalUrl = "file:\\C:\\Users\\Pavel\\Desktop\\Card game. Lords of War and Money..html";
+    protected const string LocalUrl = "file:\\C:\\Users\\Pavel\\Documents\\Tavern. Card games..html";
 
     protected const string GameMainUrl = "https://www.lordswm.com/home.php?info";
 
     protected const string GameMapUrl = "https://www.heroeswm.com/map.php";
 
     protected const string GameMiningUrl = "https://www.heroeswm.com/map.php?st=mn";
+
+    protected const string GameTavernUrl = "https://www.lordswm.com/tavern.php";
 
     private readonly IWebDriver _driver;
 

@@ -9,6 +9,10 @@ public class Round
     public decimal Rating { get; set; }
 }
 
+// TODO:
+// Adjust power to FINISH the game if possible (Tower adjust !!!)
+// Adjust to not discard with play again if possible
+
 public class RecursiveAnalysis
 {
     public RecursiveAnalysis(Board board)

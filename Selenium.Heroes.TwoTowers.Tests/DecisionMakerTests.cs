@@ -38,13 +38,14 @@ namespace Selenium.Heroes.TwoTowers.Tests
             var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
 
             var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors);
-            var decision = decisionMaker.MakeDecision();
+            var turn = decisionMaker.CreateTurn();
+            var move = turn.Moves.First();
 
-            Console.WriteLine($"ActionType: {decision.ActionType}.");
-            Console.WriteLine($"CardDescriptor: {decision.CardDescriptor.BaseCardEffect.Card.Header}.");
+            Console.WriteLine($"ActionType: {move.ActionType}.");
+            Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
-            Assert.AreEqual(ActionType.Play, decision.ActionType);
-            Assert.AreEqual("SMOKY QUARTZ", decision.CardDescriptor.BaseCardEffect.Card.Header);
+            Assert.AreEqual(ActionType.Play, move.ActionType);
+            Assert.AreEqual("SMOKY QUARTZ", move.CardDescriptor.BaseCardEffect.Card.Header);
         }
 
         [TestMethod]
@@ -78,13 +79,14 @@ namespace Selenium.Heroes.TwoTowers.Tests
             var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
 
             var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors);
-            var decision = decisionMaker.MakeDecision();
+            var turn = decisionMaker.CreateTurn();
+            var move = turn.Moves.First();
 
-            Console.WriteLine($"ActionType: {decision.ActionType}.");
-            Console.WriteLine($"CardDescriptor: {decision.CardDescriptor.BaseCardEffect.Card.Header}.");
+            Console.WriteLine($"ActionType: {move.ActionType}.");
+            Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
-            Assert.AreEqual(ActionType.Discard, decision.ActionType);
-            Assert.AreEqual("DRAGON'S HEART", decision.CardDescriptor.BaseCardEffect.Card.Header);
+            Assert.AreEqual(ActionType.Discard, move.ActionType);
+            Assert.AreEqual("DRAGON'S HEART", move.CardDescriptor.BaseCardEffect.Card.Header);
         }
 
         [TestMethod]
@@ -118,13 +120,14 @@ namespace Selenium.Heroes.TwoTowers.Tests
             var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
 
             var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors);
-            var decision = decisionMaker.MakeDecision();
+            var turn = decisionMaker.CreateTurn();
+            var move = turn.Moves.First();
 
-            Console.WriteLine($"ActionType: {decision.ActionType}.");
-            Console.WriteLine($"CardDescriptor: {decision.CardDescriptor.BaseCardEffect.Card.Header}.");
+            Console.WriteLine($"ActionType: {move.ActionType}.");
+            Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
-            Assert.AreEqual(ActionType.Discard, decision.ActionType);
-            Assert.AreEqual("SUBSOIL WATERS", decision.CardDescriptor.BaseCardEffect.Card.Header);
+            Assert.AreEqual(ActionType.Discard, move.ActionType);
+            Assert.AreEqual("SUBSOIL WATERS", move.CardDescriptor.BaseCardEffect.Card.Header);
         }
 
         [TestMethod]
@@ -158,13 +161,14 @@ namespace Selenium.Heroes.TwoTowers.Tests
             var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
 
             var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors);
-            var decision = decisionMaker.MakeDecision();
+            var turn = decisionMaker.CreateTurn();
+            var move = turn.Moves.First();
 
-            Console.WriteLine($"ActionType: {decision.ActionType}.");
-            Console.WriteLine($"CardDescriptor: {decision.CardDescriptor.BaseCardEffect.Card.Header}.");
+            Console.WriteLine($"ActionType: {move.ActionType}.");
+            Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
-            Assert.AreEqual(ActionType.Discard, decision.ActionType);
-            Assert.AreEqual("ROCKCASTER", decision.CardDescriptor.BaseCardEffect.Card.Header);
+            Assert.AreEqual(ActionType.Discard, move.ActionType);
+            Assert.AreEqual("ROCKCASTER", move.CardDescriptor.BaseCardEffect.Card.Header);
         }
     }
 }

@@ -15,6 +15,41 @@ namespace Selenium.Heroes.TwoTowers;
 
 public class HeroesTwoTowersEngine : HeroesEngineBase
 {
+    public void RegisterChallenge()
+    {
+        Driver.Navigate().GoToUrl(GameTavernUrl);
+
+        var crateButton = Awaiter.Until(x => x.FindElement(By.XPath("//b[text()='Create a challenge']")));
+        crateButton.Click();
+
+        var submitButtin = Awaiter.Until(x => x.FindElement(By.XPath("//input[@type='submit' and @class='wbtn']")));
+        submitButtin.Click();
+    }
+
+    public bool IsRegistered()
+    {
+        Driver.Navigate().GoToUrl(GameTavernUrl);
+
+        var elements = Awaiter.Until(x => x.FindElements(By.XPath("//b[text()='Withdraw challenge']")));
+        var success = elements.Any();
+
+        return success;
+    }
+
+    public bool IsPlayerFound()
+    {
+        var elements = Awaiter.Until(x => x.FindElements(By.XPath(@"//a/b[text()='Yes']")));
+        var success = elements.Any();
+
+        return success;
+    }
+
+    public void SubmitPlayer()
+    {
+        var startGame = Awaiter.Until(x => x.FindElement(By.XPath(@"//a/b[text()='Yes']")));
+        startGame.Click();
+    }
+
     public Player GetPlayerInfo()
     {
         var player = new Player("Player");

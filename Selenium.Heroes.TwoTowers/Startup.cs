@@ -15,13 +15,33 @@ public class Startup
         int seconds = 5;
         while (true)
         {
-            Console.ReadLine();
+            //Console.ReadLine();
+
             var isCardGamePage = engine.IsCardGamePage();
 
-            if (!isCardGamePage && !isLocal)
+            if (!isCardGamePage)
             {
+                if (!engine.IsRegistered())
+                {
+                    engine.RegisterChallenge();
+
+                    Console.WriteLine("Game registered.");
+
+                    Thread.Sleep(seconds * 1000);
+                    continue;
+                }
+
+                if (engine.IsPlayerFound())
+                {
+                    engine.SubmitPlayer();
+
+                    Console.WriteLine("Player found.");
+
+                    Thread.Sleep(seconds * 1000);
+                    continue;
+                }
+
                 Console.WriteLine("Not in the card game.");
-                seconds = 5;
                 Thread.Sleep(seconds * 1000);
                 continue;
             }
@@ -32,24 +52,28 @@ public class Startup
 
             var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors);
             
-            var decision = decisionMaker.MakeDecision();
+            var turn = decisionMaker.CreateTurn();
 
-            if (decision.ActionType == ActionType.Play)
+            foreach ( var move in turn.Moves ) 
             {
-                var card = decision.CardDescriptor.BaseCardEffect.Card;
+                if (move.ActionType == ActionType.Play)
+                {
+                    var card = move.CardDescriptor.BaseCardEffect.Card;
 
-                Console.WriteLine($"Play {card.Header}.");
-                //engine.Play(card);          
+                    Console.WriteLine($"Play {card.Header}.");
+                    engine.Play(card);
+                    Thread.Sleep(seconds * 1000);
+                }
+                else if (move.ActionType == ActionType.Discard)
+                {
+                    var card = move.CardDescriptor.BaseCardEffect.Card;
+
+                    Console.WriteLine($"Discard {card.Header}.");
+                    engine.Discard(card);
+                    Thread.Sleep(seconds * 1000);
+                }
             }
-            else if (decision.ActionType == ActionType.Discard)
-            {
-                var card = decision.CardDescriptor.BaseCardEffect.Card;
 
-                Console.WriteLine($"Discard {card.Header}.");
-                //engine.Discard(card);
-            }
-
-            seconds = 2;
             Thread.Sleep(seconds * 1000);
         }     
     }

@@ -29,6 +29,12 @@ public class Move
     public ICardDescriptor CardDescriptor { get; set; } = default!;
 }
 
+public enum ActionType
+{
+    Play,
+    Discard
+}
+
 public class Board
 {
     public Board(Board board) : this (board.PlayerManager, board.EnemyManager, board.CardDescriptors)

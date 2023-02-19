@@ -31,7 +31,7 @@ public class DecisionMaker
 
     public List<ICardDescriptor> CardDescriptors { get; }
 
-    public Decision MakeDecision()
+    public Turn CreateTurn()
     {
         var board = new Board(PlayerManager, EnemyManager, CardDescriptors);
         var analysis = new RecursiveAnalysis(board);
@@ -46,22 +46,7 @@ public class DecisionMaker
         var ordered = leaves.OrderByDescending(x => x.Rounds.Sum(x => x.Rating)).ToList();
 
         var turn = effectiveAnalysis!.Rounds.OrderBy(x => x.Order).Select(x => x.Turn).FirstOrDefault();
-        
-        var move = turn!.Moves.FirstOrDefault();
 
-        return new Decision { ActionType = move.ActionType, CardDescriptor = move.CardDescriptor };
+        return turn!;
     }
-}
-
-public class Decision
-{
-    public ActionType ActionType { get; set; }
-
-    public ICardDescriptor CardDescriptor { get; set; } = default!;
-}
-
-public enum ActionType
-{
-    Play,
-    Discard
 }
