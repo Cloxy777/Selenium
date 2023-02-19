@@ -3,6 +3,7 @@ using Selenium.Heroes.Common.Extensions;
 using Selenium.Heroes.Common.Managers;
 using Selenium.Heroes.Common.Models;
 using System.Data.Common;
+using System.Linq;
 
 namespace Selenium.Heroes.TwoTowers;
 
@@ -17,8 +18,6 @@ namespace Selenium.Heroes.TwoTowers;
 // Come up with some strategies to calculate card`s weight if another card played and operate by combinations inside
 public class DecisionMaker
 {
-    private const decimal WEIGHT_THRESHOLD = 0.3m;
-
     public DecisionMaker(Player player, Player enemy, List<ICardDescriptor> cardDescriptors)
 	{
         PlayerManager = new PlayerManager(player);
@@ -36,28 +35,21 @@ public class DecisionMaker
     {
         var board = new Board(PlayerManager, EnemyManager, CardDescriptors);
         var analysis = new RecursiveAnalysis(board);
+        RecursiveAnalysis.MaxDeepLevel = Math.Max(3, board.EnabledCardDescriptors.Count);
         analysis.Build();
 
         var leaves = new List<RecursiveAnalysis>();
         analysis.Extract(ref leaves);
 
-        var effectiveAnalysis = leaves.MaxBy(x => x.Ratings.Sum());
+        var effectiveAnalysis = leaves.MaxBy(x => x.Rounds.Sum(x => x.Rating));
 
-        var ordered = leaves.OrderByDescending(x => x.Ratings.Sum()).ToList();
+        var ordered = leaves.OrderByDescending(x => x.Rounds.Sum(x => x.Rating)).ToList();
 
-        var move = effectiveAnalysis.Turnes.First();
+        var turn = effectiveAnalysis!.Rounds.OrderBy(x => x.Order).Select(x => x.Turn).FirstOrDefault();
+        
+        var move = turn!.Moves.FirstOrDefault();
 
         return new Decision { ActionType = move.ActionType, CardDescriptor = move.CardDescriptor };
-    }
-
-    private ICardDescriptor GetCardDescriptorToDiscard()
-    {
-        var future = PlayerManager.Wait().Wait().Wait();
-
-        return CardDescriptors
-            .Where(x => !x.IsEnabled(future))
-            .OrderByDescending(x => x.ResourceLackNumber(future))
-            .First();
     }
 }
 

@@ -20,9 +20,9 @@ public class CardWeightCalculator
 
     public CardWeightCalculator(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
     {
-        PlayerManager = playerManager;
-        EnemyManager = enemyManager;
-        CardDescriptors = cardDescriptors;
+        PlayerManager = new PlayerManager(playerManager);
+        EnemyManager = new PlayerManager(enemyManager);
+        CardDescriptors = new List<ICardDescriptor>(cardDescriptors!);
     }
 
     public PlayerManager PlayerManager { get; }

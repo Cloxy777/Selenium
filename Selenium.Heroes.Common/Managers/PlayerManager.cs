@@ -75,8 +75,8 @@ public class PlayerManager
 
     public PlayerManager ApplyCosts(ICardDescriptor cardDescriptor)
     {
-        var resourcetype = cardDescriptor.BaseCardEffect.Card.CardType.GetResourceType();
-        var resourceEffect = new ResourceEffect(resourcetype, -1 * cardDescriptor.BaseCardEffect.Card.Cost, Side.Player);
+        var resourceType = cardDescriptor.BaseCardEffect.Card.CardType.GetResourceType();
+        var resourceEffect = new ResourceEffect(resourceType, -1 * cardDescriptor.BaseCardEffect.Card.Cost, Side.Player);
         return Apply(resourceEffect);
     }
 

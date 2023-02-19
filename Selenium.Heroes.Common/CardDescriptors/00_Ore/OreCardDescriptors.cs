@@ -567,7 +567,12 @@ public class BARRACKS_CardDescriptor : CardDescriptor
         
         if (playerManager.Player.Barracks < enemyManager.Player.Barracks)
         {
-            actualCardEffect.ResourceEffects.Add(new ResourceEffect(ResourceType.Barracks, 1, Side.Player));
+            actualCardEffect.ResourceEffects = new List<ResourceEffect>
+            {
+                new ResourceEffect(ResourceType.Stacks, 6, Side.Player),
+                new ResourceEffect(ResourceType.Wall, 6, Side.Player),
+                new ResourceEffect(ResourceType.Barracks, 1, Side.Player)
+            };
         }
         
         return actualCardEffect;

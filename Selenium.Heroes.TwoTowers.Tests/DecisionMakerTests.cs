@@ -48,46 +48,6 @@ namespace Selenium.Heroes.TwoTowers.Tests
         }
 
         [TestMethod]
-        public void MakeDecision_Play_Screenshot_0002()
-        {
-            var player = new Player("Player")
-            {
-                Ore = 7,
-                Mana = 7,
-                Stacks = 7,
-                Mines = 2,
-                Monasteries = 2,
-                Barracks = 2,
-                Tower = 20,
-                Wall = 5,
-            };
-
-            var enemy = new Player("Enemy")
-            {
-                Ore = 7,
-                Mana = 7,
-                Stacks = 7,
-                Mines = 2,
-                Monasteries = 2,
-                Barracks = 3,
-                Tower = 20,
-                Wall = 5,
-            };
-
-            var headers = new[] { "BARRACKS", "ROCKCASTER", "FAMILIAR", "ABUNDANT SOIL", "TINY SNAKES", "FISSION" };
-            var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
-
-            var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors);
-            var decision = decisionMaker.MakeDecision();
-
-            Console.WriteLine($"ActionType: {decision.ActionType}.");
-            Console.WriteLine($"CardDescriptor: {decision.CardDescriptor.BaseCardEffect.Card.Header}.");
-
-            Assert.AreEqual(ActionType.Play, decision.ActionType);
-            Assert.AreEqual("ABUNDANT SOIL", decision.CardDescriptor.BaseCardEffect.Card.Header);
-        }
-
-        [TestMethod]
         public void MakeDecision_Discard_Screenshot_0001()
         {
             var player = new Player("Player")
@@ -165,6 +125,46 @@ namespace Selenium.Heroes.TwoTowers.Tests
 
             Assert.AreEqual(ActionType.Discard, decision.ActionType);
             Assert.AreEqual("SUBSOIL WATERS", decision.CardDescriptor.BaseCardEffect.Card.Header);
+        }
+
+        [TestMethod]
+        public void MakeDecision_Discard_Screenshot_0003()
+        {
+            var player = new Player("Player")
+            {
+                Ore = 7,
+                Mana = 7,
+                Stacks = 7,
+                Mines = 2,
+                Monasteries = 2,
+                Barracks = 2,
+                Tower = 20,
+                Wall = 5,
+            };
+
+            var enemy = new Player("Enemy")
+            {
+                Ore = 7,
+                Mana = 7,
+                Stacks = 7,
+                Mines = 2,
+                Monasteries = 2,
+                Barracks = 3,
+                Tower = 20,
+                Wall = 5,
+            };
+
+            var headers = new[] { "BARRACKS", "ROCKCASTER", "FAMILIAR", "ABUNDANT SOIL", "TINY SNAKES", "FISSION" };
+            var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
+
+            var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors);
+            var decision = decisionMaker.MakeDecision();
+
+            Console.WriteLine($"ActionType: {decision.ActionType}.");
+            Console.WriteLine($"CardDescriptor: {decision.CardDescriptor.BaseCardEffect.Card.Header}.");
+
+            Assert.AreEqual(ActionType.Discard, decision.ActionType);
+            Assert.AreEqual("ROCKCASTER", decision.CardDescriptor.BaseCardEffect.Card.Header);
         }
     }
 }
