@@ -15,6 +15,9 @@ public class Round
 // Still doesn't attack tower
 // Still plays SUBSOIL WATERS
 // Still plays ELVEN SCOUTS bad (discards third card)
+// COLLABORATION not played on 0 Ore
+// For rest of the cards calculate the best combination for enemy 
+// calculate our turns based on enmy possible turns
 
 public class RecursiveAnalysis
 {

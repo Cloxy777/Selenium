@@ -46,13 +46,13 @@ public class HeroesWorkerEngine : HeroesEngineBase
             var frame = Awaiter.Until(x => x.FindElement(By.XPath("//iframe[contains(@src, 'recaptcha')]")));
             Driver.SwitchTo().Frame(frame);
 
-            Thread.Sleep(100);
+            Thread.Sleep(1000);
             var recapcha = Awaiter.Until(x => x.FindElement(By.XPath("//span[@id = 'recaptcha-anchor']")));
             recapcha.Click();
 
             Driver.SwitchTo().ParentFrame();
 
-            Thread.Sleep(100);
+            Thread.Sleep(1000);
             var submit = Awaiter.Until(x => x.FindElement(By.XPath("//input[@type = 'submit' and @value='Enroll']")));
             submit.Click();
 
@@ -72,6 +72,7 @@ public class HeroesWorkerEngine : HeroesEngineBase
     {
         for (int i = 2; i >= 0;)
         {
+            Driver.Navigate().Refresh();
             var buttons = Awaiter.Until(x => x.FindElements(By.XPath("//div[@id='hwm_map_objects_and_buttons']/div[@class='job_fl_btns_block']/a")));
             buttons[i].Click();
 
