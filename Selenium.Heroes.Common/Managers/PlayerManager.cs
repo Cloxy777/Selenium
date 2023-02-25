@@ -73,7 +73,7 @@ public class PlayerManager
         return new PlayerManager(player);
     }
 
-    public void ApplyPureDamage(int damage)
+    private void ApplyPureDamage(int damage)
     {
         if (damage > Player.Wall)
         {

@@ -37,7 +37,7 @@ public static class Deck
     }
 
     public static void Add(List<ICardDescriptor> cards)
-    {      
+    {
         cards = Exists(cards).ToList();
 
         _drawCards.ForEach(x => x.Age++);

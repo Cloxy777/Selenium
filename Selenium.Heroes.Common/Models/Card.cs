@@ -46,10 +46,3 @@ public class Card
         return $"Header: {Header}. Description: {Description}.";
     }
 }
-
-public enum CardType
-{
-    Ore,
-    Mana,
-    Stacks
-}

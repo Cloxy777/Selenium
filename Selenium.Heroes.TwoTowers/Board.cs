@@ -1,4 +1,5 @@
-﻿using Selenium.Heroes.Common.CardDescriptors;
+﻿using Selenium.Heroes.Common;
+using Selenium.Heroes.Common.CardDescriptors;
 using Selenium.Heroes.Common.Extensions;
 using Selenium.Heroes.Common.Managers;
 using Selenium.Heroes.Common.Models;

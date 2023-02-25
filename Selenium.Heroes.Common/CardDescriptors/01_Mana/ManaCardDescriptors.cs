@@ -681,7 +681,7 @@ public class MEDITATION_CardDescriptor : CardDescriptor
         },
         ResourceEffects = new List<ResourceEffect>
         {
-            new ResourceEffect(ResourceType.Tower, 20, Side.Player),
+            new ResourceEffect(ResourceType.Tower, 13, Side.Player),
             new ResourceEffect(ResourceType.Stacks, 6, Side.Player),
             new ResourceEffect(ResourceType.Ore, 6, Side.Player),
         }

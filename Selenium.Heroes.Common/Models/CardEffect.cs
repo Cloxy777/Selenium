@@ -151,34 +151,3 @@ public class DamageEffect
         return DamageType.GetHashCode() ^ Value.GetHashCode() ^ Side.GetHashCode();
     }
 }
-
-public enum ResourceType
-{
-    Mines,
-    Ore,
-    Monasteries,
-    Mana,
-    Barracks,
-    Stacks,
-    Tower,
-    Wall
-}
-
-public enum DamageType
-{
-    Pure,
-    Tower
-}
-
-public enum Side
-{
-    Player,
-    Enemy
-}
-
-public enum PlayType
-{
-    Default,
-    PlayAgain,
-    DrawDiscardAndPlayAgain
-}

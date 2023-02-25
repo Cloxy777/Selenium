@@ -1,4 +1,5 @@
-﻿using Selenium.Heroes.Common.Models;
+﻿using Selenium.Heroes.Common;
+using Selenium.Heroes.Common.Models;
 
 namespace Selenium.Heroes.TwoTowers.Tests.Models;
 

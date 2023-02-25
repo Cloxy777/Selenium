@@ -20,7 +20,7 @@ public class CardWeightTests
             Mines = 3,
             Monasteries = 3,
             Barracks = 3,
-            Wall = 14,
+            Wall = 15,
             Tower = 25
         };
 

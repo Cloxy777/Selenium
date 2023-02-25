@@ -1,4 +1,5 @@
-﻿using Selenium.Heroes.Common.Models;
+﻿using Selenium.Heroes.Common;
+using Selenium.Heroes.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
