@@ -310,7 +310,7 @@ public class FORTIFIED_WALL_CardDescriptor : CardDescriptor
         },
         ResourceEffects = new List<ResourceEffect>
         {
-            new ResourceEffect(ResourceType.Wall, 6, Side.Enemy)
+            new ResourceEffect(ResourceType.Wall, 6, Side.Player)
         }
     };
 }
@@ -387,13 +387,7 @@ public class SUBSOIL_WATERS_CardDescriptor : CardDescriptor
     
         if (playerManager.Player.Wall == enemyManager.Player.Wall)
         {
-            actualCardEffect.ResourceEffects = new List<ResourceEffect>
-            {
-                new ResourceEffect(ResourceType.Barracks, -1, Side.Player),
-                new ResourceEffect(ResourceType.Tower, -2, Side.Player),
-                new ResourceEffect(ResourceType.Barracks, -1, Side.Enemy),
-                new ResourceEffect(ResourceType.Tower, -2, Side.Enemy),
-            };
+            actualCardEffect.ResourceEffects = new List<ResourceEffect>();
         }
 
         if (playerManager.Player.Wall > enemyManager.Player.Wall)
@@ -721,7 +715,7 @@ public class ROCKCASTER_CardDescriptor : CardDescriptor
         },
         DamageEffects = new List<DamageEffect>
         {
-            new DamageEffect(DamageType.Pure, 10, Side.Player)
+            new DamageEffect(DamageType.Pure, 10, Side.Enemy)
         }
     };
 }

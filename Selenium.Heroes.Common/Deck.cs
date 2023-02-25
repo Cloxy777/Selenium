@@ -205,7 +205,6 @@ public static class Deck
         return SumDamage(cardDescriptor);
     }
 
-
     public static decimal AveragePlayerResourceEffect(ResourceType resourceType, PlayerManager playerManager)
     {
         int SumDamage(ICardDescriptor? cardDescriptor)

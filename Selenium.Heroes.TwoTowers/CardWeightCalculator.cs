@@ -1,4 +1,5 @@
 ﻿using Selenium.Heroes.Common.CardDescriptors;
+using Selenium.Heroes.Common.Extensions;
 using Selenium.Heroes.Common.Managers;
 using Selenium.Heroes.Common.Models;
 
@@ -47,16 +48,18 @@ public class CardWeightCalculator
 
         foreach (var cardWight in cardWights.Where(x => x.CardDescriptor.BaseCardEffect.PlayType == PlayType.PlayAgain))
         {
-            cardWight.Weight += cardWights
-                .Where(x => x.CardDescriptor.BaseCardEffect.PlayType != PlayType.PlayAgain)
-                ?.MaxBy(x => x.Weight)
-                ?.Weight ?? 1;
+            var otherCards = cardWights.Where(x => !x.CardDescriptor.Equals(cardWight.CardDescriptor) && x.CardDescriptor.IsEnabled(PlayerManager)).ToList();
+
+            if (otherCards.Any())
+            {
+                cardWight.Weight += otherCards.Average(x => x.Weight);
+            }
         }
 
-        foreach (var cardWight in cardWights)
-        {
-            Console.WriteLine($"{cardWight.CardDescriptor.BaseCardEffect.Card.Header} = {cardWight.Weight}.");
-        }
+        //foreach (var cardWight in cardWights)
+        //{
+        //    Console.WriteLine($"{cardWight.CardDescriptor.BaseCardEffect.Card.Header} = {cardWight.Weight}.");
+        //}
 
         return cardWights;
     }
