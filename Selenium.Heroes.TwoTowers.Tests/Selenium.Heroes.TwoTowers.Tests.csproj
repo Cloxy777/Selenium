@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Selenium.Heroes.Common\Selenium.Heroes.Common.csproj" />
     <ProjectReference Include="..\Selenium.Heroes.TwoTowers\Selenium.Heroes.TwoTowers.csproj" />
   </ItemGroup>
 

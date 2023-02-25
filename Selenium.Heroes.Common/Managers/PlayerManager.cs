@@ -61,7 +61,7 @@ public class PlayerManager
         switch (damageEffect.DamageType)
         {
             case DamageType.Pure:
-                player.ApplyPureDamage(damageEffect.Value);
+                ApplyPureDamage(damageEffect.Value);
                 break;
             case DamageType.Tower:
                 player.Tower = player.Tower - damageEffect.Value;
@@ -71,6 +71,19 @@ public class PlayerManager
         }
 
         return new PlayerManager(player);
+    }
+
+    public void ApplyPureDamage(int damage)
+    {
+        if (damage > Player.Wall)
+        {
+            var towerDamage = damage - Player.Wall;
+            Player.Wall = 0;
+            Player.Tower = Player.Tower - towerDamage;
+            return;
+        }
+
+        Player.Wall = Player.Wall - damage;
     }
 
     public PlayerManager ApplyCosts(ICardDescriptor cardDescriptor)
@@ -152,17 +165,6 @@ public class PlayerManager
         return resourcePower + productionPower + towerPower + wallPower;
     }
 
-    private decimal CalculatePlayerProductionPower(ResourceType resourceType)
-    {
-        if (resourceType is not (ResourceType.Mines or ResourceType.Monasteries or ResourceType.Barracks))
-        {
-            throw new NotSupportedException($"{nameof(CalculatePlayerResourcePower)} not support {resourceType} resource type.");
-        }
-
-        var resourceValue = GetResourceValue(resourceType);
-        return resourceValue * 20m;
-    }
-
     private decimal CalculatePlayerResourcePower(ResourceType resourceType)
     {
         if (resourceType is not (ResourceType.Ore or ResourceType.Mana or ResourceType.Stacks))
@@ -196,29 +198,58 @@ public class PlayerManager
         return resourcePower;
     }
 
+    private decimal CalculatePlayerProductionPower(ResourceType resourceType)
+    {
+        if (resourceType is not (ResourceType.Mines or ResourceType.Monasteries or ResourceType.Barracks))
+        {
+            throw new NotSupportedException($"{nameof(CalculatePlayerResourcePower)} not support {resourceType} resource type.");
+        }
+
+        var resourceValue = GetResourceValue(resourceType);
+        return resourceValue * 20m;
+    }
+
     private decimal CalculateTowerPower()
     {
-        if (Player.Tower <= 14)
+        var maxTowerDamage = Deck.MaxDamage(DamageType.Tower, this);
+        var avgTowerDamage = Deck.AvgDamage(DamageType.Tower, this);
+
+        var maxTowerEffect = Deck.MaxPlayerResourceEffect(ResourceType.Tower, this);
+        var avgTowerEffect = Deck.AveragePlayerResourceEffect(ResourceType.Tower, this);
+
+        if (Player.Tower <= avgTowerDamage)
         {
             return Player.Tower * 2.5m;
         }
 
-        if (Player.Tower <= 25)
+        if (Player.Tower <= maxTowerDamage)
         {
-            return (14 * 2.5m) + ((Player.Tower - 14) * 2m);
+            return (avgTowerDamage * 2.5m) + 
+                ((Player.Tower - avgTowerDamage) * 2m);
         }
 
-        if (Player.Tower <= 35)
+        var softThreshold = 50 - maxTowerEffect;
+        if (Player.Tower <= softThreshold)
         {
-            return (14 * 2.5m) + (11 * 2m) + ((Player.Tower - 25) * 1.5m);
+            return (avgTowerDamage * 2.5m) + 
+                ((maxTowerDamage - avgTowerDamage) * 2m) + 
+                ((Player.Tower - maxTowerDamage) * 1.5m);
         }
 
-        if (Player.Tower <= 40)
+        var hardThreshold = 50m - avgTowerEffect;
+        if (Player.Tower <= hardThreshold)
         {
-            return (14 * 2.5m) + (11 * 2m) + (10 * 1.5m) + ((Player.Tower - 35) * 2m);
+            return (avgTowerDamage * 2.5m) +
+                ((maxTowerDamage - avgTowerDamage) * 2m) +
+                ((softThreshold - maxTowerDamage) * 1.5m) + 
+                ((Player.Tower - softThreshold) * 2m);
         }
 
-        return (14 * 2.5m) + (11 * 2m) + (10 * 1.5m) + (5 * 2m) + ((Player.Tower - 40) * 2.5m);
+        return (avgTowerDamage * 2.5m) +
+                ((maxTowerDamage - avgTowerDamage) * 2m) +
+                ((softThreshold - maxTowerDamage) * 1.5m) +
+                ((hardThreshold - softThreshold) * 2m) +
+                ((Player.Tower - hardThreshold) * 2.5m);
     }
 
     private decimal CalculateWallPower()

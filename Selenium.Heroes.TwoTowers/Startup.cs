@@ -1,4 +1,6 @@
-﻿namespace Selenium.Heroes.TwoTowers;
+﻿using Selenium.Heroes.Common;
+
+namespace Selenium.Heroes.TwoTowers;
 
 
 // TODO: finish and start new game
@@ -66,6 +68,8 @@ public class Startup
 
             foreach ( var move in turn.Moves ) 
             {
+                Deck.Add(move.CardDescriptor);
+
                 if (move.ActionType == ActionType.Play)
                 {
                     var card = move.CardDescriptor.BaseCardEffect.Card;

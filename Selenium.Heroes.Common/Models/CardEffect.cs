@@ -1,9 +1,4 @@
-﻿using Newtonsoft.Json.Converters;
-using System.ComponentModel;
-using System.Reflection;
-using System.Text.Json.Serialization;
-
-namespace Selenium.Heroes.Common.Models;
+﻿namespace Selenium.Heroes.Common.Models;
 
 public class CardEffect
 {
@@ -28,8 +23,8 @@ public class CardEffect
     private bool Equals(CardEffect resourceEffect)
     {
         return Card.Equals(resourceEffect.Card) && 
-            ResourceEffects.Equals(resourceEffect.ResourceEffects) && 
-            DamageEffects.Equals(resourceEffect.DamageEffects) && 
+            ResourceEffects.All(x => resourceEffect.ResourceEffects.Contains(x)) && 
+            DamageEffects.All(x => resourceEffect.DamageEffects.Contains(x)) && 
             PlayType.Equals(resourceEffect.PlayType);
     }
 
@@ -73,7 +68,7 @@ public class ResourceEffect
                 case ResourceType.Tower:
                     return Value / 50m * 10;
                 case ResourceType.Wall:
-                    return Value / 150m * 10;
+                    return Value / 100m * 10;
                 default:
                     throw new NotSupportedException($"{nameof(TransformedValue)} not support {ResourceType} resource type.");
             }
@@ -157,9 +152,6 @@ public class DamageEffect
     }
 }
 
-
-
-
 public enum ResourceType
 {
     Mines,
@@ -190,6 +182,3 @@ public enum PlayType
     PlayAgain,
     DrawDiscardAndPlayAgain
 }
-
-
-
