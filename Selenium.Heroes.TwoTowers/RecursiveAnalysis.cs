@@ -2,8 +2,6 @@
 
 public class Round
 {
-    public Turn EnemyTurn { get; set; } = default!;
-
     public Turn PlayerTurn { get; set; } = default!;
 
     public int Order { get; set; }
@@ -63,11 +61,10 @@ public class RecursiveAnalysis
         }
 
         var playerTurnes = Board.GetPossiblePlayerTurnes();
-        var enemyTurn = Board.GetPossibleEnemyTurn();
-
+        
         foreach (var playerTurn in playerTurnes)
         {
-            var analysis = Make(playerTurn, enemyTurn);
+            var analysis = Make(playerTurn);
             RecursiveAnalyses.Add(analysis);
         }
 
@@ -77,11 +74,11 @@ public class RecursiveAnalysis
         }
     }
 
-    public RecursiveAnalysis Make(Turn playerTurn, Turn enemyTurn)
+    public RecursiveAnalysis Make(Turn playerTurn)
     {
         var board = new Board(Board);
 
-        board = board.Make(playerTurn, enemyTurn);
+        board = board.Make(playerTurn);
 
         var analysis = new RecursiveAnalysis(board)
         {
@@ -92,7 +89,6 @@ public class RecursiveAnalysis
         analysis.Rounds.Add(new Round
         {
             PlayerTurn = playerTurn,
-            EnemyTurn = enemyTurn,
             Rating = analysis.GetCurrentPower(),
             Order = analysis.CurrentDeepLevel
         });

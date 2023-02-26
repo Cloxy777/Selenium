@@ -78,7 +78,7 @@ public class Board
         var disabledCardsPower = CardDescriptors
             .Where(x => !x.IsEnabled(future))
             .DefaultIfEmpty()
-            .Max(x => x?.ResourceLackNumber(future) ?? 0);
+            .Sum(x => x?.ResourceLackNumber(future) ?? 0);
 
         return disabledCardsPower;
     }
@@ -169,23 +169,21 @@ public class Board
         return new Board(playerManager, enemyManager, cardDescriptors, deck);
     }
 
-    public Board Make(Turn playerTurn, Turn enemyTurn)
+    public Board Make(Turn playerTurn)
+    {
+        var board = Play(playerTurn);
+
+        var enemyTurnes = board.GetPossibleEnemyTurnes();
+        var enemyTurn = board.GetBestEnemyTurn(enemyTurnes);
+        board = board.Play(enemyTurn);
+
+        return board;
+    }
+
+    public Board Play(Turn turn)
     {
         var board = new Board(this);
-        foreach (var move in playerTurn.Moves)
-        {
-            if (move.ActionType == ActionType.Play)
-            {
-                board = board.Play(move);
-            }
-
-            if (move.ActionType == ActionType.Discard)
-            {
-                board = board.Discard(move);
-            }
-        }
-
-        foreach (var move in enemyTurn.Moves)
+        foreach (var move in turn.Moves)
         {
             if (move.ActionType == ActionType.Play)
             {
@@ -203,11 +201,21 @@ public class Board
 
     public IEnumerable<Turn> GetPossiblePlayerTurnes()
     {
+        return GetPossibleTurnes(PlayerManager, CardDescriptors);
+    }
+
+    public IEnumerable<Turn> GetPossibleEnemyTurnes()
+    {
+        return GetPossibleTurnes(EnemyManager, Deck.LeftCards.ToList());
+    }
+
+    public IEnumerable<Turn> GetPossibleTurnes(PlayerManager playerManager, List<ICardDescriptor> cardDescriptors)
+    {
         var turnes = new List<Turn>();
 
-        foreach (var cardDescriptor in CardDescriptors)
+        foreach (var cardDescriptor in cardDescriptors)
         {
-            if (cardDescriptor.IsEnabled(PlayerManager))
+            if (cardDescriptor.IsEnabled(playerManager))
             {
                 if (cardDescriptor.BaseCardEffect.PlayType is PlayType.PlayAgain)
                 {
@@ -335,50 +343,14 @@ public class Board
         return turnes;
     }
 
-    public Turn GetPossibleEnemyTurn()
+    public Turn GetBestEnemyTurn(IEnumerable<Turn> turnes)
     {
-        var possibleCards = Deck.LeftCards.Where(x => x.IsEnabled(EnemyManager)).ToList();
-
-        var turn = new Turn
+        var best = turnes.MaxBy(turn =>
         {
-            Moves = new List<Move>
-            {
-                new Move
-                {
-                    ActionType = ActionType.Play,
-                    CardDescriptor = CardDescriptorsLoader.AllCardDescriptors.First(),
-                    IsProduce = true
-                } 
-            }
-        };
+            var board = Play(turn);
+            return board.EnemyPower - board.PlayerPower;
+        });
 
-        if (possibleCards.Any())
-        {
-            var mostEffective = possibleCards.MaxBy(x =>
-            {
-                var board = new Board(this);
-                var move = new Move
-                {
-                    ActionType = ActionType.Play,
-                    CardDescriptor = x,
-                    IsProduce = true
-                };
-                board.Play(move);
-                return board.EnemyPower - board.PlayerPower;
-            });
-
-            var move = new Move
-            {
-                ActionType = ActionType.Play,
-                CardDescriptor = mostEffective!,
-                IsProduce = true
-            };
-
-            turn.Moves.Clear();
-            turn.Moves.Add(move);
-            return turn;
-        }
-
-        return turn;
+        return best;
     }
 }

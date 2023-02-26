@@ -131,7 +131,8 @@ public class DecisionMakerTests
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
         Assert.AreEqual(ActionType.Discard, move.ActionType);
-        Assert.AreEqual("SUBSOIL WATERS", move.CardDescriptor.BaseCardEffect.Card.Header);
+        Assert.AreEqual("SHIFT", move.CardDescriptor.BaseCardEffect.Card.Header);
+        //Assert.AreEqual("SUBSOIL WATERS", move.CardDescriptor.BaseCardEffect.Card.Header);
     }
 
     [TestMethod]
@@ -173,6 +174,6 @@ public class DecisionMakerTests
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
         Assert.AreEqual(ActionType.Discard, move.ActionType);
-        Assert.AreEqual("ROCKCASTER", move.CardDescriptor.BaseCardEffect.Card.Header);
+        Assert.AreEqual("FISSION", move.CardDescriptor.BaseCardEffect.Card.Header);
     }
 }
