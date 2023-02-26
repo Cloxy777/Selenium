@@ -13,48 +13,65 @@ public class DrawCard
     public int Age { get; set; }
 }
 
-// TODO: 
-public static class Deck
+public class Deck
 {
-    private static List<ICardDescriptor>? _leftCards;
+    public Deck()
+    {
 
-    private static List<DrawCard> _drawCards = new List<DrawCard>();
+    }
 
-    public static IReadOnlyList<DrawCard> DrawCards => _drawCards;
+    public Deck(Deck deck)
+    {
+        _drawCards = new List<DrawCard>(deck.DrawCards);
+    }
 
-    public static int MaxAge { get; set; } = 15;
+    private List<ICardDescriptor>? _leftCards;
 
-    public static IReadOnlyList<ICardDescriptor> LeftCards => _leftCards ?? (_leftCards = GetLeftCards());
+    private List<DrawCard> _drawCards = new List<DrawCard>();
 
-    private static List<ICardDescriptor> GetLeftCards()
+    public IReadOnlyList<DrawCard> DrawCards => _drawCards;
+
+    public int MaxAge { get; set; } = 15;
+
+    public IReadOnlyList<ICardDescriptor> LeftCards => _leftCards ?? (_leftCards = GetLeftCards());
+
+    private List<ICardDescriptor> GetLeftCards()
     {
         return CardDescriptorsLoader.AllCardDescriptors.Where(card => !DrawCards.Any(x => x.CardDescriptor.Equals(card))).ToList();
     }
 
-    public static void Add(ICardDescriptor card)
+    public Deck Draw(ICardDescriptor cardDescriptor)
     {
-        Add(new List<ICardDescriptor> { card });
+        return Draw(new List<ICardDescriptor> { cardDescriptor });
     }
 
-    public static void Add(List<ICardDescriptor> cards)
+    public Deck Draw(List<ICardDescriptor> cards)
     {
-        cards = Exists(cards).ToList();
+        var deck = new Deck(this);
 
-        _drawCards.ForEach(x => x.Age++);
-        _drawCards = _drawCards.Where(x => x.Age < MaxAge).ToList();
+        // filter only existing cards.
+        cards = Exists(cards).ToList();
 
         var drawCards = cards.Select(card => new DrawCard { Age = 0, CardDescriptor = card }).ToList();
 
         var otherDrawCards = Except(drawCards).ToList();
 
-        _drawCards.Clear();
-        _drawCards.AddRange(otherDrawCards);
-        _drawCards.AddRange(drawCards);
+        deck._drawCards.Clear();
+        deck._drawCards.AddRange(otherDrawCards);
+        deck._drawCards.AddRange(drawCards);
 
-        _leftCards = null;
+        deck._leftCards = null;
+
+        return deck;
     }
 
-    public static IEnumerable<DrawCard> Except(List<DrawCard> drawCards)
+    public void Reset()
+    {
+        _drawCards.ForEach(x => x.Age++);
+        _drawCards = _drawCards.Where(x => x.Age < MaxAge).ToList();
+    }
+
+    public IEnumerable<DrawCard> Except(List<DrawCard> drawCards)
     {
         return _drawCards.Where(x => !drawCards.Any(y => y.CardDescriptor.Equals(x.CardDescriptor)));
     }
@@ -65,7 +82,7 @@ public static class Deck
         return cards.Where(x => allCards.Any(y => y.Equals(x)));
     }
 
-    public static decimal MaxDamage(DamageType damageType, PlayerManager playerManager)
+    public decimal MaxDamage(DamageType damageType, PlayerManager playerManager)
     {
         int SumDamage(ICardDescriptor? cardDescriptor)
         {
@@ -93,7 +110,7 @@ public static class Deck
         return SumDamage(cardDescriptor);
     }
 
-    public static decimal AvgDamage(DamageType damageType, PlayerManager playerManager)
+    public decimal AvgDamage(DamageType damageType, PlayerManager playerManager)
     {
         int SumDamage(ICardDescriptor? cardDescriptor)
         {
@@ -120,7 +137,7 @@ public static class Deck
         return (decimal)enabledCards.DefaultIfEmpty().Average(x => SumDamage(x));
     }
 
-    public static decimal MaxEnemyResourceEffect(ResourceType resourceType, PlayerManager playerManager)
+    public decimal MaxEnemyResourceEffect(ResourceType resourceType, PlayerManager playerManager)
     {
         int SumDamage(ICardDescriptor? cardDescriptor)
         {
@@ -149,7 +166,7 @@ public static class Deck
         return SumDamage(cardDescriptor);
     }
 
-    public static decimal AverageEnemyResourceEffect(ResourceType resourceType, PlayerManager playerManager)
+    public decimal AverageEnemyResourceEffect(ResourceType resourceType, PlayerManager playerManager)
     {
         int SumDamage(ICardDescriptor? cardDescriptor)
         {
@@ -177,7 +194,7 @@ public static class Deck
         return (decimal)enabledCards.DefaultIfEmpty().Average(x => SumDamage(x));
     }
 
-    public static decimal MaxPlayerResourceEffect(ResourceType resourceType, PlayerManager playerManager)
+    public decimal MaxPlayerResourceEffect(ResourceType resourceType, PlayerManager playerManager)
     {
         int SumDamage(ICardDescriptor? cardDescriptor)
         {
@@ -205,7 +222,7 @@ public static class Deck
         return SumDamage(cardDescriptor);
     }
 
-    public static decimal AveragePlayerResourceEffect(ResourceType resourceType, PlayerManager playerManager)
+    public decimal AveragePlayerResourceEffect(ResourceType resourceType, PlayerManager playerManager)
     {
         int SumDamage(ICardDescriptor? cardDescriptor)
         {
@@ -231,5 +248,4 @@ public static class Deck
 
         return (decimal)enabledCards.DefaultIfEmpty().Average(x => SumDamage(x));
     }
-
 }

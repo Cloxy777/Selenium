@@ -19,11 +19,12 @@ namespace Selenium.Heroes.TwoTowers;
 // Come up with some strategies to calculate card`s weight if another card played and operate by combinations inside
 public class DecisionMaker
 {
-    public DecisionMaker(Player player, Player enemy, List<ICardDescriptor> cardDescriptors)
+    public DecisionMaker(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, Deck deck)
 	{
         PlayerManager = new PlayerManager(player);
         EnemyManager = new PlayerManager(enemy);
-		CardDescriptors = cardDescriptors;
+		CardDescriptors = new List<ICardDescriptor>(cardDescriptors);
+        Deck = new Deck(deck);
 	}
 
 	public PlayerManager PlayerManager { get; }
@@ -32,21 +33,24 @@ public class DecisionMaker
 
     public List<ICardDescriptor> CardDescriptors { get; }
 
+    public Deck Deck { get; }
+
     public Turn CreateTurn()
     {
-        var board = new Board(PlayerManager, EnemyManager, CardDescriptors);
+        var board = new Board(PlayerManager, EnemyManager, CardDescriptors, Deck);
         var analysis = new RecursiveAnalysis(board);
         RecursiveAnalysis.MaxDeepLevel = Math.Max(3, board.EnabledCardDescriptors.Count);
         analysis.Build();
 
         var leaves = new List<RecursiveAnalysis>();
         analysis.Extract(ref leaves);
+        leaves = leaves.OrderByDescending(x => x.Rounds.Sum(x => x.Rating)).ToList();
 
         var effectiveAnalysis = leaves.MaxBy(x => x.Rounds.Sum(x => x.Rating));
 
         var ordered = leaves.OrderByDescending(x => x.Rounds.Sum(x => x.Rating)).ToList();
 
-        var turn = effectiveAnalysis!.Rounds.OrderBy(x => x.Order).Select(x => x.Turn).FirstOrDefault();
+        var turn = effectiveAnalysis!.Rounds.OrderBy(x => x.Order).Select(x => x.PlayerTurn).FirstOrDefault();
 
         return turn!;
     }

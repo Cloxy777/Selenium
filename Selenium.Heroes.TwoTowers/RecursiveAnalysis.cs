@@ -2,7 +2,9 @@
 
 public class Round
 {
-    public Turn Turn { get; set; } = default!;
+    public Turn EnemyTurn { get; set; } = default!;
+
+    public Turn PlayerTurn { get; set; } = default!;
 
     public int Order { get; set; }
 
@@ -38,7 +40,6 @@ public class RecursiveAnalysis
     public decimal GetCurrentPower()
     {
         var playerCoefficient = (1 + MaxDeepLevel / 10m - CurrentDeepLevel / 10m);
-        var enemyCoefficient = (1 + CurrentDeepLevel / 10m);
 
         var playerPower = Board.PlayerPower;
         var enemyPower = Board.EnemyPower;
@@ -48,13 +49,8 @@ public class RecursiveAnalysis
 
         var disabledCardsPower = Board.GetMaxDisabledCardDebuff();
 
-        var combinationBonus = 1 + (Rounds.OrderBy(x => x.Order)
-            ?.LastOrDefault()
-            ?.Turn
-            ?.Moves?.Count(x => x.ActionType == ActionType.Play) ?? 0) / 10m;
-
-        var positivePart = playerPower * playerCoefficient * combinationBonus * playerWinnerCoefficient;
-        var negativePart = (enemyPower * enemyCoefficient + disabledCardsPower) * enemyWinnerCoefficient;
+        var positivePart = playerPower * playerCoefficient * playerWinnerCoefficient;
+        var negativePart = (enemyPower + disabledCardsPower) * enemyWinnerCoefficient;
 
         return positivePart - negativePart;
     }
@@ -66,11 +62,12 @@ public class RecursiveAnalysis
             return;
         }
 
-        var turnes = Board.GetPossibleTurnes();
+        var playerTurnes = Board.GetPossiblePlayerTurnes();
+        var enemyTurn = Board.GetPossibleEnemyTurn();
 
-        foreach (var turn in turnes)
+        foreach (var playerTurn in playerTurnes)
         {
-            var analysis = Make(turn);
+            var analysis = Make(playerTurn, enemyTurn);
             RecursiveAnalyses.Add(analysis);
         }
 
@@ -80,11 +77,11 @@ public class RecursiveAnalysis
         }
     }
 
-    public RecursiveAnalysis Make(Turn turn)
+    public RecursiveAnalysis Make(Turn playerTurn, Turn enemyTurn)
     {
         var board = new Board(Board);
 
-        board = board.Make(turn);
+        board = board.Make(playerTurn, enemyTurn);
 
         var analysis = new RecursiveAnalysis(board)
         {
@@ -94,7 +91,8 @@ public class RecursiveAnalysis
 
         analysis.Rounds.Add(new Round
         {
-            Turn = turn,
+            PlayerTurn = playerTurn,
+            EnemyTurn = enemyTurn,
             Rating = analysis.GetCurrentPower(),
             Order = analysis.CurrentDeepLevel
         });

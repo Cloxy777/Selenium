@@ -18,6 +18,8 @@ public class Startup
         //isLocal = true;
 
         int seconds = 3;
+
+        var deck = new Deck();
         while (true)
         {
             Console.ReadLine();
@@ -62,13 +64,13 @@ public class Startup
             var enemy = engine.GetEnemyInfo();
             var cardDescriptors = engine.GetCardDescriptors();
 
-            var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors);
+            var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors, deck);
             
             var turn = decisionMaker.CreateTurn();
 
             foreach ( var move in turn.Moves ) 
             {
-                Deck.Add(move.CardDescriptor);
+                deck.Draw(move.CardDescriptor);
 
                 if (move.ActionType == ActionType.Play)
                 {

@@ -1,6 +1,7 @@
 ﻿using Selenium.Heroes.Common;
 using Selenium.Heroes.Common.CardDescriptors;
 using Selenium.Heroes.Common.Extensions;
+using Selenium.Heroes.Common.Loaders;
 using Selenium.Heroes.Common.Managers;
 using Selenium.Heroes.Common.Models;
 
@@ -38,14 +39,15 @@ public enum ActionType
 
 public class Board
 {
-    public Board(Board board) : this (board.PlayerManager, board.EnemyManager, board.CardDescriptors)
+    public Board(Board board) : this (board.PlayerManager, board.EnemyManager, board.CardDescriptors, board.Deck)
     {  }
 
-    public Board(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors)
+    public Board(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, Deck deck)
     {
         PlayerManager = new PlayerManager(playerManager);
         EnemyManager = new PlayerManager(enemyManager);
         CardDescriptors = new List<ICardDescriptor>(cardDescriptors!);
+        Deck = new Deck(deck);
 
         Calculator = new CardWeightCalculator(this);
     }
@@ -55,6 +57,8 @@ public class Board
     public PlayerManager EnemyManager { get; }
 
     public List<ICardDescriptor> CardDescriptors { get; }
+
+    public Deck Deck { get; }
 
     public List<ICardDescriptor> EnabledCardDescriptors 
         => CardDescriptors.Where(x => x.IsEnabled(PlayerManager)).ToList();
@@ -131,7 +135,10 @@ public class Board
             .Where(x => !x.Equals(move.CardDescriptor))
             .ToList();
 
-        return new Board(playerManager, enemyManager, cardDescriptors);
+        var deck = new Deck(Deck);
+        deck = deck.Draw(move.CardDescriptor);
+
+        return new Board(playerManager, enemyManager, cardDescriptors, deck);
     }
 
     public Board Discard(Move move)
@@ -156,13 +163,29 @@ public class Board
             .Where(x => !x.Equals(move.CardDescriptor))
             .ToList();
 
-        return new Board(playerManager, enemyManager, cardDescriptors);
+        var deck = new Deck(Deck);
+        deck = deck.Draw(move.CardDescriptor);
+
+        return new Board(playerManager, enemyManager, cardDescriptors, deck);
     }
 
-    public Board Make(Turn turn)
+    public Board Make(Turn playerTurn, Turn enemyTurn)
     {
         var board = new Board(this);
-        foreach (var move in turn.Moves)
+        foreach (var move in playerTurn.Moves)
+        {
+            if (move.ActionType == ActionType.Play)
+            {
+                board = board.Play(move);
+            }
+
+            if (move.ActionType == ActionType.Discard)
+            {
+                board = board.Discard(move);
+            }
+        }
+
+        foreach (var move in enemyTurn.Moves)
         {
             if (move.ActionType == ActionType.Play)
             {
@@ -178,7 +201,7 @@ public class Board
         return board;
     }
 
-    public IEnumerable<Turn> GetPossibleTurnes()
+    public IEnumerable<Turn> GetPossiblePlayerTurnes()
     {
         var turnes = new List<Turn>();
 
@@ -310,5 +333,52 @@ public class Board
         }
 
         return turnes;
+    }
+
+    public Turn GetPossibleEnemyTurn()
+    {
+        var possibleCards = Deck.LeftCards.Where(x => x.IsEnabled(EnemyManager)).ToList();
+
+        var turn = new Turn
+        {
+            Moves = new List<Move>
+            {
+                new Move
+                {
+                    ActionType = ActionType.Play,
+                    CardDescriptor = CardDescriptorsLoader.AllCardDescriptors.First(),
+                    IsProduce = true
+                } 
+            }
+        };
+
+        if (possibleCards.Any())
+        {
+            var mostEffective = possibleCards.MaxBy(x =>
+            {
+                var board = new Board(this);
+                var move = new Move
+                {
+                    ActionType = ActionType.Play,
+                    CardDescriptor = x,
+                    IsProduce = true
+                };
+                board.Play(move);
+                return board.EnemyPower - board.PlayerPower;
+            });
+
+            var move = new Move
+            {
+                ActionType = ActionType.Play,
+                CardDescriptor = mostEffective!,
+                IsProduce = true
+            };
+
+            turn.Moves.Clear();
+            turn.Moves.Add(move);
+            return turn;
+        }
+
+        return turn;
     }
 }

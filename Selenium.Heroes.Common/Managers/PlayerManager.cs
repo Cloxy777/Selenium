@@ -4,6 +4,7 @@ using Selenium.Heroes.Common.Models;
 
 namespace Selenium.Heroes.Common.Managers;
 
+// TODO: dependency on cards of player should be here ?
 public class PlayerManager
 {
     public Player Player { get; set; }
@@ -211,45 +212,37 @@ public class PlayerManager
 
     private decimal CalculateTowerPower()
     {
-        var maxTowerDamage = Deck.MaxDamage(DamageType.Tower, this);
-        var avgTowerDamage = Deck.AvgDamage(DamageType.Tower, this);
+        if (Player.Tower <= 0)
+        {
+            return Player.Tower * 5m;
+        }
 
-        var maxTowerEffect = Deck.MaxPlayerResourceEffect(ResourceType.Tower, this);
-        var avgTowerEffect = Deck.AveragePlayerResourceEffect(ResourceType.Tower, this);
-
-        if (Player.Tower <= avgTowerDamage)
+        if (Player.Tower <= 14)
         {
             return Player.Tower * 2.5m;
         }
 
-        if (Player.Tower <= maxTowerDamage)
+        if (Player.Tower <= 25)
         {
-            return (avgTowerDamage * 2.5m) + 
-                ((Player.Tower - avgTowerDamage) * 2m);
+            return (14 * 2.5m) + ((Player.Tower - 14) * 2m);
         }
 
-        var softThreshold = 50 - maxTowerEffect;
-        if (Player.Tower <= softThreshold)
+        if (Player.Tower <= 35)
         {
-            return (avgTowerDamage * 2.5m) + 
-                ((maxTowerDamage - avgTowerDamage) * 2m) + 
-                ((Player.Tower - maxTowerDamage) * 1.5m);
+            return (14 * 2.5m) + (11 * 2m) + ((Player.Tower - 25) * 1.5m);
         }
 
-        var hardThreshold = 50m - avgTowerEffect;
-        if (Player.Tower <= hardThreshold)
+        if (Player.Tower <= 40)
         {
-            return (avgTowerDamage * 2.5m) +
-                ((maxTowerDamage - avgTowerDamage) * 2m) +
-                ((softThreshold - maxTowerDamage) * 1.5m) + 
-                ((Player.Tower - softThreshold) * 2m);
+            return (14 * 2.5m) + (11 * 2m) + (10 * 1.5m) + ((Player.Tower - 35) * 2m);
         }
 
-        return (avgTowerDamage * 2.5m) +
-                ((maxTowerDamage - avgTowerDamage) * 2m) +
-                ((softThreshold - maxTowerDamage) * 1.5m) +
-                ((hardThreshold - softThreshold) * 2m) +
-                ((Player.Tower - hardThreshold) * 2.5m);
+        if (Player.Tower <= 50)
+        {
+            return (14 * 2.5m) + (11 * 2m) + (10 * 1.5m) + (5 * 2m) + ((Player.Tower - 40) * 2.5m);
+        }
+
+        return (14 * 2.5m) + (11 * 2m) + (10 * 1.5m) + (5 * 2m) + (10 * 2.5m) + ((Player.Tower - 50) * 5m);
     }
 
     private decimal CalculateWallPower()
