@@ -4,6 +4,8 @@ namespace Selenium.Heroes.TwoTowers;
 
 
 // TODO: finish and start new game
+// Select lowest price
+// Watch video and adapt
 public class Startup
 {
     public static void Run() 
@@ -22,7 +24,7 @@ public class Startup
         var deck = new Deck();
         while (true)
         {
-            Console.ReadLine();
+            //Console.ReadLine();
 
             var isCardGamePage = engine.IsCardGamePage();
 

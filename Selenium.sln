@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.Heroes.Worker", "Selenium.Heroes.Worker\Selenium.Heroes.Worker.csproj", "{6D80B99B-1449-4B0B-BC05-5B2D1A69F16F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.Heroes.TwoTowers.CardCollector", "Selenium.Heroes.TwoTowers.CardCollector\Selenium.Heroes.TwoTowers.CardCollector.csproj", "{F97D7F16-8D81-48FB-9235-8EC56BB9F1C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Selenium.Heroes.TwoTowers.HuntFarm", "Selenium.Heroes.TwoTowers.HuntFarm\Selenium.Heroes.TwoTowers.HuntFarm.csproj", "{F97D7F16-8D81-48FB-9235-8EC56BB9F1C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F0122B3D-6DD4-446E-85C0-695A9CD6E144}"
 	ProjectSection(SolutionItems) = preProject
