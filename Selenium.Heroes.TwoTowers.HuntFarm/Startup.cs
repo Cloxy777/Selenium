@@ -1,19 +1,15 @@
-﻿
-using Newtonsoft.Json;
-using Selenium.Heroes.Common.Models;
-using Selenium.Heroes.Common;
+﻿using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Converters;
 
+
 namespace Selenium.Heroes.CardCollector;
 
-public record HuntReward(int Points, int Gold);
+public record HuntReward(int Points, int Gold, int Order = 0);
 
 public class Startup
 {
     public const string RewardsFullPath = "E:\\GitHub\\Selenium\\Selenium.Heroes.TwoTowers.HuntFarm\\rewards.json";
-
-    public const int MaxCount = 30;
 
     public static void Run() 
     {
@@ -23,16 +19,7 @@ public class Startup
         var values = JsonConvert.DeserializeObject<Dictionary<string, HuntReward>>(jsonContent) ?? throw new Exception("Rewards not parsed.");
         Console.WriteLine($"Rewards loaded. Count: {values.Count}.");
 
-        if (IsEnoughValues(values))
-        {
-            values = values
-                .OrderByDescending(x => x.Value.Points)
-                .ThenByDescending(x => x.Value.Gold)
-                .Take(MaxCount)
-                .ToDictionary(x => x.Key, x => x.Value);
-        }
-
-        var seconds = 20;
+        var seconds = 11;
         while (true)
         {
             var text = engine.GetHuntText();
@@ -71,20 +58,14 @@ public class Startup
             values[text] = new HuntReward(points, gold);
             Console.WriteLine($"Hunt points: {points}. Gold: {gold}.");
 
-            if (!IsEnoughValues(values))
-            {
-                engine.SearchAnotherHunt();
-                Thread.Sleep(seconds * 1000);
-                continue;
-            }
-
             if (IsGoodReward(values, text))
             {
+                var i = 1;
                 values = values
                     .Where(x => x.Key != text)
                     .OrderByDescending(x => x.Value.Points)
                     .ThenByDescending(x => x.Value.Gold)
-                    .ToDictionary(x => x.Key, x => x.Value);
+                    .ToDictionary(x => x.Key, x => new HuntReward(x.Value.Points, x.Value.Gold, i++));
 
                 var settings = new JsonSerializerSettings
                 {
@@ -107,18 +88,15 @@ public class Startup
 
     private static bool IsGoodReward(Dictionary<string, HuntReward> values, string text)
     {
+        var top = (int)(values.Count * 0.1);
+
         var topThreeTextRewards = values
             .OrderByDescending(x => x.Value.Points)
             .ThenByDescending(x => x.Value.Gold)
             .Select(x => x.Key)
-            .Take(3)
+            .Take(top)
             .ToList();
 
         return topThreeTextRewards.Contains(text);
-    }
-
-    private static bool IsEnoughValues(Dictionary<string, HuntReward> values)
-    {
-        return values.Count >= MaxCount;
     }
 }
