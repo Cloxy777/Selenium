@@ -14,12 +14,13 @@ public class Startup
     public static void Run() 
     {
         var engine = new HeroesHuntEngine();
+        engine.Authenticate();
 
         var jsonContent = File.ReadAllText(RewardsFullPath);
         var values = JsonConvert.DeserializeObject<Dictionary<string, HuntReward>>(jsonContent) ?? throw new Exception("Rewards not parsed.");
         Console.WriteLine($"Rewards loaded. Count: {values.Count}.");
 
-        var seconds = 11;
+        var seconds = 20;
         while (true)
         {
             var text = engine.GetHuntText();

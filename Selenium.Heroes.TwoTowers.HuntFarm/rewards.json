@@ -143,5 +143,10 @@
     "Points": 1,
     "Gold": 150,
     "Order": 29
+  },
+  " You notice traces leading to a camp of Rogues (15), it doesn't take a genius to understand that they possess 92 gold": {
+    "Points": 1,
+    "Gold": 92,
+    "Order": 30
   }
 }
