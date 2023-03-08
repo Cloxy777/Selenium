@@ -55,12 +55,22 @@ public class Startup
                 continue;
             }
 
+            if (engine.IsGameFinished())
+            {
+                engine.Continue();
+                Console.WriteLine("Continue.");
+                Thread.Sleep(seconds * 1000);
+                continue;
+            }
+
             if (!engine.IsOurTurn())
             {
                 Console.WriteLine("Not our turn.");
                 Thread.Sleep(seconds * 1000);
                 continue;
             }
+
+
 
             var player = engine.GetPlayerInfo();
             var enemy = engine.GetEnemyInfo();

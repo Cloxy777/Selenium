@@ -37,13 +37,15 @@ public class RecursiveAnalysis
 
     public decimal GetCurrentPower()
     {
+        var earlierBetter = 1.1m - (0.1m / MaxDeepLevel * CurrentDeepLevel);
+
         var playerPower = Board.PlayerPower;
         var enemyPower = Board.EnemyPower;
 
         var playerWinnerCoefficient = (Board.PlayerManager.IsWinner || Board.EnemyManager.IsDestroed) ? 10 : 1;
         var enemyWinnerCoefficient = (Board.EnemyManager.IsWinner || Board.PlayerManager.IsDestroed) ? 10 : 1;
 
-        var positivePart = playerPower * playerWinnerCoefficient;
+        var positivePart = playerPower * playerWinnerCoefficient * earlierBetter;
         var negativePart = enemyPower * enemyWinnerCoefficient;
 
         return positivePart - negativePart;

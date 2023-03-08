@@ -45,6 +45,30 @@ public class HeroesTwoTowersEngine : HeroesEngineBase
         return success;
     }
 
+    public bool IsGameFinished()
+    {
+        var elements = Awaiter.Until(x => x.FindElements(By.XPath("//div[@id='btn_continue']")));
+        var success = elements.Any();
+
+        if (!success)
+        {
+            return false;
+        }
+
+        var @continue = Awaiter.Until(x => x.FindElement(By.XPath("//div[@id='btn_continue']")));
+        return @continue.Enabled && @continue.Displayed;
+    }
+
+    public void Continue()
+    {
+        var @continue = Awaiter.Until(x => x.FindElement(By.XPath("//div[@id='btn_continue']")));
+
+        if (@continue.Enabled && @continue.Displayed)
+        {
+            @continue.Click();
+        }
+    }
+
     public bool IsPlayerFound()
     {
         var elements = Awaiter.Until(x => x.FindElements(By.XPath(@"//a/b[text()='Yes']")));
