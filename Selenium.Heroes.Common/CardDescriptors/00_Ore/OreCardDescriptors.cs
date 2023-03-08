@@ -13,13 +13,21 @@ public class DEFECTIVE_ORE_CardDescriptor : CardDescriptor
             Description = "-8 ore to all players",
             Cost = 0,
             CardType = CardType.Ore
-        },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Ore, -8, Side.Player),
-            new ResourceEffect(ResourceType.Ore, -8, Side.Enemy)
         }
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -8, ResourceType.Ore, Side.Player),
+            GetActualNegativeEffect(playerManager, enemyManager, -8, ResourceType.Ore, Side.Enemy),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class EARTHQUAKE_CardDescriptor : CardDescriptor
@@ -32,13 +40,21 @@ public class EARTHQUAKE_CardDescriptor : CardDescriptor
             Description = "-1 to all mines",
             Cost = 0,
             CardType = CardType.Ore
-        },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Mines, 1, Side.Player),
-            new ResourceEffect(ResourceType.Wall, 1, Side.Enemy)
         }
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -1, ResourceType.Mines, Side.Player),
+            GetActualNegativeEffect(playerManager, enemyManager, -1, ResourceType.Mines, Side.Enemy),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class LUCKY_COIN_CardDescriptor : CardDescriptor
@@ -71,14 +87,22 @@ public class MINE_COLLAPSE_CardDescriptor : CardDescriptor
             Description = "-1 to mine, +10 to wall, +5 mana",
             Cost = 0,
             CardType = CardType.Ore
-        },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Mines, -1, Side.Player),
-            new ResourceEffect(ResourceType.Wall, 10, Side.Player),
-            new ResourceEffect(ResourceType.Mana, 5, Side.Player)
         }
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -1, ResourceType.Mines, Side.Player),
+            new ResourceEffect(ResourceType.Wall, 10, Side.Player),
+            new ResourceEffect(ResourceType.Mana, 5, Side.Player)
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class ABUNDANT_SOIL_CardDescriptor : CardDescriptor
@@ -168,13 +192,21 @@ public class OVERTIME_CardDescriptor : CardDescriptor
             Description = "+5 to wall, -6 mana",
             Cost = 2,
             CardType = CardType.Ore
-        },
-        ResourceEffects = new List<ResourceEffect>
+        }        
+    };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
         {
             new ResourceEffect(ResourceType.Wall, 5, Side.Player),
-            new ResourceEffect(ResourceType.Mana, -6, Side.Player),
-        }
-    };
+            GetActualNegativeEffect(playerManager, enemyManager, -6, ResourceType.Mana, Side.Player),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class FOUNDATION_CardDescriptor : CardDescriptor
@@ -289,12 +321,20 @@ public class COLLAPSE_CardDescriptor : CardDescriptor
             Description = "-1 to enemy mine",
             Cost = 4,
             CardType = CardType.Ore
-        },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Mines, -1, Side.Enemy)
         }
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -1, ResourceType.Mines, Side.Enemy),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class FORTIFIED_WALL_CardDescriptor : CardDescriptor
@@ -373,11 +413,6 @@ public class SUBSOIL_WATERS_CardDescriptor : CardDescriptor
             Description = "Player with lower wall gets -1 to barracks and 2 damage to tower",
             Cost = 6,
             CardType = CardType.Ore
-        },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Barracks, -1, Side.Player),
-            new ResourceEffect(ResourceType.Tower, -2, Side.Player)
         }
     };
 
@@ -388,16 +423,18 @@ public class SUBSOIL_WATERS_CardDescriptor : CardDescriptor
         if (playerManager.Player.Wall == enemyManager.Player.Wall)
         {
             actualCardEffect.ResourceEffects = new List<ResourceEffect>();
+            return actualCardEffect;
         }
 
-        if (playerManager.Player.Wall > enemyManager.Player.Wall)
+        var side = playerManager.Player.Wall > enemyManager.Player.Wall ? 
+            Side.Enemy : 
+            Side.Player;
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
         {
-            actualCardEffect.ResourceEffects = new List<ResourceEffect>
-            {
-                new ResourceEffect(ResourceType.Barracks, -1, Side.Enemy),
-                new ResourceEffect(ResourceType.Tower, -2, Side.Enemy),
-            };
-        }
+            GetActualNegativeEffect(playerManager, enemyManager, -1, ResourceType.Barracks, side),
+            new ResourceEffect(ResourceType.Tower, -2, side), 
+        };
 
         return actualCardEffect;
     }
@@ -432,13 +469,21 @@ public class SLAVE_LABOR_CardDescriptor : CardDescriptor
             Description = "+9 to wall, -5 stacks",
             Cost = 7,
             CardType = CardType.Ore
-        },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Wall, 9, Side.Player),
-            new ResourceEffect(ResourceType.Stacks, -5, Side.Player)
         }
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            new ResourceEffect(ResourceType.Wall, 9, Side.Player),
+            GetActualNegativeEffect(playerManager, enemyManager, -5, ResourceType.Stacks, Side.Player),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class TREMOR_CardDescriptor : CardDescriptor

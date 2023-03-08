@@ -213,13 +213,21 @@ public class COLLABORATION_CardDescriptor : CardDescriptor
             Description = "+7 to tower, -10 ore",
             Cost = 4,
             CardType = CardType.Mana
-        },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Tower, 7, Side.Player),
-            new ResourceEffect(ResourceType.Ore, -10, Side.Player),
         }
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            new ResourceEffect(ResourceType.Tower, 7, Side.Player),
+            GetActualNegativeEffect(playerManager, enemyManager, -10, ResourceType.Ore, Side.Player),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class ECLIPSE_CardDescriptor : CardDescriptor
@@ -273,17 +281,25 @@ public class DISSENSION_CardDescriptor : CardDescriptor
             Cost = 5,
             CardType = CardType.Mana
         },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Monasteries, -1, Side.Player),
-            new ResourceEffect(ResourceType.Monasteries, -1, Side.Enemy),
-        },
         DamageEffects = new List<DamageEffect>
         {
             new DamageEffect(DamageType.Tower, 7, Side.Player),
             new DamageEffect(DamageType.Tower, 7, Side.Enemy),
         }
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -1, ResourceType.Monasteries, Side.Player),
+            GetActualNegativeEffect(playerManager, enemyManager, -1, ResourceType.Monasteries, Side.Enemy),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class INITIATION_CardDescriptor : CardDescriptor
@@ -297,16 +313,24 @@ public class INITIATION_CardDescriptor : CardDescriptor
             Cost = 5,
             CardType = CardType.Mana
         },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Tower, 4, Side.Player),
-            new ResourceEffect(ResourceType.Stacks, -3, Side.Player),
-        },
         DamageEffects = new List<DamageEffect>
         {
             new DamageEffect(DamageType.Tower, 2, Side.Enemy),
         }
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            new ResourceEffect(ResourceType.Tower, 4, Side.Player),
+            GetActualNegativeEffect(playerManager, enemyManager, -3, ResourceType.Stacks, Side.Player),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class ORE_VEIN_CardDescriptor : CardDescriptor
@@ -396,12 +420,21 @@ public class MILD_STONE_CardDescriptor : CardDescriptor
             Cost = 7,
             CardType = CardType.Mana
         },
-        ResourceEffects = new List<ResourceEffect>
+        
+    };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
         {
             new ResourceEffect(ResourceType.Tower, 5, Side.Player),
-            new ResourceEffect(ResourceType.Ore, -6, Side.Enemy),
-        }
-    };
+            GetActualNegativeEffect(playerManager, enemyManager, -6, ResourceType.Ore, Side.Enemy),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class PARITY_CardDescriptor : CardDescriptor
@@ -447,15 +480,23 @@ public class FISSION_CardDescriptor : CardDescriptor
             Cost = 8,
             CardType = CardType.Mana
         },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Monasteries, -1, Side.Player),
-        },
         DamageEffects = new List<DamageEffect>
         {
             new DamageEffect(DamageType.Tower, 9, Side.Enemy)
         }
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -1, ResourceType.Monasteries, Side.Player),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class SOLIDIFICATION_CardDescriptor : CardDescriptor
@@ -469,12 +510,21 @@ public class SOLIDIFICATION_CardDescriptor : CardDescriptor
             Cost = 8,
             CardType = CardType.Mana
         },
-        ResourceEffects = new List<ResourceEffect>
+        
+    };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
         {
             new ResourceEffect(ResourceType.Tower, 11, Side.Player),
-            new ResourceEffect(ResourceType.Wall, -6, Side.Player)
-        }
-    };
+            GetActualNegativeEffect(playerManager, enemyManager, -6, ResourceType.Wall, Side.Player),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class WISDOM_PEARL_CardDescriptor : CardDescriptor

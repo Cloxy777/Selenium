@@ -259,4 +259,21 @@ public class PlayerManager
 
         return (7 * 2m) + (8 * 1.5m) + (Player.Wall - 15);
     }
+
+    public ResourceEffect GetActualNegativeEffect(int value, ResourceType resourceType, Side side)
+    {
+        if (value >= 0)
+        {
+            throw new ArgumentException($"Wrong value: {value}. {nameof(GetActualNegativeEffect)}");
+        }
+
+        value = Math.Abs(value);
+
+        var resourceValue = GetResourceValue(resourceType);
+
+        var actual = Math.Min(value, resourceValue);
+
+        return new ResourceEffect(resourceType, actual * -1, side);
+
+    }
 }

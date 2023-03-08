@@ -46,8 +46,8 @@ public class DecisionMakerTests
         Console.WriteLine($"ActionType: {move.ActionType}.");
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
-        Assert.AreEqual(ActionType.Discard, move.ActionType);
-        Assert.AreEqual("DRAGON", move.CardDescriptor.BaseCardEffect.Card.Header);
+        Assert.AreEqual(ActionType.Play, move.ActionType);
+        Assert.AreEqual("FORTIFIED WALL", move.CardDescriptor.BaseCardEffect.Card.Header);
     }
 
     [TestMethod]
@@ -89,7 +89,7 @@ public class DecisionMakerTests
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
         Assert.AreEqual(ActionType.Discard, move.ActionType);
-        Assert.AreEqual("DRAGON'S HEART", move.CardDescriptor.BaseCardEffect.Card.Header);
+        Assert.AreEqual("SUBSOIL WATERS", move.CardDescriptor.BaseCardEffect.Card.Header);
     }
 
     [TestMethod]
@@ -131,8 +131,8 @@ public class DecisionMakerTests
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
         Assert.AreEqual(ActionType.Discard, move.ActionType);
-        Assert.AreEqual("SHIFT", move.CardDescriptor.BaseCardEffect.Card.Header);
-        //Assert.AreEqual("SUBSOIL WATERS", move.CardDescriptor.BaseCardEffect.Card.Header);
+        //Assert.AreEqual("SHIFT", move.CardDescriptor.BaseCardEffect.Card.Header);
+        Assert.AreEqual("SUBSOIL WATERS", move.CardDescriptor.BaseCardEffect.Card.Header);
     }
 
     [TestMethod]

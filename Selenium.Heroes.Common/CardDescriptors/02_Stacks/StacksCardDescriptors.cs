@@ -13,13 +13,21 @@ public class COW_RABIES_CardDescriptor : CardDescriptor
             Description = "-6 stacks to all players",
             Cost = 0,
             CardType = CardType.Stacks
-        },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Stacks, -6, Side.Player),
-            new ResourceEffect(ResourceType.Stacks, -6, Side.Enemy),
-        }
+        }        
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -6, ResourceType.Stacks, Side.Player),
+            GetActualNegativeEffect(playerManager, enemyManager, -6, ResourceType.Stacks, Side.Enemy),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class FULL_MOON_CardDescriptor : CardDescriptor
@@ -53,15 +61,24 @@ public class GOBLINS_CardDescriptor : CardDescriptor
             Cost = 1,
             CardType = CardType.Stacks
         },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Mana, -3, Side.Player),
-        },
         DamageEffects = new List<DamageEffect>
         {
             new DamageEffect(DamageType.Pure, 4, Side.Enemy),
         }
     };
+
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -3, ResourceType.Mana, Side.Player),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class SPRITE_CardDescriptor : CardDescriptor
@@ -277,20 +294,30 @@ public class FAMILIAR_CardDescriptor : CardDescriptor
             Cost = 5,
             CardType = CardType.Stacks
         },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Ore, -5, Side.Player),
-            new ResourceEffect(ResourceType.Mana, -5, Side.Player),
-            new ResourceEffect(ResourceType.Stacks, -5, Side.Player),
-            new ResourceEffect(ResourceType.Ore, -5, Side.Enemy),
-            new ResourceEffect(ResourceType.Mana, -5, Side.Enemy),
-            new ResourceEffect(ResourceType.Stacks, -5, Side.Enemy),
-        },
         DamageEffects = new List<DamageEffect>
         {
             new DamageEffect(DamageType.Pure, 6, Side.Enemy),
         }
     };
+
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -5, ResourceType.Ore, Side.Player),
+            GetActualNegativeEffect(playerManager, enemyManager, -5, ResourceType.Mana, Side.Player),
+            GetActualNegativeEffect(playerManager, enemyManager, -5, ResourceType.Stacks, Side.Player),
+
+            GetActualNegativeEffect(playerManager, enemyManager, -5, ResourceType.Ore, Side.Enemy),
+            GetActualNegativeEffect(playerManager, enemyManager, -5, ResourceType.Mana, Side.Enemy),
+            GetActualNegativeEffect(playerManager, enemyManager, -5, ResourceType.Stacks, Side.Enemy),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class GNOMES_CardDescriptor : CardDescriptor
@@ -363,15 +390,24 @@ public class RABID_SHEEP_CardDescriptor : CardDescriptor
             Cost = 6,
             CardType = CardType.Stacks
         },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Stacks, -3, Side.Enemy),
-        },
         DamageEffects = new List<DamageEffect>
         {
-            new DamageEffect(DamageType.Pure, 3, Side.Enemy),
+            new DamageEffect(DamageType.Pure, 6, Side.Enemy),
         }
     };
+
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -3, ResourceType.Stacks, Side.Enemy),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class TINY_SNAKES_CardDescriptor : CardDescriptor
@@ -594,15 +630,23 @@ public class STONE_DEVOURERS_CardDescriptor : CardDescriptor
             Cost = 11,
             CardType = CardType.Stacks
         },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Mines, -1, Side.Enemy),
-        },
         DamageEffects = new List<DamageEffect>
         {
             new DamageEffect(DamageType.Pure, 8, Side.Enemy),
         }
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -1, ResourceType.Mines, Side.Enemy),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class THIEF_CardDescriptor : CardDescriptor
@@ -622,17 +666,15 @@ public class THIEF_CardDescriptor : CardDescriptor
     {
         var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        var enemyManaDraw = enemyManager.Player.Mana % 10;
-        var enemyOreDraw = enemyManager.Player.Ore % 5;
-        var playerMana = enemyManaDraw / 2;
-        var playerOre = enemyOreDraw / 2;
+        var enemyOreEffect = GetActualNegativeEffect(playerManager, enemyManager, -5, ResourceType.Ore, Side.Enemy);
+        var enemyManaEffect = GetActualNegativeEffect(playerManager, enemyManager, -10, ResourceType.Mana, Side.Enemy);
 
         actualCardEffect.ResourceEffects = new List<ResourceEffect>
         {
-            new ResourceEffect(ResourceType.Mana, enemyManaDraw * -1, Side.Enemy),
-            new ResourceEffect(ResourceType.Ore, enemyOreDraw * -1, Side.Enemy),
-            new ResourceEffect(ResourceType.Mana, playerMana, Side.Player),
-            new ResourceEffect(ResourceType.Ore, playerOre, Side.Player),
+            enemyOreEffect,
+            enemyManaEffect,
+            new ResourceEffect(enemyOreEffect.ResourceType, Math.Abs(enemyOreEffect.Value / 2), Side.Player),
+            new ResourceEffect(enemyManaEffect.ResourceType, Math.Abs(enemyManaEffect.Value / 2), Side.Player),
         };
 
         return actualCardEffect;
@@ -650,15 +692,24 @@ public class WARRIOR_CardDescriptor : CardDescriptor
             Cost = 13,
             CardType = CardType.Stacks
         },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Mana, -3, Side.Player)
-        },
         DamageEffects = new List<DamageEffect>
         {
             new DamageEffect(DamageType.Pure, 13, Side.Enemy)
         }
     };
+
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -3, ResourceType.Mana, Side.Player),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class SUCCUBI_CardDescriptor : CardDescriptor
@@ -672,15 +723,23 @@ public class SUCCUBI_CardDescriptor : CardDescriptor
             Cost = 14,
             CardType = CardType.Stacks
         },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Stacks, -8, Side.Enemy)
-        },
         DamageEffects = new List<DamageEffect>
         {
             new DamageEffect(DamageType.Tower, 5, Side.Enemy)
         }
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -8, ResourceType.Stacks, Side.Enemy),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class STONE_GIANT_CardDescriptor : CardDescriptor
@@ -716,16 +775,24 @@ public class VAMPIRE_CardDescriptor : CardDescriptor
             Cost = 17,
             CardType = CardType.Stacks
         },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Stacks, -5, Side.Enemy),
-            new ResourceEffect(ResourceType.Barracks, -1, Side.Enemy),
-        },
         DamageEffects = new List<DamageEffect>
         {
             new DamageEffect(DamageType.Pure, 10, Side.Enemy)
         }
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -5, ResourceType.Stacks, Side.Enemy),
+            GetActualNegativeEffect(playerManager, enemyManager, -1, ResourceType.Barracks, Side.Enemy),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class PEGASUS_RIDER_CardDescriptor : CardDescriptor
@@ -757,14 +824,22 @@ public class DRAGON_CardDescriptor : CardDescriptor
             Cost = 25,
             CardType = CardType.Stacks
         },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Mana, -10, Side.Enemy),
-            new ResourceEffect(ResourceType.Barracks, -1, Side.Enemy),
-        },
         DamageEffects = new List<DamageEffect>
         {
             new DamageEffect(DamageType.Pure, 20, Side.Enemy)
         }
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+            GetActualNegativeEffect(playerManager, enemyManager, -10, ResourceType.Mana, Side.Enemy),
+            GetActualNegativeEffect(playerManager, enemyManager, -1, ResourceType.Barracks, Side.Enemy),
+        };
+
+        return actualCardEffect;
+    }
 }

@@ -38,4 +38,17 @@ public abstract class CardDescriptor : ICardDescriptor
     {
         return BaseCardEffect.Card.Header.GetHashCode();
     }
+
+    protected virtual ResourceEffect GetActualNegativeEffect(PlayerManager playerManager, PlayerManager enemyManager, int value, ResourceType resourceType, Side side)
+    {
+        switch (side)
+        {
+            case Side.Player:
+                return playerManager.GetActualNegativeEffect(value, resourceType, side);
+            case Side.Enemy:
+                return enemyManager.GetActualNegativeEffect(value, resourceType, side);
+            default:
+                throw new NotSupportedException($"{nameof(GetActualNegativeEffect)} not support {side} side.");
+        }
+    }
 }
