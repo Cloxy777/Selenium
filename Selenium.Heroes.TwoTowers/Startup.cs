@@ -1,4 +1,5 @@
 ﻿using Selenium.Heroes.Common;
+using Selenium.Heroes.Common.Managers;
 
 namespace Selenium.Heroes.TwoTowers;
 
@@ -30,6 +31,9 @@ public class Startup
 
             if (!isCardGamePage)
             {
+                TurnCounter.Number = 1;
+                Console.WriteLine($"Turn number = {TurnCounter.Number}.");
+
                 if (!engine.IsRegistered())
                 {
                     engine.RegisterChallenge();
@@ -70,8 +74,6 @@ public class Startup
                 continue;
             }
 
-
-
             var player = engine.GetPlayerInfo();
             var enemy = engine.GetEnemyInfo();
             var cardDescriptors = engine.GetCardDescriptors();
@@ -101,6 +103,9 @@ public class Startup
                     Thread.Sleep(seconds * 1000);
                 }
             }
+
+            TurnCounter.Number++;
+            Console.WriteLine($"Turn number = {TurnCounter.Number}.");
 
             Thread.Sleep(seconds * 1000);
         }     

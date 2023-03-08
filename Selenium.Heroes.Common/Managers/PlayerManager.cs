@@ -58,23 +58,24 @@ public class PlayerManager
     public PlayerManager Apply(DamageEffect damageEffect)
     {
         var player = new Player(Player);
+        var playerManager = new PlayerManager(player);
 
         switch (damageEffect.DamageType)
         {
             case DamageType.Pure:
-                ApplyPureDamage(damageEffect.Value);
+                playerManager.ApplyPureDamage(damageEffect.Value);
                 break;
             case DamageType.Tower:
-                player.Tower = player.Tower - damageEffect.Value;
+                playerManager.Player.Tower = playerManager.Player.Tower - damageEffect.Value;
                 break;
             default:
                 throw new NotSupportedException($"{nameof(Apply)} not support {damageEffect.DamageType} damage type.");
         }
 
-        return new PlayerManager(player);
+        return playerManager;
     }
 
-    private void ApplyPureDamage(int damage)
+    public void ApplyPureDamage(int damage)
     {
         if (damage > Player.Wall)
         {
@@ -149,7 +150,7 @@ public class PlayerManager
 
     public bool IsWinner => Player.Tower >= 50;
 
-    public decimal GetPower()
+    public decimal GetPower(PlayerManager enemyManager)
     {
         var resourcePower = CalculatePlayerResourcePower(ResourceType.Ore) +
             CalculatePlayerResourcePower(ResourceType.Mana) +
@@ -161,7 +162,7 @@ public class PlayerManager
 
         var towerPower = CalculateTowerPower();
 
-        var wallPower = CalculateWallPower();
+        var wallPower = CalculateWallPower(enemyManager);
 
         return resourcePower + productionPower + towerPower + wallPower;
     }
@@ -178,22 +179,22 @@ public class PlayerManager
         var resourcePower = 0m;
         if (resourceValue <= 7)
         {
-            resourcePower = resourceValue * 1.3m;
+            resourcePower = resourceValue * 1.5m;
         }
 
         if (resourceValue <= 15)
         {
-            resourcePower = (7 * 2) + ((resourceValue - 7) * 1.2m);
+            resourcePower = (7 * 1.5m) + ((resourceValue - 7) * 1.3m);
         }
 
         if (resourceValue <= 25)
         {
-            resourcePower = (7 * 2m) + (8 * 1.5m) + (resourceValue - 15);
+            resourcePower = (7 * 1.5m) + (8 * 1.3m) + (resourceValue - 15);
         }
 
         if (resourceValue > 25)
         {
-            resourcePower = (7 * 2m) + (8 * 1.5m) + 10 + ((resourceValue - 25) * 0.9m);
+            resourcePower = (7 * 1.5m) + (8 * 1.3m) + 10 + ((resourceValue - 25) * 0.9m);
         }
 
         return resourcePower;
@@ -207,7 +208,7 @@ public class PlayerManager
         }
 
         var resourceValue = GetResourceValue(resourceType);
-        return resourceValue * 20m;
+        return resourceValue * TurnCounter.Left;
     }
 
     private decimal CalculateTowerPower()
@@ -245,19 +246,23 @@ public class PlayerManager
         return (14 * 2.5m) + (11 * 2m) + (10 * 1.5m) + (5 * 2m) + (10 * 2.5m) + ((Player.Tower - 50) * 5m);
     }
 
-    private decimal CalculateWallPower()
+    private decimal CalculateWallPower(PlayerManager enemyManager)
     {
+        var delta = Math.Max(0, Player.Wall - enemyManager.Player.Wall);
+        if (delta > 0 && delta < 6) delta = 10;
+        if (delta >= 6) delta = 0;
+
         if (Player.Wall <= 7)
         {
-            return Player.Wall * 2m;
+            return Player.Wall * 2m + delta;
         }
 
         if (Player.Wall <= 15)
         {
-            return (7 * 2) + ((Player.Wall - 7) * 1.5m);
+            return (7 * 2) + ((Player.Wall - 7) * 1.5m) + delta;
         }
 
-        return (7 * 2m) + (8 * 1.5m) + (Player.Wall - 15);
+        return (7 * 2m) + (8 * 1.5m) + (Player.Wall - 15) + delta;
     }
 
     public ResourceEffect GetActualNegativeEffect(int value, ResourceType resourceType, Side side)

@@ -13,6 +13,16 @@ public class Startup
     public static void CardsAnalysis()
     {
         var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.ToList();
+        var maxOreCost = cardDescriptors.Where(x => x.BaseCardEffect.Card.CardType == CardType.Ore).Max(x => x.BaseCardEffect.Card.Cost);
+        var maxManaCost = cardDescriptors.Where(x => x.BaseCardEffect.Card.CardType == CardType.Mana).Max(x => x.BaseCardEffect.Card.Cost);
+        var maxStacksCost = cardDescriptors.Where(x => x.BaseCardEffect.Card.CardType == CardType.Stacks).Max(x => x.BaseCardEffect.Card.Cost);
+
+        Console.WriteLine($"Max ore cost: {maxOreCost}.");
+        Console.WriteLine($"Max mana cost: {maxManaCost}.");
+        Console.WriteLine($"Max stacks cost: {maxStacksCost}.");
+        Console.WriteLine();
+
+
         var averageOreCost = cardDescriptors.Where(x => x.BaseCardEffect.Card.CardType == CardType.Ore).Average(x => x.BaseCardEffect.Card.Cost);
         var averageManaCost = cardDescriptors.Where(x => x.BaseCardEffect.Card.CardType == CardType.Mana).Average(x => x.BaseCardEffect.Card.Cost);
         var averageStacksCost = cardDescriptors.Where(x => x.BaseCardEffect.Card.CardType == CardType.Stacks).Average(x => x.BaseCardEffect.Card.Cost);

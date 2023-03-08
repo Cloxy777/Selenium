@@ -1,4 +1,6 @@
-﻿namespace Selenium.Heroes.TwoTowers;
+﻿using Selenium.Heroes.Common.Models;
+
+namespace Selenium.Heroes.TwoTowers;
 
 public class Round
 {

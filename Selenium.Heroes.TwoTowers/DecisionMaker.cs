@@ -48,6 +48,7 @@ public class DecisionMaker
         var effectiveAnalysis = leaves.MaxBy(x => x.Rounds.Sum(x => x.Rating));
 
         var ordered = leaves.OrderByDescending(x => x.Rounds.Sum(x => x.Rating)).ToList();
+        var play = ordered.FirstOrDefault(x => x.Rounds.First().PlayerTurn.Moves.First().ActionType == ActionType.Play);
 
         var turn = effectiveAnalysis!.Rounds.OrderBy(x => x.Order).Select(x => x.PlayerTurn).FirstOrDefault();
 

@@ -51,6 +51,48 @@ public class DecisionMakerTests
     }
 
     [TestMethod]
+    public void MakeDecision_Play_Screenshot_0002()
+    {
+        var player = new Player("Player")
+        {
+            Ore = 8,
+            Mana = 11,
+            Stacks = 15,
+            Mines = 3,
+            Monasteries = 2,
+            Barracks = 2,
+            Tower = 28,
+            Wall = 5,
+        };
+
+        var enemy = new Player("Enemy")
+        {
+            Ore = 1,
+            Mana = 20,
+            Stacks = 9,
+            Mines = 3,
+            Monasteries = 4,
+            Barracks = 2,
+            Tower = 18,
+            Wall = 11,
+        };
+
+        var headers = new[] { "BARRACKS", "DRAGON'S HEART", "GREATER WALL", "CRUSHER", "CRYSTAL SHIELD", "SANCTUARY" };
+        var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
+        var deck = new Deck();
+
+        var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors, deck);
+        var turn = decisionMaker.CreateTurn();
+        var move = turn.Moves.First();
+
+        Console.WriteLine($"ActionType: {move.ActionType}.");
+        Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
+
+        Assert.AreEqual(ActionType.Play, move.ActionType);
+        Assert.AreEqual("CRUSHER", move.CardDescriptor.BaseCardEffect.Card.Header);
+    }
+
+    [TestMethod]
     public void MakeDecision_Discard_Screenshot_0001()
     {
         var player = new Player("Player")

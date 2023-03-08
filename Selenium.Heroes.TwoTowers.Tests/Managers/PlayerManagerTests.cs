@@ -59,4 +59,44 @@ public class PlayerManagerTests
         Assert.AreEqual(30, playerManager.Player.Tower);
         Assert.AreEqual(15, playerManager.Player.Wall);
     }
+
+    [TestMethod]
+    public void ApplyPureDamage_WallIsGreaterThanDamage_DamageAppliedToWall()
+    {
+        // Arrange
+        var player = new Player("Player")
+        {
+            Wall = 5,
+            Tower = 10
+        };
+
+        var playerManager = new PlayerManager(player);
+
+        // Act
+        playerManager.ApplyPureDamage(3);
+
+        // Assert
+        Assert.AreEqual(2, playerManager.Player.Wall);
+        Assert.AreEqual(10, playerManager.Player.Tower);
+    }
+
+    [TestMethod]
+    public void ApplyPureDamage_WallIsLessThanDamage_DamageAppliedToWallAndTower()
+    {
+        // Arrange
+        var player = new Player("Player")
+        {
+            Wall = 2,
+            Tower = 10
+        };
+
+        var playerManager = new PlayerManager(player);
+
+        // Act
+        playerManager.ApplyPureDamage(5);
+
+        // Assert
+        Assert.AreEqual(0, playerManager.Player.Wall);
+        Assert.AreEqual(7, playerManager.Player.Tower);
+    }
 }

@@ -67,9 +67,9 @@ public class Board
 
     public IEnumerable<CardWeight> CardWeights => Calculator.CardWeights;
 
-    public decimal PlayerPower => PlayerManager.GetPower();
+    public decimal PlayerPower => PlayerManager.GetPower(EnemyManager);
 
-    public decimal EnemyPower => EnemyManager.GetPower();
+    public decimal EnemyPower => EnemyManager.GetPower(PlayerManager);
 
 
     public decimal GetMaxDisabledCardDebuff()
