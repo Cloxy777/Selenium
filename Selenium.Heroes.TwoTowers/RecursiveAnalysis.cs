@@ -33,22 +33,18 @@ public class RecursiveAnalysis
 
     public int CurrentDeepLevel { get; set; } = 0;
 
-    public static int MaxDeepLevel { get; set; } = 4;
+    public static int MaxDeepLevel { get; set; } = 3;
 
     public decimal GetCurrentPower()
     {
-        var playerCoefficient = (1 + MaxDeepLevel / 10m - CurrentDeepLevel / 10m);
-
         var playerPower = Board.PlayerPower;
         var enemyPower = Board.EnemyPower;
 
         var playerWinnerCoefficient = (Board.PlayerManager.IsWinner || Board.EnemyManager.IsDestroed) ? 10 : 1;
         var enemyWinnerCoefficient = (Board.EnemyManager.IsWinner || Board.PlayerManager.IsDestroed) ? 10 : 1;
 
-        var disabledCardsPower = Board.GetMaxDisabledCardDebuff();
-
-        var positivePart = playerPower * playerCoefficient * playerWinnerCoefficient;
-        var negativePart = (enemyPower + disabledCardsPower) * enemyWinnerCoefficient;
+        var positivePart = playerPower * playerWinnerCoefficient;
+        var negativePart = enemyPower * enemyWinnerCoefficient;
 
         return positivePart - negativePart;
     }

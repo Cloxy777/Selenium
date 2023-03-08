@@ -173,7 +173,7 @@ public class DecisionMakerTests
         Console.WriteLine($"ActionType: {move.ActionType}.");
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
-        Assert.AreEqual(ActionType.Discard, move.ActionType);
-        Assert.AreEqual("FISSION", move.CardDescriptor.BaseCardEffect.Card.Header);
+        Assert.AreEqual(ActionType.Play, move.ActionType);
+        Assert.AreEqual("ABUNDANT SOIL", move.CardDescriptor.BaseCardEffect.Card.Header);
     }
 }

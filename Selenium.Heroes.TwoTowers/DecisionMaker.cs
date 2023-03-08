@@ -39,7 +39,6 @@ public class DecisionMaker
     {
         var board = new Board(PlayerManager, EnemyManager, CardDescriptors, Deck);
         var analysis = new RecursiveAnalysis(board);
-        RecursiveAnalysis.MaxDeepLevel = Math.Max(3, board.EnabledCardDescriptors.Count);
         analysis.Build();
 
         var leaves = new List<RecursiveAnalysis>();

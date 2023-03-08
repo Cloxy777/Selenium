@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using Selenium.Heroes.Common.Loaders;
 using Selenium.Heroes.Common.CardDescriptors;
+using Selenium.Extensions;
 
 namespace Selenium.Heroes.TwoTowers;
 
@@ -19,8 +20,16 @@ public class HeroesTwoTowersEngine : HeroesEngineBase
     {
         Driver.Navigate().GoToUrl(GameTavernUrl);
 
-        var crateButton = Awaiter.Until(x => x.FindElement(By.XPath("//b[text()='Create a challenge']")));
-        crateButton.Click();
+        var createButton = Awaiter.Until(x => x.FindElement(By.XPath("//b[text()='Create a challenge']")));
+        createButton.Click();
+
+        var gold = Awaiter.Until(x => x.FindElement(By.XPath("//table[@class='wblight']/tbody/tr/td/select[@name='gold']")));
+        var selecter = new SelectElement(gold);
+        selecter.SelectByValue("0");
+
+        var timeout = Awaiter.Until(x => x.FindElement(By.XPath("//table[@class='wblight']/tbody/tr/td/select[@name='timeout']")));
+        selecter = new SelectElement(timeout);
+        selecter.SelectByValue("40");
 
         var submitButtin = Awaiter.Until(x => x.FindElement(By.XPath("//input[@type='submit' and @class='wbtn']")));
         submitButtin.Click();
