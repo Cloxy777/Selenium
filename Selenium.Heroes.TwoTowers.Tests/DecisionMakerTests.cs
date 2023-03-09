@@ -47,7 +47,7 @@ public class DecisionMakerTests
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
         Assert.AreEqual(ActionType.Play, move.ActionType);
-        Assert.AreEqual("FORTIFIED WALL", move.CardDescriptor.BaseCardEffect.Card.Header);
+        Assert.AreEqual("SMOKY QUARTZ", move.CardDescriptor.BaseCardEffect.Card.Header);
     }
 
     [TestMethod]

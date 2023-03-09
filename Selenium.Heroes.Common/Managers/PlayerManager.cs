@@ -208,7 +208,18 @@ public class PlayerManager
         }
 
         var resourceValue = GetResourceValue(resourceType);
-        return resourceValue * TurnCounter.Left;
+
+        var @base = 6m;
+
+        if (resourceValue == 0) @base = 0m;
+        if (resourceValue == 1) @base = 2m;
+        if (resourceValue == 2) @base = 3.5m;
+        if (resourceValue == 3) @base = 4.5m;
+        if (resourceValue == 4) @base = 5.25m;
+        if (resourceValue == 5) @base = 5.75m;
+        if (resourceValue == 6) @base = 6.0m;
+
+        return @base * TurnCounter.Left;
     }
 
     private decimal CalculateTowerPower()
