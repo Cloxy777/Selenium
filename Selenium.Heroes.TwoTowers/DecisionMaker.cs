@@ -1,10 +1,7 @@
 ﻿using Selenium.Heroes.Common;
 using Selenium.Heroes.Common.CardDescriptors;
-using Selenium.Heroes.Common.Extensions;
 using Selenium.Heroes.Common.Managers;
 using Selenium.Heroes.Common.Models;
-using System.Data.Common;
-using System.Linq;
 
 namespace Selenium.Heroes.TwoTowers;
 
@@ -20,14 +17,14 @@ namespace Selenium.Heroes.TwoTowers;
 public class DecisionMaker
 {
     public DecisionMaker(Player player, Player enemy, List<ICardDescriptor> cardDescriptors, Deck deck)
-	{
+    {
         PlayerManager = new PlayerManager(player);
         EnemyManager = new PlayerManager(enemy);
-		CardDescriptors = new List<ICardDescriptor>(cardDescriptors);
+        CardDescriptors = new List<ICardDescriptor>(cardDescriptors);
         Deck = new Deck(deck);
-	}
+    }
 
-	public PlayerManager PlayerManager { get; }
+    public PlayerManager PlayerManager { get; }
 
     public PlayerManager EnemyManager { get; }
 

@@ -19,6 +19,8 @@ public class Startup
         var jsonContent = File.ReadAllText(RewardsFullPath);
         var values = JsonConvert.DeserializeObject<Dictionary<string, HuntReward>>(jsonContent) ?? throw new Exception("Rewards not parsed.");
         Console.WriteLine($"Rewards loaded. Count: {values.Count}.");
+        
+        values = Filter(values, x => x.Value.Points >= 3);
 
         var seconds = 20;
         while (true)
@@ -61,12 +63,7 @@ public class Startup
 
             if (IsGoodReward(values, text))
             {
-                var i = 1;
-                values = values
-                    .Where(x => x.Key != text)
-                    .OrderByDescending(x => x.Value.Points)
-                    .ThenByDescending(x => x.Value.Gold)
-                    .ToDictionary(x => x.Key, x => new HuntReward(x.Value.Points, x.Value.Gold, i++));
+                values = Filter(values, x => x.Key != text);
 
                 var settings = new JsonSerializerSettings
                 {
@@ -89,15 +86,25 @@ public class Startup
 
     private static bool IsGoodReward(Dictionary<string, HuntReward> values, string text)
     {
-        var top = (int)(values.Count * 0.1);
+        values = Filter(values, x => x.Value.Points >= 3);
 
-        var topThreeTextRewards = values
+        var topRewards = values
             .OrderByDescending(x => x.Value.Points)
             .ThenByDescending(x => x.Value.Gold)
             .Select(x => x.Key)
-            .Take(top)
+            .Take(values.Count / 2)
             .ToList();
 
-        return topThreeTextRewards.Contains(text);
+        return topRewards.Contains(text);
+    }
+
+    private static Dictionary<string, HuntReward> Filter(Dictionary<string, HuntReward> values, Func<KeyValuePair<string, HuntReward>, bool> func)
+    {
+        var i = 1;
+        return values
+            .Where(x => x.Value.Points >= 3)
+            .OrderByDescending(x => x.Value.Points)
+            .ThenByDescending(x => x.Value.Gold)
+            .ToDictionary(x => x.Key, x => new HuntReward(x.Value.Points, x.Value.Gold, i++));
     }
 }
