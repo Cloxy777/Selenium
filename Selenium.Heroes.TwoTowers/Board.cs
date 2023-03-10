@@ -173,6 +173,11 @@ public class Board
     {
         var board = Play(playerTurn);
 
+        if (board.PlayerManager.IsWinner || board.EnemyManager.IsDestroed)
+        {
+            return board;
+        }
+
         var enemyTurnes = board.GetPossibleEnemyTurnes();
         var enemyTurn = board.GetBestEnemyTurn(enemyTurnes);
         board = board.Play(enemyTurn);

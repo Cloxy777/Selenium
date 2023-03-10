@@ -42,7 +42,9 @@ public class DecisionMaker
         analysis.Extract(ref leaves);
         leaves = leaves.OrderByDescending(x => x.Rounds.Sum(x => x.Rating)).ToList();
 
-        var effectiveAnalysis = leaves.MaxBy(x => x.Rounds.Sum(x => x.Rating));
+        var winnerTurn = analysis.RecursiveAnalyses.FirstOrDefault(x => x.Board.PlayerManager.IsWinner || x.Board.EnemyManager.IsDestroed);
+
+        var effectiveAnalysis = winnerTurn ?? leaves.MaxBy(x => x.Rounds.Sum(x => x.Rating));
 
         var turn = effectiveAnalysis!.Rounds.OrderBy(x => x.Order).Select(x => x.PlayerTurn).FirstOrDefault();
 
