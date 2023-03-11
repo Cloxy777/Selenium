@@ -104,6 +104,7 @@ public class Startup
     private static bool IsGoodReward(Dictionary<string, HuntReward> values, string text)
     {
         var topRewards = values
+            .Where(x => IsMaxPoints(x.Value, values))
             .OrderByDescending(x => x.Value.Points)
             .ThenByDescending(x => x.Value.Gold)
             .Select(x => x.Key)
