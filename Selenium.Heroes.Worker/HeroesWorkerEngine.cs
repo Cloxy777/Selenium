@@ -46,13 +46,13 @@ public class HeroesWorkerEngine : HeroesEngineBase
             var frame = Awaiter.Until(x => x.FindElement(By.XPath("//iframe[contains(@src, 'recaptcha')]")));
             Driver.SwitchTo().Frame(frame);
 
-            Thread.Sleep(1000);
+            Thread.Sleep(1234);
             var recapcha = Awaiter.Until(x => x.FindElement(By.XPath("//span[@id = 'recaptcha-anchor']")));
             recapcha.Click();
 
             Driver.SwitchTo().ParentFrame();
 
-            Thread.Sleep(1000);
+            Thread.Sleep(987);
             var submit = Awaiter.Until(x => x.FindElement(By.XPath("//input[@type = 'submit' and @value='Enroll']")));
             submit.Click();
 

@@ -96,6 +96,23 @@ public class HeroesTwoTowersEngine : HeroesEngineBase
         return false;
     }
 
+    public bool TimeIsInRange(int minTime = int.MinValue, int maxTime = int.MaxValue)
+    {
+        try
+        {
+            var timer = Awaiter.Until(x => x.FindElement(By.XPath("//div[@id='timer']")));
+            var text = timer.Text;
+            var currentTime = Convert.ToInt32(text);
+
+            Console.WriteLine($"Time: {currentTime}.");
+            return currentTime < maxTime && currentTime > minTime;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
     public Player GetPlayerInfo()
     {
         var player = new Player("Player");

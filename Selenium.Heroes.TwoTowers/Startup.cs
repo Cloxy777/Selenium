@@ -1,5 +1,7 @@
 ﻿using Selenium.Heroes.Common;
 using Selenium.Heroes.Common.Managers;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Selenium.Heroes.TwoTowers;
 
@@ -67,7 +69,7 @@ public class Startup
                 continue;
             }
 
-            if (!engine.IsOurTurn())
+            if (!engine.IsOurTurn() || (!engine.TimeIsInRange(0, 38) && !engine.TimeIsInRange(42, 118)))
             {
                 Console.WriteLine("Not our turn.");
                 Thread.Sleep(seconds * 1000);
@@ -82,32 +84,41 @@ public class Startup
             
             var turn = decisionMaker.CreateTurn();
 
-            foreach ( var move in turn.Moves ) 
+            var move = turn.Moves.First();
+            Play(move, deck, engine);
+            Thread.Sleep(seconds * 1000);
+
+            if (turn.Moves.Count == 3)
             {
-                deck.Draw(move.CardDescriptor);
-
-                if (move.ActionType == ActionType.Play)
-                {
-                    var card = move.CardDescriptor.BaseCardEffect.Card;
-
-                    Console.WriteLine($"Play {card.Header}.");
-                    engine.Play(card);
-                    Thread.Sleep(seconds * 1000);
-                }
-                else if (move.ActionType == ActionType.Discard)
-                {
-                    var card = move.CardDescriptor.BaseCardEffect.Card;
-
-                    Console.WriteLine($"Discard {card.Header}.");
-                    engine.Discard(card);
-                    Thread.Sleep(seconds * 1000);
-                }
+                move = turn.Moves[1];
+                Play(move, deck, engine);
+                Thread.Sleep(seconds * 1000);
             }
 
-            TurnCounter.Number++;
-            Console.WriteLine($"Turn number = {TurnCounter.Number}.");
+            if (turn.Moves.Count == 1)
+            {
+                TurnCounter.Number++;
+            }      
 
+            Console.WriteLine($"Turn number = {TurnCounter.Number}.");
             Thread.Sleep(seconds * 1000);
         }     
+    }
+
+    public static void Play(Move move, Deck deck, HeroesTwoTowersEngine engine)
+    {
+        deck.Draw(move.CardDescriptor);
+        var card = move.CardDescriptor.BaseCardEffect.Card;
+
+        if (move.ActionType == ActionType.Play)
+        {
+            Console.WriteLine($"Play {card.Header}.");
+            engine.Play(card);
+        }
+        else if (move.ActionType == ActionType.Discard)
+        {
+            Console.WriteLine($"Discard {card.Header}.");
+            engine.Discard(card);
+        }
     }
 }

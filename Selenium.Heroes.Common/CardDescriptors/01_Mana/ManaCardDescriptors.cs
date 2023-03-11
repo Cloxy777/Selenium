@@ -455,13 +455,20 @@ public class PARITY_CardDescriptor : CardDescriptor
         var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
         var difference = enemyManager.Player.Monasteries - playerManager.Player.Monasteries;
-        if (difference != 0) 
-        {
-            var side = difference > 0 ? Side.Player : Side.Enemy;
 
+        if (difference > 0) 
+        {
             actualCardEffect.ResourceEffects = new List<ResourceEffect>
             {
-                new ResourceEffect(ResourceType.Monasteries, difference, side)
+                new ResourceEffect(ResourceType.Monasteries, difference, Side.Player)
+            };
+        }
+
+        if (difference < 0)
+        {
+            actualCardEffect.ResourceEffects = new List<ResourceEffect>
+            {
+                new ResourceEffect(ResourceType.Monasteries, Math.Abs(difference), Side.Enemy)
             };
         }
 

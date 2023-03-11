@@ -1,227 +1,72 @@
 {
-  " You smell Goblins (70), when you are about to pass by, you notice - they are guarding 516 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 516,
-    "Order": 1
-  },
   " You smell Gremlin engineers (42), when you are about to pass by, you notice - they are guarding 404 gold. +3 HG points": {
     "Points": 3,
     "Gold": 404,
-    "Order": 2
+    "Order": 1
   },
   " You hear a scream of Recruits (70), you turn around and see that they are guarding 374 gold. +3 HG points": {
     "Points": 3,
     "Gold": 374,
-    "Order": 3
+    "Order": 2
   },
   " You notice traces leading to a camp of Faeries (32), it doesn't take a genius to understand that they possess 374 gold. +3 HG points": {
     "Points": 3,
     "Gold": 374,
+    "Order": 3
+  },
+  " You hear a scream of Sentries (65), you turn around and see that they are guarding 348 gold. +3 HG points": {
+    "Points": 3,
+    "Gold": 348,
     "Order": 4
   },
-  " You smell Spiders (32), when you are about to pass by, you notice - they are guarding 358 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 358,
-    "Order": 5
-  },
-  " You smell Bowmen (36), when you are about to pass by, you notice - they are guarding 342 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 342,
-    "Order": 6
-  },
-  " You notice traces leading to a camp of Faeries (32), it doesn't take a genius to understand that they possess 342 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 342,
-    "Order": 7
-  },
-  " You smell Bowmen (36), when you are about to pass by, you notice - they are guarding 338 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 338,
-    "Order": 8
-  },
-  " You hear a scream of Goblin warlocks (143), you turn around and see that they are guarding 338 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 338,
-    "Order": 9
-  },
-  " You smell Bowmen (36), when you are about to pass by, you notice - they are guarding 334 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 334,
-    "Order": 10
-  },
-  " You smell Goblin archers (102), when you are about to pass by, you notice - they are guarding 332 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 332,
-    "Order": 11
-  },
-  " You notice traces leading to a camp of Bowmen (36), it doesn't take a genius to understand that they possess 330 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 330,
-    "Order": 12
-  },
-  " You notice traces leading to a camp of Gremlin engineers (42), it doesn't take a genius to understand that they possess 328 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 328,
-    "Order": 13
-  },
-  " You smell Bowmen (36), when you are about to pass by, you notice - they are guarding 326 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 326,
-    "Order": 14
-  },
-  " You hear a scream of Spiders (32), you turn around and see that they are guarding 318 gold. +3 HG points": {
+  " You notice Spiders (32) that are guarding 318 gold. +3 HG points": {
     "Points": 3,
     "Gold": 318,
-    "Order": 15
+    "Order": 5
   },
-  " You hear a scream of Spiders (32), you turn around and see that they are guarding 312 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 312,
-    "Order": 16
-  },
-  " You hear a scream of Spiders (32), you turn around and see that they are guarding 308 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 308,
-    "Order": 17
-  },
-  " You notice Goblin archers (102) that are guarding 302 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 302,
-    "Order": 18
-  },
-  " You notice traces leading to a camp of Grotesques (33), it doesn't take a genius to understand that they possess 300 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 300,
-    "Order": 19
-  },
-  " You notice Recruits (70) that are guarding 298 gold. +3 HG points": {
+  " You smell Spiders (32), when you are about to pass by, you notice - they are guarding 298 gold. +3 HG points": {
     "Points": 3,
     "Gold": 298,
-    "Order": 20
+    "Order": 6
   },
-  " You smell Spiders (32), when you are about to pass by, you notice - they are guarding 294 gold. +3 HG points": {
+  " You hear a scream of Spawns (51), you turn around and see that they are guarding 296 gold. +3 HG points": {
     "Points": 3,
-    "Gold": 294,
-    "Order": 21
+    "Gold": 296,
+    "Order": 7
   },
-  " You smell Spawns (51), when you are about to pass by, you notice - they are guarding 294 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 294,
-    "Order": 22
-  },
-  " You smell Fiends (42), when you are about to pass by, you notice - they are guarding 294 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 294,
-    "Order": 23
-  },
-  " You smell Spiders (32), when you are about to pass by, you notice - they are guarding 292 gold. +3 HG points": {
+  " You smell Spawns (51), when you are about to pass by, you notice - they are guarding 292 gold. +3 HG points": {
     "Points": 3,
     "Gold": 292,
-    "Order": 24
+    "Order": 8
   },
-  " You notice traces leading to a camp of Grotesques (33), it doesn't take a genius to understand that they possess 290 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 290,
-    "Order": 25
-  },
-  " You notice Goblin archers (102) that are guarding 290 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 290,
-    "Order": 26
-  },
-  " You hear a scream of Spearmen (51), you turn around and see that they are guarding 288 gold. +3 HG points": {
+  " You notice traces leading to a camp of Spawns (51), it doesn't take a genius to understand that they possess 288 gold. +3 HG points": {
     "Points": 3,
     "Gold": 288,
-    "Order": 27
+    "Order": 9
   },
-  " You notice Spawns (51) that are guarding 284 gold. +3 HG points": {
+  " You hear a scream of Sentries (65), you turn around and see that they are guarding 286 gold. +3 HG points": {
+    "Points": 3,
+    "Gold": 286,
+    "Order": 10
+  },
+  " You smell Spawns (51), when you are about to pass by, you notice - they are guarding 284 gold. +3 HG points": {
     "Points": 3,
     "Gold": 284,
-    "Order": 28
+    "Order": 11
   },
-  " You smell Fiends (42), when you are about to pass by, you notice - they are guarding 282 gold. +3 HG points": {
+  " You notice Spiders (32) that are guarding 278 gold. +3 HG points": {
     "Points": 3,
-    "Gold": 282,
-    "Order": 29
+    "Gold": 278,
+    "Order": 12
   },
-  " You notice traces leading to a camp of Fiends (42), it doesn't take a genius to understand that they possess 282 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 282,
-    "Order": 30
-  },
-  " You hear a scream of Sentries (65), you turn around and see that they are guarding 280 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 280,
-    "Order": 31
-  },
-  " You hear a scream of Goblin archers (102), you turn around and see that they are guarding 276 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 276,
-    "Order": 32
-  },
-  " You notice traces leading to a camp of Recruits (70), it doesn't take a genius to understand that they possess 274 gold. +3 HG points": {
+  " You smell Spiders (32), when you are about to pass by, you notice - they are guarding 274 gold. +3 HG points": {
     "Points": 3,
     "Gold": 274,
-    "Order": 33
+    "Order": 13
   },
-  " You hear a scream of Goblin archers (102), you turn around and see that they are guarding 274 gold. +3 HG points": {
+  " You smell Spawns (51), when you are about to pass by, you notice - they are guarding 274 gold. +3 HG points": {
     "Points": 3,
     "Gold": 274,
-    "Order": 34
-  },
-  " You notice Zombies (38) that are guarding 272 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 272,
-    "Order": 35
-  },
-  " You smell Goblin archers (102), when you are about to pass by, you notice - they are guarding 272 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 272,
-    "Order": 36
-  },
-  " You notice traces leading to a camp of Zombies (38), it doesn't take a genius to understand that they possess 272 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 272,
-    "Order": 37
-  },
-  " You notice traces leading to a camp of Spiders (32), it doesn't take a genius to understand that they possess 270 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 270,
-    "Order": 38
-  },
-  " You smell Goblin archers (102), when you are about to pass by, you notice - they are guarding 270 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 270,
-    "Order": 39
-  },
-  " You notice Faeries (32) that are guarding 264 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 264,
-    "Order": 40
-  },
-  " You hear a scream of Goblin archers (102), you turn around and see that they are guarding 262 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 262,
-    "Order": 41
-  },
-  " You hear a scream of Ghosts (12), you turn around and see that they are guarding 262 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 262,
-    "Order": 42
-  },
-  " You notice traces leading to a camp of Spawns (51), it doesn't take a genius to understand that they possess 262 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 262,
-    "Order": 43
-  },
-  " You notice traces leading to a camp of Faeries (32), it doesn't take a genius to understand that they possess 252 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 252,
-    "Order": 44
-  },
-  " You notice Faeries (32) that are guarding 248 gold. +3 HG points": {
-    "Points": 3,
-    "Gold": 248,
-    "Order": 45
+    "Order": 14
   }
 }
