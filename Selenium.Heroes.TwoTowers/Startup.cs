@@ -1,10 +1,10 @@
 ﻿using Selenium.Heroes.Common;
 using Selenium.Heroes.Common.Managers;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
+using Selenium.Heroes.Worker;
+
+using WorkerStartup = Selenium.Heroes.Worker.Startup;
 
 namespace Selenium.Heroes.TwoTowers;
-
 
 // TODO: finish and start new game
 // Select lowest price
@@ -22,7 +22,7 @@ public class Startup
         //engine.NavigateToLocal();
         //isLocal = true;
 
-        int seconds = 3;
+        var seconds = 3;
 
         var deck = new Deck();
         while (true)
@@ -61,10 +61,16 @@ public class Startup
                 continue;
             }
 
+            // Provide some time window for worker.
             if (engine.IsGameFinished())
             {
+                deck = new Deck();
                 engine.Continue();
-                Console.WriteLine("Continue.");
+
+                Console.WriteLine("Run worker..");
+                WorkerStartup.InternalRun();
+
+                Console.WriteLine("Continue card game..");
                 Thread.Sleep(seconds * 1000);
                 continue;
             }

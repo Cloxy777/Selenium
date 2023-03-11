@@ -18,9 +18,9 @@ public class Startup
 
         var jsonContent = File.ReadAllText(RewardsFullPath);
         var values = JsonConvert.DeserializeObject<Dictionary<string, HuntReward>>(jsonContent) ?? throw new Exception("Rewards not parsed.");
+        values = FilterMaxPoints(values);
         Console.WriteLine($"Rewards loaded. Count: {values.Count}.");
-        
-        values = Filter(values, x => x.Value.Points >= 3);
+
 
         var seconds = 20;
         while (true)
@@ -58,8 +58,17 @@ public class Startup
                 }
             }
 
-            values[text] = new HuntReward(points, gold);
-            Console.WriteLine($"Hunt points: {points}. Gold: {gold}.");
+            var reward = new HuntReward(points, gold);
+            Console.Write($"Hunt points: {reward.Points}. Gold: {reward.Gold} ");
+            if (IsMaxPoints(reward, values))
+            {
+                values[text] = new HuntReward(points, gold);
+                Console.WriteLine("added.");
+            }
+            else
+            {
+                Console.WriteLine(".");
+            }
 
             if (IsGoodReward(values, text))
             {
@@ -86,13 +95,10 @@ public class Startup
 
     private static bool IsGoodReward(Dictionary<string, HuntReward> values, string text)
     {
-        values = Filter(values, x => x.Value.Points >= 3);
-
         var topRewards = values
             .OrderByDescending(x => x.Value.Points)
             .ThenByDescending(x => x.Value.Gold)
             .Select(x => x.Key)
-            .Take(values.Count / 2)
             .ToList();
 
         return topRewards.Contains(text);
@@ -106,5 +112,22 @@ public class Startup
             .OrderByDescending(x => x.Value.Points)
             .ThenByDescending(x => x.Value.Gold)
             .ToDictionary(x => x.Key, x => new HuntReward(x.Value.Points, x.Value.Gold, i++));
+    }
+
+    private static Dictionary<string, HuntReward> FilterMaxPoints(Dictionary<string, HuntReward> values)
+    {
+        var maxPoints = GetMaxPoints(values);
+        return Filter(values, x => x.Value.Points >= maxPoints);
+    }
+
+    private static bool IsMaxPoints(HuntReward reward, Dictionary<string, HuntReward> values)
+    {
+        var maxPoints = GetMaxPoints(values);
+        return reward.Points == maxPoints;
+    }
+
+    private static int GetMaxPoints(Dictionary<string, HuntReward> values)
+    {
+        return values.MaxBy(x => x.Value.Points).Value.Points;
     }
 }

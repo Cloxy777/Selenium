@@ -37,5 +37,21 @@ public class Startup
                 Console.WriteLine("Global exception handler worked.");
             }
         }
-    } 
+    }
+
+    public static void InternalRun()
+    {
+        var worker = new HeroesWorkerEngine();
+        worker.Authenticate();
+        worker.CalculateTimeDifference();
+
+        try
+        {
+            worker.StartWork();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Global exception handler worked.");
+        }
+    }
 }

@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Selenium.Heroes.Common\Selenium.Heroes.Common.csproj" />
+    <ProjectReference Include="..\Selenium.Heroes.Worker\Selenium.Heroes.Worker.csproj" />
   </ItemGroup>
 
 </Project>

@@ -101,6 +101,18 @@ public abstract class HeroesEngineBase
         return match.Success;
     }
 
+
+    public bool IsTavernPage()
+    {
+        var actualUrl = Driver.Url;
+
+        var regex = @$"{GameTavernUrl}";
+
+        var match = Regex.Match(actualUrl, regex, RegexOptions.IgnoreCase);
+
+        return match.Success;
+    }
+
     public void NavigateToLocal()
     {
         Driver.Navigate().GoToUrl(LocalUrl);
