@@ -59,11 +59,11 @@ public class Startup
             }
 
             var reward = new HuntReward(points, gold);
-            Console.Write($"Hunt points: {reward.Points}. Gold: {reward.Gold} ");
+            Console.Write($"Hunt points: {reward.Points}. Gold: {reward.Gold}");
             if (IsMaxPoints(reward, values))
             {
                 values[text] = new HuntReward(points, gold);
-                Console.WriteLine("added.");
+                Console.WriteLine(" added.");
             }
             else
             {
