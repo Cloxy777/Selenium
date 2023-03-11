@@ -68,5 +68,10 @@
     "Points": 3,
     "Gold": 274,
     "Order": 14
+  },
+  " You smell Spiders (32), when you are about to pass by, you notice - they are guarding 258 gold. +3 HG points": {
+    "Points": 3,
+    "Gold": 258,
+    "Order": 15
   }
 }

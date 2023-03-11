@@ -58,17 +58,7 @@ public class Startup
                 }
             }
 
-            var reward = new HuntReward(points, gold);
-            Console.Write($"Hunt points: {reward.Points}. Gold: {reward.Gold}");
-            if (IsMaxPoints(reward, values))
-            {
-                values[text] = new HuntReward(points, gold);
-                Console.WriteLine(" added.");
-            }
-            else
-            {
-                Console.WriteLine(".");
-            }
+            StoreReward(points, gold, text, values);
 
             if (IsGoodReward(values, text))
             {
@@ -91,6 +81,25 @@ public class Startup
             Thread.Sleep(seconds * 1000);
             continue;
         }     
+    }
+
+    private static void StoreReward(int points, int gold, string text, Dictionary<string, HuntReward> values)
+    {
+        var reward = new HuntReward(points, gold);
+        values[text] = reward;
+        Console.WriteLine($"Hunt points: {reward.Points}. Gold: {reward.Gold}.");
+
+        //var reward = new HuntReward(points, gold);
+        //Console.Write($"Hunt points: {reward.Points}. Gold: {reward.Gold}");
+        //if (IsMaxPoints(reward, values))
+        //{
+        //    values[text] = reward;
+        //    Console.WriteLine(" added.");
+        //}
+        //else
+        //{
+        //    Console.WriteLine(".");
+        //}
     }
 
     private static bool IsGoodReward(Dictionary<string, HuntReward> values, string text)
@@ -128,6 +137,14 @@ public class Startup
 
     private static int GetMaxPoints(Dictionary<string, HuntReward> values)
     {
-        return values.MaxBy(x => x.Value.Points).Value.Points;
+        var actualMaxPoints = values.MaxBy(x => x.Value.Points).Value.Points;
+
+        if (actualMaxPoints > 3)
+        {
+            Console.WriteLine($"FOUND MAX POINTS -----------------> {actualMaxPoints}.");
+            return actualMaxPoints;
+        }
+
+        return 3;
     }
 }
