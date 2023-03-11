@@ -27,7 +27,17 @@ public class Startup
         var deck = new Deck();
         while (true)
         {
-            //Console.ReadLine();
+            if (engine.IsWorkAllowed())
+            {
+                Console.WriteLine("Work is allowed.");
+                Console.WriteLine("Run worker..");
+                WorkerStartup.InternalRun();
+
+                Console.WriteLine("Continue card game..");
+                Thread.Sleep(seconds * 1000);
+                continue;
+
+            }
 
             var isCardGamePage = engine.IsCardGamePage();
 

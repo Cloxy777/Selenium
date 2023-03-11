@@ -104,13 +104,26 @@ public class HeroesTwoTowersEngine : HeroesEngineBase
             var text = timer.Text;
             var currentTime = Convert.ToInt32(text);
 
-            Console.WriteLine($"Time: {currentTime}.");
             return currentTime < maxTime && currentTime > minTime;
         }
         catch (Exception)
         {
             return false;
         }
+    }
+
+    public bool IsWorkAllowed()
+    {
+        var elements = Awaiter.Until(x => x.FindElements(By.XPath("//a[@href='map.php']/div[@id='hwm_topline_with_hint2']")));
+        var success = elements.Any();
+
+        if (!success)
+        {
+            return false;
+        }
+
+        var hint = Awaiter.Until(x => x.FindElement(By.XPath("//a[@href='map.php']/div[@id='hwm_topline_with_hint2']")));
+        return hint.Enabled && hint.Displayed;
     }
 
     public Player GetPlayerInfo()

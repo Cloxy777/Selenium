@@ -1,7 +1,5 @@
 ﻿using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium;
-using Selenium.WebDriver.UndetectedChromeDriver;
-using Sl.Selenium.Extensions.Chrome;
 using System.Text.RegularExpressions;
 using Selenium.Heroes.Common.Configuration;
 
@@ -19,39 +17,9 @@ public abstract class HeroesEngineBase
 
     protected const string GameTavernUrl = "https://www.lordswm.com/tavern.php";
 
-    private readonly IWebDriver _driver;
+    public IWebDriver Driver => WebDriverSingleton.Driver;
 
-    private readonly IWait<IWebDriver> _awaiter;
-
-    public HeroesEngineBase()
-    {
-        UndetectedChromeDriver.KillAllChromeProcesses();
-        UndetectedChromeDriver.ENABLE_PATCHER = true;
-
-        var @params = new ChromeDriverParameters()
-        {
-            Timeout = TimeSpan.FromSeconds(10),
-            ProfileName = "bordox",
-            DriverArguments = Arguments
-        };
-
-        _driver = UndetectedChromeDriver.Instance(@params);
-
-        _awaiter = new WebDriverWait(_driver, TimeSpan.FromSeconds(3));
-    }
-
-    public IWebDriver Driver => _driver;
-
-    public IWait<IWebDriver> Awaiter => _awaiter;
-
-    protected virtual HashSet<string> Arguments => new HashSet<string>
-    {
-        "--no-sandbox",
-        "--window-size=1920,1080",
-        //"--headless-new",
-        "--disable-gpu",
-        "--allow-running-insecure-content"
-    };
+    public IWait<IWebDriver> Awaiter => WebDriverSingleton.Awaiter;
 
     public void Authenticate()
     {
