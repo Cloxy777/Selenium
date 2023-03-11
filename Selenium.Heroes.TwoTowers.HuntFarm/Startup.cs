@@ -21,7 +21,6 @@ public class Startup
         values = FilterMaxPoints(values);
         Console.WriteLine($"Rewards loaded. Count: {values.Count}.");
 
-
         var seconds = 20;
         while (true)
         {
