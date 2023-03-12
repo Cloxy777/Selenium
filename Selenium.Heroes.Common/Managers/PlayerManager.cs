@@ -260,9 +260,6 @@ public class PlayerManager
     private decimal CalculateWallPower(PlayerManager enemyManager)
     {
         var delta = (Player.Wall - enemyManager.Player.Wall) * 2;
-        if (Player.Wall <= 3 || enemyManager.Player.Wall <= 3) delta *= 2;
-        //if (delta > 0 && delta < 8) delta = 10;
-        //if (delta >= 8) delta = 0;
 
         if (Player.Wall <= 7)
         {
