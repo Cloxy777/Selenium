@@ -498,13 +498,21 @@ public class TREMOR_CardDescriptor : CardDescriptor
             Cost = 7,
             CardType = CardType.Ore
         },
-        ResourceEffects = new List<ResourceEffect>
-        {
-            new ResourceEffect(ResourceType.Wall, 5, Side.Player),
-            new ResourceEffect(ResourceType.Wall, 5, Side.Enemy)
-        },
         PlayType = PlayType.PlayAgain
     };
+
+    public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
+    {
+        var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
+
+        actualCardEffect.ResourceEffects = new List<ResourceEffect>
+        {
+             GetActualNegativeEffect(playerManager, enemyManager, -5, ResourceType.Wall, Side.Player),
+             GetActualNegativeEffect(playerManager, enemyManager, -5, ResourceType.Wall, Side.Enemy),
+        };
+
+        return actualCardEffect;
+    }
 }
 
 public class GREAT_WALL_CardDescriptor : CardDescriptor

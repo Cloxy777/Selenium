@@ -144,11 +144,6 @@ public class Board
 
         if (move.IsProduce)
         {
-            playerManager = playerManager
-                .Produce(ResourceType.Mines)
-                .Produce(ResourceType.Monasteries)
-                .Produce(ResourceType.Barracks);
-
             enemyManager = enemyManager
                 .Produce(ResourceType.Mines)
                 .Produce(ResourceType.Monasteries)
@@ -162,7 +157,9 @@ public class Board
         var deck = new Deck(Deck);
         deck = deck.Draw(move.CardDescriptor);
 
-        return new Board(playerManager, enemyManager, cardDescriptors, deck);
+        return side is Side.Player ?
+            new Board(playerManager, enemyManager, cardDescriptors, deck) :
+            new Board(enemyManager, playerManager, cardDescriptors, deck);
     }
 
     public Board Make(Turn turn, Side side = Side.Player)
@@ -204,7 +201,7 @@ public class Board
     {
         var turnes = new List<Turn>();
 
-        foreach (var cardDescriptor in CardDescriptors)
+        foreach (var cardDescriptor in CardDescriptors.OrderByDescending(x => x.BaseCardEffect.Card.Cost))
         {
             if (cardDescriptor.IsEnabled(playerManager))
             {
@@ -312,7 +309,7 @@ public class Board
 
         var turnes = new List<Turn>();
 
-        foreach (var cardDescriptor in CardDescriptors)
+        foreach (var cardDescriptor in CardDescriptors.OrderByDescending(x => x.BaseCardEffect.Card.Cost))
         {
             if (!ignoreDiscard)
             {

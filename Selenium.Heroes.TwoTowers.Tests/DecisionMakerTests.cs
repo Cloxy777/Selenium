@@ -140,6 +140,52 @@ public class DecisionMakerTests
     }
 
     [TestMethod]
+    public void MakeDecision_Play_Screenshot_0004()
+    {
+        var player = new Player("Player")
+        {
+            Ore = 7,
+            Mana = 4,
+            Stacks = 16,
+            Mines = 3,
+            Monasteries = 2,
+            Barracks = 2,
+            Tower = 27,
+            Wall = 9,
+        };
+
+        var enemy = new Player("Enemy")
+        {
+            Ore = 14,
+            Mana = 1,
+            Stacks = 4,
+            Mines = 4,
+            Monasteries = 2,
+            Barracks = 3,
+            Tower = 30,
+            Wall = 1,
+        };
+
+        var headers = new[] { "BASTION", "BARRACKS", "WARRIOR", "TREMOR", "CAUSTIC CLOUD", "DIE MOULD" };
+        var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
+        var deck = new Deck();
+        deck = deck.Draw(cardDescriptors);
+
+        var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors, deck);
+        var turn = decisionMaker.CreateTurn();
+        var move = turn.Moves.First();
+
+        Console.WriteLine($"ActionType: {move.ActionType}.");
+        Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
+
+        Assert.AreEqual(ActionType.Play, move.ActionType);
+        Assert.AreEqual("WARRIOR", move.CardDescriptor.BaseCardEffect.Card.Header);
+
+        //Assert.AreEqual(ActionType.Discard, move.ActionType);
+        //Assert.AreEqual("BASTION", move.CardDescriptor.BaseCardEffect.Card.Header);
+    }
+
+    [TestMethod]
     public void MakeDecision_Discard_Screenshot_0001()
     {
         var player = new Player("Player")
@@ -179,10 +225,11 @@ public class DecisionMakerTests
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
         Assert.AreEqual(ActionType.Discard, move.ActionType);
-        Assert.AreEqual("SINGING COAL", move.CardDescriptor.BaseCardEffect.Card.Header);
+        Assert.AreEqual("DRAGON'S HEART", move.CardDescriptor.BaseCardEffect.Card.Header);
     }
 
     [TestMethod]
+    // TODO: rename to Play
     public void MakeDecision_Discard_Screenshot_0002()
     {
         var player = new Player("Player")
@@ -221,9 +268,12 @@ public class DecisionMakerTests
         Console.WriteLine($"ActionType: {move.ActionType}.");
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
-        Assert.AreEqual(ActionType.Discard, move.ActionType);
+        Assert.AreEqual(ActionType.Play, move.ActionType);
+        Assert.AreEqual("BEETLE", move.CardDescriptor.BaseCardEffect.Card.Header);
+
+        //Assert.AreEqual(ActionType.Discard, move.ActionType);
         //Assert.AreEqual("SHIFT", move.CardDescriptor.BaseCardEffect.Card.Header);
-        Assert.AreEqual("SUBSOIL WATERS", move.CardDescriptor.BaseCardEffect.Card.Header);
+        //Assert.AreEqual("SUBSOIL WATERS", move.CardDescriptor.BaseCardEffect.Card.Header);
     }
 
     [TestMethod]
