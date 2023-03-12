@@ -162,48 +162,56 @@ public class Board
             new Board(enemyManager, playerManager, cardDescriptors, deck);
     }
 
-    public Board Make(Turn turn, Side side = Side.Player)
+    public Board Make(Turn turn)
     {
-        var board = Play(turn, side);
+        var board = Play(turn);
         return board;
     }
 
-    public Board Play(Turn turn, Side side = Side.Player)
+    public Board Play(Turn turn)
     {
         var board = new Board(this);
         foreach (var move in turn.Moves)
         {
             if (move.ActionType == ActionType.Play)
             {
-                board = board.Play(move, side);
+                board = board.Play(move);
             }
 
             if (move.ActionType == ActionType.Discard)
             {
-                board = board.Discard(move, side);
+                board = board.Discard(move);
             }
         }
 
         return board;
     }
 
-    public IEnumerable<Turn> GetPossiblePlayerTurnes()
+    // Play or Discard is must for enemy because Player gets resources here.
+    public Board EnemyPlayOrDiscard(Turn enemyTurn)
     {
-        return GetPossibleTurnes(PlayerManager);
+        var board = new Board(this);
+        foreach (var move in enemyTurn.Moves)
+        {
+            if (move.ActionType == ActionType.Play && move.CardDescriptor.IsEnabled(EnemyManager))
+            {
+                board = board.Play(move, Side.Enemy);
+                continue;
+            }
+
+            board = board.Discard(move, Side.Enemy);
+        }
+
+        return board;
     }
 
-    public IEnumerable<Turn> GetPossibleEnemyTurnes()
-    {
-        return GetPossibleTurnes(EnemyManager, true);
-    }
-
-    public IEnumerable<Turn> GetPossibleTurnes(PlayerManager playerManager, bool ignoreDiscard = false)
+    public IEnumerable<Turn> GetPossibleTurnes(bool ignoreDiscard = false)
     {
         var turnes = new List<Turn>();
 
         foreach (var cardDescriptor in CardDescriptors.OrderByDescending(x => x.BaseCardEffect.Card.Cost))
         {
-            if (cardDescriptor.IsEnabled(playerManager))
+            if (cardDescriptor.IsEnabled(PlayerManager))
             {
                 if (cardDescriptor.BaseCardEffect.PlayType is PlayType.PlayAgain)
                 {
@@ -340,16 +348,5 @@ public class Board
         }
 
         return turnes;
-    }
-
-    public Turn GetBestEnemyTurn(IEnumerable<Turn> turnes)
-    {
-        var best = turnes.MaxBy(turn =>
-        {
-            var board = Play(turn, Side.Enemy);
-            return board.EnemyPower - board.PlayerPower;
-        });
-
-        return best;
     }
 }

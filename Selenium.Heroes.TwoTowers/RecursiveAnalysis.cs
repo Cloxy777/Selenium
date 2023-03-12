@@ -8,7 +8,7 @@ public class Round
 {
     public Turn PlayerTurn { get; set; } = default!;
 
-    public Turn EnemyTurn { get; internal set; } = default!;
+    public Turn? EnemyTurn { get; internal set; } = null;
 
     public int Order { get; set; }
 
@@ -70,7 +70,7 @@ public class RecursiveAnalysis
             return;
         }
 
-        var playerTurnes = Board.GetPossiblePlayerTurnes();
+        var playerTurnes = Board.GetPossibleTurnes();
         
         foreach (var playerTurn in playerTurnes)
         {
@@ -91,9 +91,11 @@ public class RecursiveAnalysis
         board = board.Make(playerTurn);
 
         var enemyTurn = EnemyTurns.FirstOrDefault();
-        if (!board.PlayerManager.IsWinner && !board.EnemyManager.IsDestroed && enemyTurn != null)
+        if (!board.PlayerManager.IsWinner && 
+            !board.EnemyManager.IsDestroed && 
+            enemyTurn != null)
         {
-            board = board.Play(enemyTurn, Side.Enemy);
+            board = board.EnemyPlayOrDiscard(enemyTurn);
         }
 
         var enemyTurns = new List<Turn>(EnemyTurns);

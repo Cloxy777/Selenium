@@ -49,7 +49,7 @@ public class DecisionMakerTests
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
         Assert.AreEqual(ActionType.Play, move.ActionType);
-        Assert.AreEqual("RABID SHEEP", move.CardDescriptor.BaseCardEffect.Card.Header);
+        Assert.AreEqual("SMOKY QUARTZ", move.CardDescriptor.BaseCardEffect.Card.Header);
     }
 
     [TestMethod]
@@ -178,8 +178,11 @@ public class DecisionMakerTests
         Console.WriteLine($"ActionType: {move.ActionType}.");
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
-        Assert.AreEqual(ActionType.Play, move.ActionType);
-        Assert.AreEqual("WARRIOR", move.CardDescriptor.BaseCardEffect.Card.Header);
+        Assert.AreEqual(ActionType.Discard, move.ActionType);
+        Assert.AreEqual("CAUSTIC CLOUD", move.CardDescriptor.BaseCardEffect.Card.Header);
+
+        //Assert.AreEqual(ActionType.Play, move.ActionType);
+        //Assert.AreEqual("WARRIOR", move.CardDescriptor.BaseCardEffect.Card.Header);
 
         //Assert.AreEqual(ActionType.Discard, move.ActionType);
         //Assert.AreEqual("BASTION", move.CardDescriptor.BaseCardEffect.Card.Header);
