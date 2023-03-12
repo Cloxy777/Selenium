@@ -12,7 +12,7 @@ public class HuntInfo
 
     public RewardInfo RewardInfo { get; set; } = default!;
 
-    public int Count { get; set; } = 0;
+    public int Repeat { get; set; } = 0;
 
     public int Order { get; set; } = -1;
 
@@ -117,11 +117,14 @@ public class Startup
             }
 
             // over half hunts repeated more then 1 time.
-            if (values.Count(x => x.Count > 1) > values.Count / 2)
+            var duplicatesCount = values.Count(x => x.Repeat > 1);
+            Console.WriteLine($"Duplicates: {duplicatesCount} > {values.Count / 2}.");
+            if (duplicatesCount > values.Count / 2)
             {
                 maxPoints--;
+                values = SetRepeats(values);
                 Save(maxPoints, MaxPointsFullPath);
-                Console.WriteLine($"Max points file overwritten.");
+                Console.WriteLine($"Max points file overwritten. {maxPoints}");
             }
 
             values = SetOrders(values);
@@ -155,8 +158,8 @@ public class Startup
 
         // new or existing.
         var value = values.First(x => x.CreatureInfo.Equals(creatureInfo));
-        value.Count++;
-        Console.WriteLine($"{creatureInfo}. {reward}. Count: {value.Count}. Timestamp: {value.Timestamp}.");
+        value.Repeat++;
+        Console.WriteLine($"{creatureInfo}. {reward}. Repeat: {value.Repeat}. Timestamp: {value.Timestamp}.");
     }
 
     private static bool IsGoodReward(List<HuntInfo> values, CreatureInfo creatureInfo, int maxPoints)
@@ -189,6 +192,16 @@ public class Startup
         foreach (var value in values)
         {
             value.Order = i++;
+        }
+
+        return values;
+    }
+
+    private static List<HuntInfo> SetRepeats(List<HuntInfo> values)
+    {
+        foreach (var value in values)
+        {
+            value.Repeat = 1;
         }
 
         return values;
