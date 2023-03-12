@@ -1,6 +1,19 @@
 [
   {
     "CreatureInfo": {
+      "Name": "Goblins",
+      "Count": 119
+    },
+    "RewardInfo": {
+      "Points": 2,
+      "Gold": 248
+    },
+    "Repeat": 1,
+    "Order": 1,
+    "Timestamp": "2023-03-12T18:46:47.7341528Z"
+  },
+  {
+    "CreatureInfo": {
       "Name": "Gremlin engineers",
       "Count": 71
     },
@@ -9,8 +22,34 @@
       "Gold": 242
     },
     "Repeat": 1,
-    "Order": 1,
+    "Order": 2,
     "Timestamp": "2023-03-12T11:14:40.0017607Z"
+  },
+  {
+    "CreatureInfo": {
+      "Name": "Bowmen",
+      "Count": 61
+    },
+    "RewardInfo": {
+      "Points": 2,
+      "Gold": 228
+    },
+    "Repeat": 1,
+    "Order": 3,
+    "Timestamp": "2023-03-12T18:44:39.1726696Z"
+  },
+  {
+    "CreatureInfo": {
+      "Name": "Grotesques",
+      "Count": 26
+    },
+    "RewardInfo": {
+      "Points": 2,
+      "Gold": 218
+    },
+    "Repeat": 1,
+    "Order": 4,
+    "Timestamp": "2023-03-12T18:47:09.3297481Z"
   },
   {
     "CreatureInfo": {
@@ -22,8 +61,21 @@
       "Gold": 202
     },
     "Repeat": 1,
-    "Order": 2,
+    "Order": 5,
     "Timestamp": "2023-03-12T11:01:59.9038981Z"
+  },
+  {
+    "CreatureInfo": {
+      "Name": "Ghouls",
+      "Count": 29
+    },
+    "RewardInfo": {
+      "Points": 2,
+      "Gold": 198
+    },
+    "Repeat": 1,
+    "Order": 6,
+    "Timestamp": "2023-03-12T18:37:48.3175776Z"
   },
   {
     "CreatureInfo": {
@@ -35,7 +87,7 @@
       "Gold": 188
     },
     "Repeat": 1,
-    "Order": 3,
+    "Order": 7,
     "Timestamp": "2023-03-12T11:01:16.972999Z"
   },
   {
@@ -48,34 +100,8 @@
       "Gold": 180
     },
     "Repeat": 1,
-    "Order": 4,
+    "Order": 8,
     "Timestamp": "2023-03-12T11:22:25.3474238Z"
-  },
-  {
-    "CreatureInfo": {
-      "Name": "Vampires",
-      "Count": 7
-    },
-    "RewardInfo": {
-      "Points": 2,
-      "Gold": 172
-    },
-    "Repeat": 1,
-    "Order": 5,
-    "Timestamp": "2023-03-12T11:03:33.4790911Z"
-  },
-  {
-    "CreatureInfo": {
-      "Name": "Ghouls",
-      "Count": 29
-    },
-    "RewardInfo": {
-      "Points": 2,
-      "Gold": 168
-    },
-    "Repeat": 1,
-    "Order": 6,
-    "Timestamp": "2023-03-12T11:20:36.4692743Z"
   },
   {
     "CreatureInfo": {
@@ -87,7 +113,7 @@
       "Gold": 144
     },
     "Repeat": 1,
-    "Order": 7,
+    "Order": 9,
     "Timestamp": "2023-03-12T11:07:07.7887957Z"
   },
   {
@@ -100,8 +126,34 @@
       "Gold": 138
     },
     "Repeat": 1,
-    "Order": 8,
+    "Order": 10,
     "Timestamp": "2023-03-12T11:13:14.3506852Z"
+  },
+  {
+    "CreatureInfo": {
+      "Name": "Imps",
+      "Count": 119
+    },
+    "RewardInfo": {
+      "Points": 1,
+      "Gold": 134
+    },
+    "Repeat": 1,
+    "Order": 11,
+    "Timestamp": "2023-03-12T18:48:13.5495359Z"
+  },
+  {
+    "CreatureInfo": {
+      "Name": "Recruits",
+      "Count": 91
+    },
+    "RewardInfo": {
+      "Points": 1,
+      "Gold": 128
+    },
+    "Repeat": 1,
+    "Order": 12,
+    "Timestamp": "2023-03-12T18:39:57.5019727Z"
   },
   {
     "CreatureInfo": {
@@ -112,8 +164,8 @@
       "Points": 1,
       "Gold": 120
     },
-    "Repeat": 2,
-    "Order": 9,
+    "Repeat": 1,
+    "Order": 13,
     "Timestamp": "2023-03-12T11:13:57.1513532Z"
   },
   {
@@ -126,7 +178,7 @@
       "Gold": 120
     },
     "Repeat": 1,
-    "Order": 10,
+    "Order": 14,
     "Timestamp": "2023-03-12T11:15:44.1956194Z"
   },
   {
@@ -139,7 +191,7 @@
       "Gold": 118
     },
     "Repeat": 1,
-    "Order": 11,
+    "Order": 15,
     "Timestamp": "2023-03-12T11:07:50.5479199Z"
   },
   {
@@ -152,7 +204,7 @@
       "Gold": 112
     },
     "Repeat": 1,
-    "Order": 12,
+    "Order": 16,
     "Timestamp": "2023-03-12T11:17:09.9275574Z"
   },
   {
@@ -165,8 +217,21 @@
       "Gold": 110
     },
     "Repeat": 1,
-    "Order": 13,
+    "Order": 17,
     "Timestamp": "2023-03-12T11:15:22.8011492Z"
+  },
+  {
+    "CreatureInfo": {
+      "Name": "Bandits",
+      "Count": 57
+    },
+    "RewardInfo": {
+      "Points": 1,
+      "Gold": 110
+    },
+    "Repeat": 1,
+    "Order": 18,
+    "Timestamp": "2023-03-12T18:41:03.1331598Z"
   },
   {
     "CreatureInfo": {
@@ -178,7 +243,7 @@
       "Gold": 108
     },
     "Repeat": 1,
-    "Order": 14,
+    "Order": 19,
     "Timestamp": "2023-03-12T11:04:38.1640208Z"
   },
   {
@@ -191,7 +256,7 @@
       "Gold": 104
     },
     "Repeat": 1,
-    "Order": 15,
+    "Order": 20,
     "Timestamp": "2023-03-12T11:02:30.216761Z"
   },
   {
@@ -204,7 +269,7 @@
       "Gold": 104
     },
     "Repeat": 1,
-    "Order": 16,
+    "Order": 21,
     "Timestamp": "2023-03-12T11:12:09.2812775Z"
   },
   {
@@ -217,8 +282,21 @@
       "Gold": 98
     },
     "Repeat": 1,
-    "Order": 17,
+    "Order": 22,
     "Timestamp": "2023-03-12T11:05:20.9057797Z"
+  },
+  {
+    "CreatureInfo": {
+      "Name": "Veterans",
+      "Count": 53
+    },
+    "RewardInfo": {
+      "Points": 1,
+      "Gold": 98
+    },
+    "Repeat": 1,
+    "Order": 23,
+    "Timestamp": "2023-03-12T18:47:30.7169792Z"
   },
   {
     "CreatureInfo": {
@@ -230,8 +308,21 @@
       "Gold": 94
     },
     "Repeat": 1,
-    "Order": 18,
+    "Order": 24,
     "Timestamp": "2023-03-12T11:04:16.2747965Z"
+  },
+  {
+    "CreatureInfo": {
+      "Name": "Incendiaries",
+      "Count": 22
+    },
+    "RewardInfo": {
+      "Points": 1,
+      "Gold": 94
+    },
+    "Repeat": 1,
+    "Order": 25,
+    "Timestamp": "2023-03-12T18:45:22.050805Z"
   },
   {
     "CreatureInfo": {
@@ -243,7 +334,7 @@
       "Gold": 90
     },
     "Repeat": 1,
-    "Order": 19,
+    "Order": 26,
     "Timestamp": "2023-03-12T11:12:31.5792673Z"
   },
   {
@@ -256,7 +347,7 @@
       "Gold": 90
     },
     "Repeat": 1,
-    "Order": 20,
+    "Order": 27,
     "Timestamp": "2023-03-12T11:12:52.9721357Z"
   },
   {
@@ -269,7 +360,7 @@
       "Gold": 90
     },
     "Repeat": 1,
-    "Order": 21,
+    "Order": 28,
     "Timestamp": "2023-03-12T11:22:47.1066717Z"
   },
   {
@@ -282,7 +373,7 @@
       "Gold": 88
     },
     "Repeat": 1,
-    "Order": 22,
+    "Order": 29,
     "Timestamp": "2023-03-12T11:09:16.4761744Z"
   },
   {
@@ -294,9 +385,22 @@
       "Points": 1,
       "Gold": 88
     },
-    "Repeat": 1,
-    "Order": 23,
+    "Repeat": 2,
+    "Order": 30,
     "Timestamp": "2023-03-12T11:09:59.2031415Z"
+  },
+  {
+    "CreatureInfo": {
+      "Name": "Forest keepers",
+      "Count": 41
+    },
+    "RewardInfo": {
+      "Points": 1,
+      "Gold": 88
+    },
+    "Repeat": 1,
+    "Order": 31,
+    "Timestamp": "2023-03-12T18:38:31.4071236Z"
   },
   {
     "CreatureInfo": {
@@ -307,8 +411,8 @@
       "Points": 1,
       "Gold": 84
     },
-    "Repeat": 2,
-    "Order": 24,
+    "Repeat": 1,
+    "Order": 32,
     "Timestamp": "2023-03-12T11:01:38.3963103Z"
   },
   {
@@ -321,7 +425,7 @@
       "Gold": 84
     },
     "Repeat": 1,
-    "Order": 25,
+    "Order": 33,
     "Timestamp": "2023-03-12T11:03:54.8768402Z"
   },
   {
@@ -334,7 +438,7 @@
       "Gold": 80
     },
     "Repeat": 1,
-    "Order": 26,
+    "Order": 34,
     "Timestamp": "2023-03-12T11:16:27.1754851Z"
   }
 ]

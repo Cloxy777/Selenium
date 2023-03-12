@@ -1,5 +1,6 @@
 ﻿using Selenium.Heroes.Common;
 using Selenium.Heroes.Common.CardDescriptors;
+using Selenium.Heroes.Common.Extensions;
 using Selenium.Heroes.Common.Managers;
 using Selenium.Heroes.Common.Models;
 
@@ -34,20 +35,145 @@ public class DecisionMaker
 
     public Turn CreateTurn()
     {
-        var board = new Board(PlayerManager, EnemyManager, CardDescriptors, Deck);
-        var analysis = new RecursiveAnalysis(board);
-        analysis.Build();
+        // ENEMY FIRST
+        var enemyCards = BestEnemyDrawCards(PlayerManager, EnemyManager, Deck);
+        var enemyBoard = new Board(EnemyManager, PlayerManager, enemyCards, Deck);
+        var enemyAnalysis = new RecursiveAnalysis(enemyBoard);
+        enemyAnalysis.Build();
 
-        var leaves = new List<RecursiveAnalysis>();
-        analysis.Extract(ref leaves);
-        leaves = leaves.OrderByDescending(x => x.Rounds.Sum(x => x.Rating)).ToList();
+        var enemyLeaves = new List<RecursiveAnalysis>();
+        enemyAnalysis.Extract(ref enemyLeaves);
+        enemyLeaves = enemyLeaves.OrderByDescending(x => x.SumRounds).ToList();
 
-        var winnerTurn = analysis.RecursiveAnalyses.FirstOrDefault(x => x.Board.PlayerManager.IsWinner || x.Board.EnemyManager.IsDestroed);
+        var enemyWinnerTurn = enemyAnalysis.WinnerAnalysis;
 
-        var effectiveAnalysis = winnerTurn ?? leaves.MaxBy(x => x.Rounds.Sum(x => x.Rating));
+        var enemyEffectiveAnalysis = enemyWinnerTurn ?? enemyLeaves.First();
 
-        var turn = effectiveAnalysis!.Rounds.OrderBy(x => x.Order).Select(x => x.PlayerTurn).FirstOrDefault();
+        // PLAYER SECOND
+        var playerBoard = new Board(PlayerManager, EnemyManager, CardDescriptors, Deck);
+        var enemyTurns = enemyEffectiveAnalysis.Rounds.Select(x => x.PlayerTurn).ToList();
+        var playerAnalysis = new RecursiveAnalysis(playerBoard) { EnemyTurns = enemyTurns };
+        playerAnalysis.Build();
 
-        return turn!;
+        var playerLeaves = new List<RecursiveAnalysis>();
+        playerAnalysis.Extract(ref playerLeaves);
+        playerLeaves = playerLeaves.OrderByDescending(x => x.SumRounds).ToList();
+
+        //var check = leaves.Where(x => x.Rounds.All(y => y.PlayerTurn.Moves.First().ActionType == ActionType.Play)).ToList();
+
+        var playerWinnerTurn = playerAnalysis.RecursiveAnalyses.FirstOrDefault(x => x.Board.PlayerManager.IsWinner || x.Board.EnemyManager.IsDestroed);
+
+        var playerEffectiveAnalysis = playerWinnerTurn ?? playerLeaves.First();
+
+        var turn = playerEffectiveAnalysis.Rounds.OrderBy(x => x.Order).Select(x => x.PlayerTurn).First();
+
+        return turn;
+    }
+
+    public static List<ICardDescriptor> BestEnemyDrawCards(PlayerManager playerManager, PlayerManager enemyManager, Deck deck)
+    {
+        var enabledCards = deck.LeftCards.Where(x => x.IsEnabled(enemyManager)).ToList();
+
+        CardEffect GetActualEffect(ICardDescriptor cardDescriptor)
+        {
+            return cardDescriptor.GetActualCardEffect(playerManager, enemyManager, new List<ICardDescriptor>(), new DRAGONS_HEART_CardDescriptor());
+        }
+
+        var cards = new List<ICardDescriptor>();
+        if (enabledCards.Any())
+        {
+            var resourceEffectCards = enabledCards.Where(x => GetActualEffect(x).ResourceEffects.Any()).ToList();
+            if (resourceEffectCards.Any())
+            {
+                var resourceTypes = new[]
+                {
+                    ResourceType.Ore,
+                    ResourceType.Mana,
+                    ResourceType.Stacks,
+                    ResourceType.Mines,
+                    ResourceType.Monasteries,
+                    ResourceType.Barracks,
+                    ResourceType.Tower,
+                    ResourceType.Wall
+                };
+
+                foreach (var resourceType in resourceTypes)
+                {
+                    var resourceCard = resourceEffectCards
+                        .MaxBy(x => GetActualEffect(x).ResourceEffects
+                            .Where(y => y.ResourceType == resourceType)
+                            .DefaultIfEmpty()
+                            .Max(y => y?.Value ?? 0));
+
+
+                    if (resourceCard != null && cards.All(card => !card.Equals(resourceCard)))
+                    {
+                        cards.Add(resourceCard);
+                    }
+                }
+
+                foreach (var resourceType in resourceTypes)
+                {
+                    var resourceCard = resourceEffectCards
+                        .MinBy(x => GetActualEffect(x).ResourceEffects
+                            .Where(y => y.ResourceType == resourceType)
+                            .DefaultIfEmpty()
+                            .Min(y => y?.Value ?? 0));
+
+
+                    if (resourceCard != null && cards.All(card => !card.Equals(resourceCard)))
+                    {
+                        cards.Add(resourceCard);
+                    }
+                }
+            }
+
+            var damageEffectCards = enabledCards.Where(x => GetActualEffect(x).DamageEffects.Any()).ToList();
+            if (damageEffectCards.Any())
+            {
+                var damageTypes = new[]
+                {
+                    DamageType.Pure,
+                    DamageType.Tower,
+                };
+
+                foreach (var damageType in damageTypes)
+                {
+                    var damageCard = damageEffectCards
+                        .MaxBy(x => GetActualEffect(x).DamageEffects
+                            .Where(y => y.DamageType == damageType)
+                            .DefaultIfEmpty()
+                            .Max(y => y?.Value ?? 0));
+
+
+                    if (damageCard != null && cards.All(card => !card.Equals(damageCard)))
+                    {
+                        cards.Add(damageCard);
+                    }
+                }
+
+                foreach (var damageType in damageTypes)
+                {
+                    var damageCard = damageEffectCards
+                      .MinBy(x => GetActualEffect(x).DamageEffects
+                          .Where(y => y.DamageType == damageType)
+                          .DefaultIfEmpty()
+                          .Min(y => y?.Value ?? 0));
+
+
+                    if (damageCard != null && cards.All(card => !card.Equals(damageCard)))
+                    {
+                        cards.Add(damageCard);
+                    }
+                }
+            }
+        }
+
+        if (!cards.Any())
+        {
+            cards = enabledCards.Take(10).ToList();
+        }
+
+        return cards;
     }
 }

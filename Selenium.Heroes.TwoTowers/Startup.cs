@@ -96,6 +96,7 @@ public class Startup
             var enemy = engine.GetEnemyInfo();
             var cardDescriptors = engine.GetCardDescriptors();
 
+            deck = deck.Draw(cardDescriptors);
             var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors, deck);
             
             var turn = decisionMaker.CreateTurn();

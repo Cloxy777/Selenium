@@ -71,7 +71,6 @@ public class Board
 
     public decimal EnemyPower => EnemyManager.GetPower(PlayerManager);
 
-
     public decimal GetMaxDisabledCardDebuff()
     {
         var future = PlayerManager.Wait().Wait().Wait();
@@ -83,10 +82,10 @@ public class Board
         return disabledCardsPower;
     }
 
-    public Board Play(Move move)
+    public Board Play(Move move, Side side = Side.Player)
     {
-        var playerManager = new PlayerManager(PlayerManager);
-        var enemyManager = new PlayerManager(EnemyManager);
+        var playerManager = side is Side.Player ? new PlayerManager(PlayerManager) : new PlayerManager(EnemyManager);
+        var enemyManager = side is Side.Player ? new PlayerManager(EnemyManager) : new PlayerManager(PlayerManager);
 
         var actualEffect = move.CardDescriptor.GetActualCardEffect(playerManager, enemyManager, CardDescriptors, move.CardDescriptor);
 
@@ -120,15 +119,10 @@ public class Board
 
         if (move.IsProduce)
         {
-            playerManager = playerManager
-               .Produce(ResourceType.Mines)
-               .Produce(ResourceType.Monasteries)
-               .Produce(ResourceType.Barracks);
-
             enemyManager = enemyManager
                 .Produce(ResourceType.Mines)
                 .Produce(ResourceType.Monasteries)
-                .Produce(ResourceType.Barracks);
+                .Produce(ResourceType.Barracks);            
         }
 
         var cardDescriptors = CardDescriptors
@@ -138,13 +132,15 @@ public class Board
         var deck = new Deck(Deck);
         deck = deck.Draw(move.CardDescriptor);
 
-        return new Board(playerManager, enemyManager, cardDescriptors, deck);
+        return side is Side.Player ? 
+            new Board(playerManager, enemyManager, cardDescriptors, deck) :
+            new Board(enemyManager, playerManager, cardDescriptors, deck);
     }
 
-    public Board Discard(Move move)
+    public Board Discard(Move move, Side side = Side.Player)
     {
-        var playerManager = new PlayerManager(PlayerManager);
-        var enemyManager = new PlayerManager(EnemyManager);
+        var playerManager = side is Side.Player ? new PlayerManager(PlayerManager) : new PlayerManager(EnemyManager);
+        var enemyManager = side is Side.Player ? new PlayerManager(EnemyManager) : new PlayerManager(PlayerManager);
 
         if (move.IsProduce)
         {
@@ -169,35 +165,25 @@ public class Board
         return new Board(playerManager, enemyManager, cardDescriptors, deck);
     }
 
-    public Board Make(Turn playerTurn)
+    public Board Make(Turn turn, Side side = Side.Player)
     {
-        var board = Play(playerTurn);
-
-        if (board.PlayerManager.IsWinner || board.EnemyManager.IsDestroed)
-        {
-            return board;
-        }
-
-        var enemyTurnes = board.GetPossibleEnemyTurnes();
-        var enemyTurn = board.GetBestEnemyTurn(enemyTurnes);
-        board = board.Play(enemyTurn);
-
+        var board = Play(turn, side);
         return board;
     }
 
-    public Board Play(Turn turn)
+    public Board Play(Turn turn, Side side = Side.Player)
     {
         var board = new Board(this);
         foreach (var move in turn.Moves)
         {
             if (move.ActionType == ActionType.Play)
             {
-                board = board.Play(move);
+                board = board.Play(move, side);
             }
 
             if (move.ActionType == ActionType.Discard)
             {
-                board = board.Discard(move);
+                board = board.Discard(move, side);
             }
         }
 
@@ -206,29 +192,29 @@ public class Board
 
     public IEnumerable<Turn> GetPossiblePlayerTurnes()
     {
-        return GetPossibleTurnes(PlayerManager, CardDescriptors);
+        return GetPossibleTurnes(PlayerManager);
     }
 
     public IEnumerable<Turn> GetPossibleEnemyTurnes()
     {
-        return GetPossibleTurnes(EnemyManager, Deck.LeftCards.ToList());
+        return GetPossibleTurnes(EnemyManager, true);
     }
 
-    public IEnumerable<Turn> GetPossibleTurnes(PlayerManager playerManager, List<ICardDescriptor> cardDescriptors)
+    public IEnumerable<Turn> GetPossibleTurnes(PlayerManager playerManager, bool ignoreDiscard = false)
     {
         var turnes = new List<Turn>();
 
-        foreach (var cardDescriptor in cardDescriptors)
+        foreach (var cardDescriptor in CardDescriptors)
         {
             if (cardDescriptor.IsEnabled(playerManager))
             {
                 if (cardDescriptor.BaseCardEffect.PlayType is PlayType.PlayAgain)
                 {
-                    turnes.AddRange(GetPossiblePlayAgainTurnes(cardDescriptor));
+                    turnes.AddRange(GetPossiblePlayAgainTurnes(cardDescriptor, ignoreDiscard));
                 }
                 else if (cardDescriptor.BaseCardEffect.PlayType is PlayType.DrawDiscardAndPlayAgain)
                 {
-                    turnes.AddRange(GetPossibleDrawDiscardAndPlayAgainTurnes(cardDescriptor));
+                    turnes.AddRange(GetPossibleDrawDiscardAndPlayAgainTurnes(cardDescriptor, ignoreDiscard));
                 }
                 else
                 {
@@ -247,9 +233,11 @@ public class Board
                 }
             }
 
-            turnes.Add(new Turn
+            if (!ignoreDiscard)
             {
-                Moves = new List<Move>
+                turnes.Add(new Turn
+                {
+                    Moves = new List<Move>
                 {
                     new Move
                     {
@@ -258,13 +246,14 @@ public class Board
                         IsProduce = true
                     }
                 }
-            });
+                });
+            }
         }
 
         return turnes;
     }
 
-    public IEnumerable<Turn> GetPossibleDrawDiscardAndPlayAgainTurnes(ICardDescriptor cardDescriptor)
+    public IEnumerable<Turn> GetPossibleDrawDiscardAndPlayAgainTurnes(ICardDescriptor cardDescriptor, bool ignoreDiscard = false)
     {
         var turnes = new List<Turn>();
 
@@ -292,14 +281,14 @@ public class Board
             extendedTurn.Moves.Add(move);
 
             var afterDiscard = board.Discard(move);
-            turnes.AddRange(afterDiscard.GetPossiblePlayAgainTurnes(extendedTurn));
+            turnes.AddRange(afterDiscard.GetPossiblePlayAgainTurnes(extendedTurn, ignoreDiscard));
         }
 
 
         return turnes;
     }
 
-    public IEnumerable<Turn> GetPossiblePlayAgainTurnes(ICardDescriptor cardDescriptor)
+    public IEnumerable<Turn> GetPossiblePlayAgainTurnes(ICardDescriptor cardDescriptor, bool ignoreDiscard =  false)
     {
         var move = new Move
         {
@@ -313,10 +302,10 @@ public class Board
 
         var board = Play(move);
 
-        return board.GetPossiblePlayAgainTurnes(turn);
+        return board.GetPossiblePlayAgainTurnes(turn, ignoreDiscard);
     }
 
-    private IEnumerable<Turn> GetPossiblePlayAgainTurnes(Turn turn)
+    private IEnumerable<Turn> GetPossiblePlayAgainTurnes(Turn turn, bool ignoreDiscard = false)
     {
         var drawCard = Deck.LeftCards.OrderBy(x => x.BaseCardEffect.Card.Cost).First();
         CardDescriptors.Add(drawCard);
@@ -325,20 +314,24 @@ public class Board
 
         foreach (var cardDescriptor in CardDescriptors)
         {
-            var extendedTurn = new Turn(turn);
-            var move = new Move
+            if (!ignoreDiscard)
             {
-                ActionType = ActionType.Discard,
-                CardDescriptor = cardDescriptor,
-                IsProduce = true
-            };
-            extendedTurn.Moves.Add(move);
-            turnes.Add(extendedTurn);
+                var extendedTurn = new Turn(turn);
+                var move = new Move
+                {
+                    ActionType = ActionType.Discard,
+                    CardDescriptor = cardDescriptor,
+                    IsProduce = true
+                };
+                extendedTurn.Moves.Add(move);
+                turnes.Add(extendedTurn);
+
+            }
 
             if (cardDescriptor.IsEnabled(PlayerManager))
             {
-                extendedTurn = new Turn(turn);
-                move = new Move
+                var extendedTurn = new Turn(turn);
+                var move = new Move
                 {
                     ActionType = ActionType.Play,
                     CardDescriptor = cardDescriptor,
@@ -356,7 +349,7 @@ public class Board
     {
         var best = turnes.MaxBy(turn =>
         {
-            var board = Play(turn);
+            var board = Play(turn, Side.Enemy);
             return board.EnemyPower - board.PlayerPower;
         });
 

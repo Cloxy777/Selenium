@@ -1,10 +1,14 @@
-﻿using Selenium.Heroes.Common.Models;
+﻿using Selenium.Heroes.Common;
+using Selenium.Heroes.Common.Managers;
+using Selenium.Heroes.Common.Models;
 
 namespace Selenium.Heroes.TwoTowers;
 
 public class Round
 {
     public Turn PlayerTurn { get; set; } = default!;
+
+    public Turn EnemyTurn { get; internal set; } = default!;
 
     public int Order { get; set; }
 
@@ -33,9 +37,15 @@ public class RecursiveAnalysis
 
     public List<Round> Rounds { get; set; } = new List<Round>();
 
+    public decimal SumRounds => Rounds.Sum(x => x.Rating);
+
     public int CurrentDeepLevel { get; set; } = 0;
 
-    public static int MaxDeepLevel { get; set; } = 3;
+    public int MaxDeepLevel { get; set; } = 3;
+
+    public List<Turn> EnemyTurns { get; set; } = new List<Turn>();
+
+    public RecursiveAnalysis? WinnerAnalysis => RecursiveAnalyses.FirstOrDefault(x => x.Board.PlayerManager.IsWinner || x.Board.EnemyManager.IsDestroed);
 
     public decimal GetCurrentPower()
     {
@@ -80,15 +90,28 @@ public class RecursiveAnalysis
 
         board = board.Make(playerTurn);
 
+        var enemyTurn = EnemyTurns.FirstOrDefault();
+        if (!board.PlayerManager.IsWinner && !board.EnemyManager.IsDestroed && enemyTurn != null)
+        {
+            board = board.Play(enemyTurn, Side.Enemy);
+        }
+
+        var enemyTurns = new List<Turn>(EnemyTurns);
+        if (enemyTurns.Any())
+        {
+            enemyTurns.RemoveAt(0);
+        }
         var analysis = new RecursiveAnalysis(board)
         {
             Rounds = new List<Round>(Rounds),
-            CurrentDeepLevel = CurrentDeepLevel + 1
+            CurrentDeepLevel = CurrentDeepLevel + 1,
+            EnemyTurns = enemyTurns
         };
 
         analysis.Rounds.Add(new Round
         {
             PlayerTurn = playerTurn,
+            EnemyTurn = enemyTurn,
             Rating = analysis.GetCurrentPower(),
             Order = analysis.CurrentDeepLevel
         });

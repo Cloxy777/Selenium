@@ -1,5 +1,6 @@
 using Selenium.Heroes.Common;
 using Selenium.Heroes.Common.Loaders;
+using Selenium.Heroes.Common.Managers;
 using Selenium.Heroes.Common.Models;
 using System;
 
@@ -38,6 +39,7 @@ public class DecisionMakerTests
         var headers = new[] { "RABID SHEEP", "ORC", "DRAGON", "SMOKY QUARTZ", "STONE DEVOURERS", "FORTIFIED WALL" };
         var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
         var deck = new Deck();
+        deck = deck.Draw(cardDescriptors);
 
         var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors, deck);
         var turn = decisionMaker.CreateTurn();
@@ -47,7 +49,7 @@ public class DecisionMakerTests
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
         Assert.AreEqual(ActionType.Play, move.ActionType);
-        Assert.AreEqual("SMOKY QUARTZ", move.CardDescriptor.BaseCardEffect.Card.Header);
+        Assert.AreEqual("RABID SHEEP", move.CardDescriptor.BaseCardEffect.Card.Header);
     }
 
     [TestMethod]
@@ -80,6 +82,51 @@ public class DecisionMakerTests
         var headers = new[] { "BARRACKS", "DRAGON'S HEART", "GREATER WALL", "CRUSHER", "CRYSTAL SHIELD", "SANCTUARY" };
         var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
         var deck = new Deck();
+        deck = deck.Draw(cardDescriptors);
+
+        var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors, deck);
+        var turn = decisionMaker.CreateTurn();
+        var move = turn.Moves.First();
+
+
+        Console.WriteLine($"ActionType: {move.ActionType}.");
+        Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
+
+        Assert.AreEqual(ActionType.Play, move.ActionType);
+        Assert.AreEqual("CRUSHER", move.CardDescriptor.BaseCardEffect.Card.Header);
+    }
+
+    [TestMethod]
+    public void MakeDecision_Play_Screenshot_0003()
+    {
+        var player = new Player("Player")
+        {
+            Ore = 27,
+            Mana = 8,
+            Stacks = 3,
+            Mines = 4,
+            Monasteries = 2,
+            Barracks = 2,
+            Tower = 24,
+            Wall = 0,
+        };
+
+        var enemy = new Player("Enemy")
+        {
+            Ore = 14,
+            Mana = 11,
+            Stacks = 8,
+            Mines = 4,
+            Monasteries = 2,
+            Barracks = 2,
+            Tower = 13,
+            Wall = 0,
+        };
+
+        var headers = new[] { "SINGING COAL", "STONE DEVOURERS", "LARGE WALL", "ORDINARY WALL", "VAMPIRE", "FOUNDATION" };
+        var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
+        var deck = new Deck();
+        deck = deck.Draw(cardDescriptors);
 
         var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors, deck);
         var turn = decisionMaker.CreateTurn();
@@ -89,7 +136,7 @@ public class DecisionMakerTests
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
         Assert.AreEqual(ActionType.Play, move.ActionType);
-        Assert.AreEqual("CRUSHER", move.CardDescriptor.BaseCardEffect.Card.Header);
+        Assert.AreEqual("FOUNDATION", move.CardDescriptor.BaseCardEffect.Card.Header);
     }
 
     [TestMethod]
@@ -122,6 +169,7 @@ public class DecisionMakerTests
         var headers = new[] { "DRAGON'S HEART", "SINGING COAL", "SUBSOIL WATERS", "SAPPHIRE", "THIEF", "PEGASUS RIDER" };
         var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
         var deck = new Deck();
+        deck = deck.Draw(cardDescriptors);
 
         var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors, deck);
         var turn = decisionMaker.CreateTurn();
@@ -131,7 +179,7 @@ public class DecisionMakerTests
         Console.WriteLine($"CardDescriptor: {move.CardDescriptor.BaseCardEffect.Card.Header}.");
 
         Assert.AreEqual(ActionType.Discard, move.ActionType);
-        Assert.AreEqual("SUBSOIL WATERS", move.CardDescriptor.BaseCardEffect.Card.Header);
+        Assert.AreEqual("SINGING COAL", move.CardDescriptor.BaseCardEffect.Card.Header);
     }
 
     [TestMethod]
@@ -164,6 +212,7 @@ public class DecisionMakerTests
         var headers = new[] { "SHIFT", "STONE GIANT", "SUBSOIL WATERS", "BEETLE", "THIEF", "DRAGON'S EYE" };
         var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
         var deck = new Deck();
+        deck = deck.Draw(cardDescriptors);
 
         var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors, deck);
         var turn = decisionMaker.CreateTurn();
@@ -207,6 +256,7 @@ public class DecisionMakerTests
         var headers = new[] { "BARRACKS", "ROCKCASTER", "FAMILIAR", "ABUNDANT SOIL", "TINY SNAKES", "FISSION" };
         var cardDescriptors = CardDescriptorsLoader.AllCardDescriptors.Where(x => headers.Contains(x.BaseCardEffect.Card.Header)).ToList();
         var deck = new Deck();
+        deck = deck.Draw(cardDescriptors);
 
         var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors, deck);
         var turn = decisionMaker.CreateTurn();

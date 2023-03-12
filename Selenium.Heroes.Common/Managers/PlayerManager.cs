@@ -152,19 +152,19 @@ public class PlayerManager
 
     public decimal GetPower(PlayerManager enemyManager)
     {
-        var resourcePower = CalculatePlayerResourcePower(ResourceType.Ore) +
-            CalculatePlayerResourcePower(ResourceType.Mana) +
-            CalculatePlayerResourcePower(ResourceType.Stacks);
+        var orePower = CalculatePlayerResourcePower(ResourceType.Ore);
+        var manaPower = CalculatePlayerResourcePower(ResourceType.Mana);
+        var stacksPower = CalculatePlayerResourcePower(ResourceType.Stacks);
 
-        var productionPower = CalculatePlayerProductionPower(ResourceType.Mines) +
-            CalculatePlayerProductionPower(ResourceType.Monasteries) +
-            CalculatePlayerProductionPower(ResourceType.Barracks);
+        var minesPower = CalculatePlayerProductionPower(ResourceType.Mines);
+        var monasteriesPower = CalculatePlayerProductionPower(ResourceType.Monasteries);
+        var barracksPower = CalculatePlayerProductionPower(ResourceType.Barracks);
 
         var towerPower = CalculateTowerPower();
 
         var wallPower = CalculateWallPower(enemyManager);
 
-        return resourcePower + productionPower + towerPower + wallPower;
+        return orePower + manaPower + stacksPower + minesPower + monasteriesPower + barracksPower + towerPower + wallPower;
     }
 
     private decimal CalculatePlayerResourcePower(ResourceType resourceType)
@@ -259,7 +259,8 @@ public class PlayerManager
 
     private decimal CalculateWallPower(PlayerManager enemyManager)
     {
-        var delta = Math.Max(0, Player.Wall - enemyManager.Player.Wall);
+        var delta = (Player.Wall - enemyManager.Player.Wall) * 2;
+        if (Player.Wall <= 3 || enemyManager.Player.Wall <= 3) delta *= 2;
         //if (delta > 0 && delta < 8) delta = 10;
         //if (delta >= 8) delta = 0;
 
