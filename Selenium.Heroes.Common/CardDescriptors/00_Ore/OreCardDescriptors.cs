@@ -371,10 +371,11 @@ public class STEAL_TECHNOLOGY_CardDescriptor : CardDescriptor
     public override CardEffect GetActualCardEffect(PlayerManager playerManager, PlayerManager enemyManager, List<ICardDescriptor> cardDescriptors, ICardDescriptor cardDescriptor)
     {
         var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
-
-        var difference = enemyManager.Player.Mines - playerManager.Player.Mines;
-        if (difference > 0)
+      
+        if (playerManager.Player.Mines < enemyManager.Player.Mines)
         {
+            var difference = enemyManager.Player.Mines - playerManager.Player.Mines;
+
             actualCardEffect.ResourceEffects = new List<ResourceEffect>
             {
                  new ResourceEffect(ResourceType.Mines, difference, Side.Player)

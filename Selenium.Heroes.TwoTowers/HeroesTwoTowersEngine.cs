@@ -25,7 +25,20 @@ public class HeroesTwoTowersEngine : HeroesEngineBase
 
         var gold = Awaiter.Until(x => x.FindElement(By.XPath("//table[@class='wblight']/tbody/tr/td/select[@name='gold']")));
         var selecter = new SelectElement(gold);
-        selecter.SelectByValue("0");
+        var values = new[] { "0", "1", "2", "3", "4", "5" };
+        foreach (var value in values)
+        {
+            try
+            {
+                selecter.SelectByValue(value);
+                break;
+            }
+            catch (Exception)
+            {
+                continue;
+            }
+        }
+        
 
         var timeout = Awaiter.Until(x => x.FindElement(By.XPath("//table[@class='wblight']/tbody/tr/td/select[@name='timeout']")));
         selecter = new SelectElement(timeout);

@@ -312,11 +312,15 @@ public class Board
         turn.Moves.Add(move);
 
         var board = Play(move);
+
         return board.GetPossiblePlayAgainTurnes(turn);
     }
 
     private IEnumerable<Turn> GetPossiblePlayAgainTurnes(Turn turn)
     {
+        var drawCard = Deck.LeftCards.OrderBy(x => x.BaseCardEffect.Card.Cost).First();
+        CardDescriptors.Add(drawCard);
+
         var turnes = new List<Turn>();
 
         foreach (var cardDescriptor in CardDescriptors)
