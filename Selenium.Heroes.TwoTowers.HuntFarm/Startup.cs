@@ -106,6 +106,8 @@ public class Startup
 
             StoreReward(creatureInfo, points, gold, text, values);
 
+            GetMaxPoints(values, ref maxPoints);
+
             if (IsGoodReward(values, creatureInfo, maxPoints))
             {
                 values = Filter(values, x => !x.CreatureInfo.Equals(creatureInfo));
@@ -207,14 +209,16 @@ public class Startup
         return values;
     }
 
-    private static int GetMaxPoints(Dictionary<string, RewardInfo> values, ref int maxPoints)
+    private static int GetMaxPoints(List<HuntInfo> values, ref int maxPoints)
     {
-        var actualMaxPoints = values.MaxBy(x => x.Value.Points).Value.Points;
+        var actualMaxPoints = values.Max(x => x.RewardInfo.Points);
 
         if (actualMaxPoints > maxPoints)
         {
             Console.WriteLine($"FOUND MAX POINTS -----------------> {actualMaxPoints}.");
             maxPoints = actualMaxPoints;
+            Save(maxPoints, MaxPointsFullPath);
+            Console.WriteLine($"Max points file overwritten. {maxPoints}");
         }
 
         return maxPoints;
