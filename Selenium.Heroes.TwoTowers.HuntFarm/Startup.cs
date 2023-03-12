@@ -24,7 +24,7 @@ public class Startup
 
         jsonContent = File.ReadAllText(MaxPointsFullPath);
         var maxPoints = JsonConvert.DeserializeObject<int?>(jsonContent) ?? throw new Exception("Max points not parsed.");
-        Console.WriteLine($"Max points loaded. Count: {maxPoints}.");
+        Console.WriteLine($"Max points loaded. {maxPoints}.");
 
         var seconds = 20;
         while (true)
@@ -152,7 +152,7 @@ public class Startup
             .Where(func)
             .OrderByDescending(x => x.Value.Points)
             .ThenByDescending(x => x.Value.Gold)
-            .ToDictionary(x => x.Key, x => new HuntReward(x.Value.Points, x.Value.Gold, i++, x.Value.Timestamp));
+            .ToDictionary(x => x.Key, x => new HuntReward(x.Value.Points, x.Value.Gold, x.Value.Count, x.Value.Timestamp, i++));
     }
 
     private static int GetMaxPoints(Dictionary<string, HuntReward> values, ref int maxPoints)
