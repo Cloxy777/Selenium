@@ -75,7 +75,8 @@ public class Startup
                 break;
             }
 
-            if (values.All(x => x.Value.Count > 1))
+            // over half hunts repeated more then 1 time.
+            if (values.Count(x => x.Value.Count > 1) > values.Count / 2)
             {
                 maxPoints--;
                 Save(maxPoints, MaxPointsFullPath);
