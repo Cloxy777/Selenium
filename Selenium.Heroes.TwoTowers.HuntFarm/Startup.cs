@@ -2,10 +2,26 @@
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Converters;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Selenium.Heroes.CardCollector;
 
-public record HuntReward(int Points, int Gold, int Count, DateTime Timestamp, int Order = -1);
+public class HuntInfo
+{
+    public CreatureInfo CreatureInfo { get; set; } = default!;
+
+    public RewardInfo RewardInfo { get; set; } = default!;
+
+    public int Count { get; set; } = 0;
+
+    public int Order { get; set; } = -1;
+
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+}
+
+public record CreatureInfo(string Name, int Count);
+
+public record RewardInfo(int Points, int Gold);
 
 public class Startup
 {
@@ -18,8 +34,7 @@ public class Startup
         engine.Authenticate();
    
         var jsonContent = File.ReadAllText(RewardsFullPath);
-        var values = JsonConvert.DeserializeObject<Dictionary<string, HuntReward>>(jsonContent) ?? throw new Exception("Rewards not parsed.");
-        values = Filter(values, x => x.Value.Timestamp >= DateTime.UtcNow.AddDays(-1));
+        var values = JsonConvert.DeserializeObject<List<HuntInfo>>(jsonContent) ?? throw new Exception("Rewards not parsed.");
         Console.WriteLine($"Rewards loaded. Count: {values.Count}.");
 
         jsonContent = File.ReadAllText(MaxPointsFullPath);
@@ -29,6 +44,8 @@ public class Startup
         var seconds = 20;
         while (true)
         {
+            values = Filter(values, x => x.Timestamp >= DateTime.UtcNow.AddDays(-1));
+
             var text = engine.GetHuntText();
             Console.WriteLine($"Text: {text}");
 
@@ -62,12 +79,36 @@ public class Startup
                 }
             }
 
-            StoreReward(points, gold, text, values);
+            var creatureName = string.Empty;
+            var creatureCount = 0;
 
-            if (IsGoodReward(values, text, maxPoints))
+            var found = false;
+            foreach (string template in StartPhraseTemplates)
             {
-                values = Filter(values, x => x.Key != text);
+                if (Regex.IsMatch(text, template))
+                {
+                    var match = Regex.Match(text, template);
+                    creatureName = match.Groups[1].Value;
+                    
+                    if (int.TryParse(match.Groups[2].Value, out var value))
+                    {
+                        creatureCount = value;
+                    }
 
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) throw new InvalidOperationException("Creatures NOT parsed !!!!!");
+
+            var creatureInfo = new CreatureInfo(creatureName, creatureCount);
+
+            StoreReward(creatureInfo, points, gold, text, values);
+
+            if (IsGoodReward(values, creatureInfo, maxPoints))
+            {
+                values = Filter(values, x => !x.CreatureInfo.Equals(creatureInfo));
                 Save(values, RewardsFullPath);
                 Console.WriteLine($"Rewards file overwritten.");
 
@@ -76,13 +117,14 @@ public class Startup
             }
 
             // over half hunts repeated more then 1 time.
-            if (values.Count(x => x.Value.Count > 1) > values.Count / 2)
+            if (values.Count(x => x.Count > 1) > values.Count / 2)
             {
                 maxPoints--;
                 Save(maxPoints, MaxPointsFullPath);
                 Console.WriteLine($"Max points file overwritten.");
             }
 
+            values = SetOrders(values);
             Save(values, RewardsFullPath);
             Console.WriteLine($"Rewards file overwritten.");
 
@@ -102,60 +144,57 @@ public class Startup
         File.WriteAllText(path, json);
     }
 
-    private static void StoreReward(int points, int gold, string text, Dictionary<string, HuntReward> values)
+    private static void StoreReward(CreatureInfo creatureInfo, int points, int gold, string text, List<HuntInfo> values)
     {
-        var timestamp = DateTime.UtcNow;
-        var reward = new HuntReward(points, gold, 0, timestamp);
+        var reward = new RewardInfo(points, gold);
 
-        if (!values.ContainsKey(text))
+        if (!values.Any(x => x.CreatureInfo.Equals(creatureInfo)))
         {
-            values[text] = reward;
+            values.Add(new HuntInfo { CreatureInfo = creatureInfo, RewardInfo = reward });
         }
 
         // new or existing.
-        reward = values[text];
-
-        var count = reward.Count + 1;
-        values[text] = new HuntReward(reward.Points, reward.Gold, count, timestamp);
-        Console.WriteLine($"Hunt points: {reward.Points}. Gold: {reward.Gold}. Count: {count}. Timestamp: {timestamp}.");
-
-        //var reward = new HuntReward(points, gold);
-        //Console.Write($"Hunt points: {reward.Points}. Gold: {reward.Gold}");
-        //if (IsMaxPoints(reward, values))
-        //{
-        //    values[text] = reward;
-        //    Console.WriteLine(" added.");
-        //}
-        //else
-        //{
-        //    Console.WriteLine(".");
-        //}
+        var value = values.First(x => x.CreatureInfo.Equals(creatureInfo));
+        value.Count++;
+        Console.WriteLine($"{creatureInfo}. {reward}. Count: {value.Count}. Timestamp: {value.Timestamp}.");
     }
 
-    private static bool IsGoodReward(Dictionary<string, HuntReward> values, string text, int maxPoints)
+    private static bool IsGoodReward(List<HuntInfo> values, CreatureInfo creatureInfo, int maxPoints)
     {
-
         var topRewards = values
-            .Where(x => x.Value.Points >= maxPoints)
-            .OrderByDescending(x => x.Value.Points)
-            .ThenByDescending(x => x.Value.Gold)
-            .Select(x => x.Key)
+            .Where(x => x.RewardInfo.Points >= maxPoints)
+            .OrderByDescending(x => x.RewardInfo.Points)
+            .ThenByDescending(x => x.RewardInfo.Gold)
             .ToList();
 
-        return topRewards.Contains(text);
+        return topRewards.Any(x => x.CreatureInfo.Equals(creatureInfo));
     }
 
-    private static Dictionary<string, HuntReward> Filter(Dictionary<string, HuntReward> values, Func<KeyValuePair<string, HuntReward>, bool> func)
+    private static List<HuntInfo> Filter(List<HuntInfo> values, Func<HuntInfo, bool> func)
+    {      
+        values = values
+            .Where(func)
+            .OrderByDescending(x => x.RewardInfo.Points)
+            .ThenByDescending(x => x.RewardInfo.Gold)
+            .ToList();
+
+        values = SetOrders(values);
+
+        return values;
+    }
+
+    private static List<HuntInfo> SetOrders(List<HuntInfo> values)
     {
         var i = 1;
-        return values
-            .Where(func)
-            .OrderByDescending(x => x.Value.Points)
-            .ThenByDescending(x => x.Value.Gold)
-            .ToDictionary(x => x.Key, x => new HuntReward(x.Value.Points, x.Value.Gold, x.Value.Count, x.Value.Timestamp, i++));
+        foreach (var value in values)
+        {
+            value.Order = i++;
+        }
+
+        return values;
     }
 
-    private static int GetMaxPoints(Dictionary<string, HuntReward> values, ref int maxPoints)
+    private static int GetMaxPoints(Dictionary<string, RewardInfo> values, ref int maxPoints)
     {
         var actualMaxPoints = values.MaxBy(x => x.Value.Points).Value.Points;
 
@@ -167,4 +206,14 @@ public class Startup
 
         return maxPoints;
     }
+
+    private static string CreatureTemplate => @"([A-Z][a-z]+\s?[a-z]*) \((\d+)\)";
+
+    private static string[] StartPhraseTemplates => new[]
+    {
+        @$"You hear a scream of {CreatureTemplate}",
+        @$"You notice {CreatureTemplate}",
+        @$"You notice traces leading to a camp of {CreatureTemplate}",
+        @$"You smell {CreatureTemplate}"
+    };
 }

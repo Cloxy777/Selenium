@@ -1,79 +1,28 @@
-{
-  " You smell Gremlin engineers (71), when you are about to pass by, you notice - they are guarding 224 gold. +2 HG points": {
-    "Points": 2,
-    "Gold": 224,
+[
+  {
+    "CreatureInfo": {
+      "Name": "Venomous spiders",
+      "Count": 30
+    },
+    "RewardInfo": {
+      "Points": 1,
+      "Gold": 94
+    },
     "Count": 1,
-    "Timestamp": "2023-03-12T08:30:27.197509Z",
-    "Order": -1
+    "Order": 1,
+    "Timestamp": "2023-03-12T10:57:45.7056564Z"
   },
-  " You smell Farmers (154), when you are about to pass by, you notice - they are guarding 138 gold": {
-    "Points": 1,
-    "Gold": 138,
-    "Count": 2,
-    "Timestamp": "2023-03-12T08:47:11.6469442Z",
-    "Order": -1
-  },
-  " You smell Rogues (15), when you are about to pass by, you notice - they are guarding 108 gold": {
-    "Points": 1,
-    "Gold": 108,
-    "Count": 3,
-    "Timestamp": "2023-03-12T08:49:40.2694287Z",
-    "Order": -1
-  },
-  " You hear a scream of Recruits (91), you turn around and see that they are guarding 106 gold": {
-    "Points": 1,
-    "Gold": 106,
-    "Count": 4,
-    "Timestamp": "2023-03-12T08:47:46.5299989Z",
-    "Order": -1
-  },
-  " You hear a scream of Magi (8), you turn around and see that they are guarding 100 gold": {
-    "Points": 1,
-    "Gold": 100,
-    "Count": 5,
-    "Timestamp": "2023-03-12T08:46:22.2192589Z",
-    "Order": -1
-  },
-  " You notice Spiders (41) that are guarding 100 gold": {
-    "Points": 1,
-    "Gold": 100,
-    "Count": 6,
-    "Timestamp": "2023-03-12T08:50:04.0240702Z",
-    "Order": -1
-  },
-  " You smell Harpies (22), when you are about to pass by, you notice - they are guarding 98 gold": {
-    "Points": 1,
-    "Gold": 98,
-    "Count": 7,
-    "Timestamp": "2023-03-12T08:30:59.8773391Z",
-    "Order": -1
-  },
-  " You notice Magi (8) that are guarding 96 gold": {
-    "Points": 1,
-    "Gold": 96,
-    "Count": 8,
-    "Timestamp": "2023-03-12T08:48:07.9419999Z",
-    "Order": -1
-  },
-  " You hear a scream of Harpies (22), you turn around and see that they are guarding 84 gold": {
-    "Points": 1,
-    "Gold": 84,
-    "Count": 9,
-    "Timestamp": "2023-03-12T08:48:27.1368395Z",
-    "Order": -1
-  },
-  " You notice traces leading to a camp of Demons (50), it doesn't take a genius to understand that they possess 78 gold": {
-    "Points": 1,
-    "Gold": 78,
-    "Count": 10,
-    "Timestamp": "2023-03-12T08:29:48.7998323Z",
-    "Order": -1
-  },
-  " You notice Forest keepers (41) that are guarding 114 gold": {
-    "Points": 1,
-    "Gold": 114,
+  {
+    "CreatureInfo": {
+      "Name": "Bandits",
+      "Count": 44
+    },
+    "RewardInfo": {
+      "Points": 2,
+      "Gold": 240
+    },
     "Count": 1,
-    "Timestamp": "2023-03-12T08:51:54.5621935Z",
-    "Order": -1
+    "Order": 2,
+    "Timestamp": "2023-03-12T10:58:21.1929367Z"
   }
-}
+]
