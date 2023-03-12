@@ -1,25 +1,30 @@
 ﻿using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Converters;
-
+using System.Xml.Linq;
 
 namespace Selenium.Heroes.CardCollector;
 
-public record HuntReward(int Points, int Gold, int Order = 0);
+public record HuntReward(int Points, int Gold, int Count, DateTime Timestamp, int Order = -1);
 
 public class Startup
 {
-    public const string RewardsFullPath = "E:\\GitHub\\Selenium\\Selenium.Heroes.TwoTowers.HuntFarm\\rewards.json";
+    public const string RewardsFullPath = @"..\..\..\rewards.json";
+    public const string MaxPointsFullPath = @"..\..\..\max_points.json";
 
     public static void Run() 
     {
         var engine = new HeroesHuntEngine();
         engine.Authenticate();
-
+   
         var jsonContent = File.ReadAllText(RewardsFullPath);
         var values = JsonConvert.DeserializeObject<Dictionary<string, HuntReward>>(jsonContent) ?? throw new Exception("Rewards not parsed.");
-        values = FilterMaxPoints(values);
+        values = Filter(values, x => x.Value.Timestamp >= DateTime.UtcNow.AddDays(-1));
         Console.WriteLine($"Rewards loaded. Count: {values.Count}.");
+
+        jsonContent = File.ReadAllText(MaxPointsFullPath);
+        var maxPoints = JsonConvert.DeserializeObject<int?>(jsonContent) ?? throw new Exception("Max points not parsed.");
+        Console.WriteLine($"Max points loaded. Count: {maxPoints}.");
 
         var seconds = 20;
         while (true)
@@ -59,22 +64,26 @@ public class Startup
 
             StoreReward(points, gold, text, values);
 
-            if (IsGoodReward(values, text))
+            if (IsGoodReward(values, text, maxPoints))
             {
                 values = Filter(values, x => x.Key != text);
 
-                var settings = new JsonSerializerSettings
-                {
-                    Converters = { new StringEnumConverter() }
-                };
-                var json = JsonConvert.SerializeObject(values, Formatting.Indented, settings);
-                File.WriteAllText(RewardsFullPath, json);
+                Save(values, RewardsFullPath);
                 Console.WriteLine($"Rewards file overwritten.");
-
 
                 Console.WriteLine("Exit");
                 break;
             }
+
+            if (values.All(x => x.Value.Count > 1))
+            {
+                maxPoints--;
+                Save(maxPoints, MaxPointsFullPath);
+                Console.WriteLine($"Max points file overwritten.");
+            }
+
+            Save(values, RewardsFullPath);
+            Console.WriteLine($"Rewards file overwritten.");
 
             engine.SearchAnotherHunt();
             Thread.Sleep(seconds * 1000);
@@ -82,11 +91,32 @@ public class Startup
         }     
     }
 
+    public static void Save(object @object, string path)
+    {
+        var settings = new JsonSerializerSettings
+        {
+            Converters = { new StringEnumConverter() }
+        };
+        var json = JsonConvert.SerializeObject(@object, Formatting.Indented, settings);
+        File.WriteAllText(path, json);
+    }
+
     private static void StoreReward(int points, int gold, string text, Dictionary<string, HuntReward> values)
     {
-        var reward = new HuntReward(points, gold);
-        values[text] = reward;
-        Console.WriteLine($"Hunt points: {reward.Points}. Gold: {reward.Gold}.");
+        var timestamp = DateTime.UtcNow;
+        var reward = new HuntReward(points, gold, 0, timestamp);
+
+        if (!values.ContainsKey(text))
+        {
+            values[text] = reward;
+        }
+
+        // new or existing.
+        reward = values[text];
+
+        var count = reward.Count + 1;
+        values[text] = new HuntReward(reward.Points, reward.Gold, count, timestamp);
+        Console.WriteLine($"Hunt points: {reward.Points}. Gold: {reward.Gold}. Count: {count}. Timestamp: {timestamp}.");
 
         //var reward = new HuntReward(points, gold);
         //Console.Write($"Hunt points: {reward.Points}. Gold: {reward.Gold}");
@@ -101,10 +131,11 @@ public class Startup
         //}
     }
 
-    private static bool IsGoodReward(Dictionary<string, HuntReward> values, string text)
+    private static bool IsGoodReward(Dictionary<string, HuntReward> values, string text, int maxPoints)
     {
+
         var topRewards = values
-            .Where(x => IsMaxPoints(x.Value, values))
+            .Where(x => x.Value.Points >= maxPoints)
             .OrderByDescending(x => x.Value.Points)
             .ThenByDescending(x => x.Value.Gold)
             .Select(x => x.Key)
@@ -117,34 +148,22 @@ public class Startup
     {
         var i = 1;
         return values
-            .Where(x => x.Value.Points >= 3)
+            .Where(func)
             .OrderByDescending(x => x.Value.Points)
             .ThenByDescending(x => x.Value.Gold)
-            .ToDictionary(x => x.Key, x => new HuntReward(x.Value.Points, x.Value.Gold, i++));
+            .ToDictionary(x => x.Key, x => new HuntReward(x.Value.Points, x.Value.Gold, i++, x.Value.Timestamp));
     }
 
-    private static Dictionary<string, HuntReward> FilterMaxPoints(Dictionary<string, HuntReward> values)
-    {
-        var maxPoints = GetMaxPoints(values);
-        return Filter(values, x => x.Value.Points >= maxPoints);
-    }
-
-    private static bool IsMaxPoints(HuntReward reward, Dictionary<string, HuntReward> values)
-    {
-        var maxPoints = GetMaxPoints(values);
-        return reward.Points == maxPoints;
-    }
-
-    private static int GetMaxPoints(Dictionary<string, HuntReward> values)
+    private static int GetMaxPoints(Dictionary<string, HuntReward> values, ref int maxPoints)
     {
         var actualMaxPoints = values.MaxBy(x => x.Value.Points).Value.Points;
 
-        if (actualMaxPoints > 3)
+        if (actualMaxPoints > maxPoints)
         {
             Console.WriteLine($"FOUND MAX POINTS -----------------> {actualMaxPoints}.");
-            return actualMaxPoints;
+            maxPoints = actualMaxPoints;
         }
 
-        return 3;
+        return maxPoints;
     }
 }
