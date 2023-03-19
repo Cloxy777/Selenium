@@ -28,10 +28,7 @@ public class Startup
         }     
     }
 
-    private static bool IsFirstMinute()
-    {
-        throw new NotImplementedException();
-    }
+    private static bool IsFirstMinute() => DateTime.Now.Minute % 5 == 1;
 
     private static bool IsFouthMinute() => DateTime.Now.Minute % 5 == 4;
 

@@ -2,7 +2,9 @@
 
 public static class RouletteManager
 {
-    public static int Bet { get; set; } = 100;
+    private const int MinBet = 100;
+
+    public static int Bet { get; set; } = MinBet;
 
     public static bool IsWinCheck { get; set; } = true;
 
@@ -38,8 +40,8 @@ public static class RouletteManager
 
     internal static void UpdateBet(bool success)
     {
-        Bet = success ? 100 : Bet * 2;
-        if (Bet > 400) Bet = 400;
-        if (Bet == 0) Bet = 100;
+        Bet = success ? MinBet : Bet * 2;
+        if (Bet > MinBet * 3) Bet = MinBet * 3;
+        if (Bet == 0) Bet = MinBet;
     }
 }
