@@ -41,7 +41,7 @@ public class Startup
         var maxPoints = JsonConvert.DeserializeObject<int?>(jsonContent) ?? throw new Exception("Max points not parsed.");
         Console.WriteLine($"Max points loaded. {maxPoints}.");
 
-        var seconds = 20;
+        var seconds = 23;
         while (true)
         {
             values = Filter(values, x => x.Timestamp >= DateTime.UtcNow.AddDays(-1));

@@ -17,6 +17,10 @@ public abstract class HeroesEngineBase
 
     protected const string GameTavernUrl = "https://www.lordswm.com/tavern.php";
 
+    protected const string GameRouletteUrl = "https://www.lordswm.com/roulette.php";
+
+    protected const string GameRouletteResultsUrl = "https://www.lordswm.com/allroul.php";
+
     public IWebDriver Driver => WebDriverSingleton.Driver;
 
     public IWait<IWebDriver> Awaiter => WebDriverSingleton.Awaiter;
