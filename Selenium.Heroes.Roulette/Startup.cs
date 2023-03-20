@@ -11,7 +11,7 @@ public class Startup
    
         while (true)
         {
-            if (IsFirstMinute() && RouletteManager.AnyBets())
+            if (IsFirstMinute() && RouletteManager.AnyBetMarkers())
             {
                 var winningNumber = Engine.GetLastWinningNumber();
                 var isWin = IsWin(winningNumber);
