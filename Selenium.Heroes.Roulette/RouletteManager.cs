@@ -19,6 +19,14 @@ public static class RouletteManager
         IsThirdDozenBet = false;
     }
 
+    public static bool IsNoneBetMarkers()
+    {
+        return !IsZeroFifelineBet &&
+            !IsSevenSixlineBet &&
+            !IsSecondDozenBet &&
+            !IsThirdDozenBet;
+    }
+
     public static bool IsAnyBetMarkers()
     {
         return IsZeroFifelineBet ||

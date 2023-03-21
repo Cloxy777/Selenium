@@ -1,5 +1,7 @@
 ﻿namespace Selenium.Heroes.Roulette;
 
+// TODO: check if bet made on UI.
+
 public class Startup
 {
     public static HeroesRouletteEngine Engine { get; set; } = new HeroesRouletteEngine();
@@ -31,12 +33,13 @@ public class Startup
     private static DateTime InternalTreshhold { get; set; } = DateTime.Now;
 
     public static void InternalRun()
-    {
-        var isAnyBetMarkersMissed = RouletteManager.IsAnyBetMarkers() && !RouletteManager.IsAllBetMarkers();
+    {       
         var isInTime = IsFouthMinute() || IsThirdMinute() || IsSecondMinute() || IsFirstMinute();
-        var isTried = Engine.Started && !Engine.Finished || Engine.Finished && !Engine.Started;
+        
+        // In case when we started and immediately failed.
+        var isStarted = Engine.Started && !Engine.Finished;
 
-        if (isTried && !isAnyBetMarkersMissed)
+        if (!isStarted && RouletteManager.IsNoneBetMarkers())
         {
             var winningNumber = Engine.GetLastWinningNumber();
             var isWin = IsWin(winningNumber);
@@ -44,7 +47,7 @@ public class Startup
             Console.WriteLine($"Roulette update bet. Bet={RouletteManager.Bet}.");
         }
 
-        if (isInTime && (DateTime.Now > InternalTreshhold || isAnyBetMarkersMissed) || isTried)
+        if (isInTime && DateTime.Now > InternalTreshhold || isStarted)
         {
             InternalTreshhold = DateTime.Now.AddMinutes(4);
             Console.WriteLine($"Roulette started. InternalTreshhold={InternalTreshhold}.");
