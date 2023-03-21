@@ -6,7 +6,7 @@ HeroesConfiguration.ReadConfiguration();
 
 //Build the policy
 var retryPolicy = Policy.Handle<Exception>()
-    .WaitAndRetry(retryCount: 300, sleepDurationProvider: _ => TimeSpan.FromSeconds(1));
+    .WaitAndRetry(retryCount: 1000, sleepDurationProvider: _ => TimeSpan.FromSeconds(1));
 
 
 //Execute the error prone code with the policy

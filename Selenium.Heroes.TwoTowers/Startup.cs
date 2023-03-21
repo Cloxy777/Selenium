@@ -101,7 +101,7 @@ public class Startup
 
             deck = deck.Draw(cardDescriptors);
             var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors, deck);
-            
+
             var turn = decisionMaker.CreateTurn();
 
             var move = turn.Moves.First();
@@ -118,7 +118,7 @@ public class Startup
             if (turn.Moves.Count == 1)
             {
                 TurnCounter.Number++;
-            }      
+            }
 
             Console.WriteLine($"Turn number = {TurnCounter.Number}.");
             Thread.Sleep(seconds * 1000);

@@ -19,7 +19,7 @@ public static class RouletteManager
         IsThirdDozenBet = false;
     }
 
-    public static bool AnyBetMarkers()
+    public static bool IsAnyBetMarkers()
     {
         return IsZeroFifelineBet ||
             IsSevenSixlineBet ||
@@ -27,10 +27,19 @@ public static class RouletteManager
             IsThirdDozenBet;
     }
 
+    public static bool IsAllBetMarkers()
+    {
+        return IsZeroFifelineBet &&
+            IsSevenSixlineBet &&
+            IsSecondDozenBet &&
+            IsThirdDozenBet;
+
+    }
+
     public static void UpdateBet(bool success)
     {
         Bet = success ? MinBet : Bet * 2;
-        if (Bet > MinBet * 3) Bet = MinBet * 3;
+        if (Bet > MinBet * 4) Bet = MinBet * 4;
         if (Bet == 0) Bet = MinBet;
     }
 }

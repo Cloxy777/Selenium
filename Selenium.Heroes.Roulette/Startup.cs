@@ -11,7 +11,7 @@ public class Startup
    
         while (true)
         {
-            if (IsFirstMinute() && RouletteManager.AnyBetMarkers())
+            if (IsFirstMinute() && RouletteManager.IsAnyBetMarkers())
             {
                 var winningNumber = Engine.GetLastWinningNumber();
                 var isWin = IsWin(winningNumber);
@@ -32,17 +32,41 @@ public class Startup
 
     public static void InternalRun()
     {
-        if (IsFouthMinute() && DateTime.Now > InternalTreshhold) 
+        //RouletteManager.Bet = 200;
+        //var winningNumber1 = Engine.GetLastWinningNumber();
+        //var isWin1 = IsWin(winningNumber1);
+        //RouletteManager.UpdateBet(isWin1);
+
+        var isAnyBetMarkersMissed = RouletteManager.IsAnyBetMarkers() && !RouletteManager.IsAllBetMarkers();
+        var isInTime = IsFouthMinute() || IsThirdMinute() || IsSecondMinute() || IsFirstMinute();
+        var started = Engine.Started && !Engine.Finished;
+
+        if (isInTime && (DateTime.Now > InternalTreshhold || isAnyBetMarkersMissed) || started)
         {
-            var winningNumber = Engine.GetLastWinningNumber();
-            var isWin = IsWin(winningNumber);
-            RouletteManager.UpdateBet(isWin);
+            InternalTreshhold = DateTime.Now.AddMinutes(4);
+
+            Console.WriteLine($"Roulette started. InternalTreshhold={InternalTreshhold}.");
+            Console.WriteLine($"Roulette started. Initial bet={RouletteManager.Bet}.");
+
+            if (isAnyBetMarkersMissed)
+            {
+                var winningNumber = Engine.GetLastWinningNumber();
+                var isWin = IsWin(winningNumber);
+                RouletteManager.UpdateBet(isWin);
+            }
+            
+            Console.WriteLine($"Roulette processing. Initial bet={RouletteManager.Bet}.");
+            
             Engine.MakeBets();
-            InternalTreshhold = DateTime.Now.AddMinutes(3);
+            RouletteManager.ResetBetMarkers();
         }
     }
 
     private static bool IsFirstMinute() => DateTime.Now.Minute % 5 == 1;
+
+    private static bool IsSecondMinute() => DateTime.Now.Minute % 5 == 2;
+
+    private static bool IsThirdMinute() => DateTime.Now.Minute % 5 == 3;
 
     private static bool IsFouthMinute() => DateTime.Now.Minute % 5 == 4;
 

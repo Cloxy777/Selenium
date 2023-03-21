@@ -5,6 +5,9 @@ namespace Selenium.Heroes.Roulette;
 
 public class HeroesRouletteEngine : HeroesEngineBase
 {
+    private const string SelectTileWarning = "Please choose a tile or crossing to bet on";
+    private const string IncorrectBetWarning = "Incorrect bet";
+
     private const string ThirdDozenSelector = "//img[@title='3rd Dozen']";
     private const string SecondDozenSelector = "//img[@title='2nd Dozen']";
     private const string FirstDozenSelector = "//img[@title='1rd Dozen']";
@@ -17,24 +20,49 @@ public class HeroesRouletteEngine : HeroesEngineBase
 
     public void SelectBetNumbers(string selector)
     {
+        Thread.Sleep(1000);
         var roulettePoint = Awaiter.Until(x => x.FindElement(By.XPath(selector)));
         roulettePoint.Click();
+        Thread.Sleep(1000);
     }
 
     public void Input(decimal bet)
     {
+        Thread.Sleep(1000);
         // <input type="text" name="bet" size="4" value="0" alt="" title="Stake" maxlength="5" style="width:72px;">
         var input = Awaiter.Until(x => x.FindElement(By.XPath("//input[@name='bet' and @type='text']")));
         input.Clear();
         input.SendKeys(((int)bet).ToString());
+        Thread.Sleep(1000);
     }
 
     public void SubmitBet()
     {
+        Thread.Sleep(1000);
         // <input type="submit" value="Bet!" onclick="return checkbet();">
         var submit = Awaiter.Until(x => x.FindElement(By.XPath("//input[@type='submit' and @value='Bet!']")));
-        //submit.Click();
+        submit.Click();
+        Thread.Sleep(1000);
     }
+
+    private bool CheckIfWarning(string warning)
+    {
+        Thread.Sleep(1000);
+
+        // <h2>Please choose a tile or crossing to bet on</h2>
+        var elements = Awaiter.Until(x => x.FindElements(By.XPath($"//h2[text()='{warning}']")));
+        if (elements.Any())
+        {
+            var h2 = elements.First();
+            return h2.Displayed && h2.Enabled;
+        }
+
+        return false;
+    }
+
+    public bool Started { get; set; } = false;
+
+    public bool Finished { get; set; } = false;
 
     public void MakeBets()
     {
@@ -43,17 +71,22 @@ public class HeroesRouletteEngine : HeroesEngineBase
         var minimalBet = (decimal)RouletteManager.Bet;
         var bet = minimalBet;
 
+        Started = true;
+        Finished = false;
+
         if (!RouletteManager.IsZeroFifelineBet)
         {
             SelectBetNumbers(ZeroSixline);
             Input(bet);
             SubmitBet();
+            if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
+            {
+                Console.WriteLine("No zone selected warning.");
+                throw new InvalidOperationException("No zone selected warning.");
+            }
             RouletteManager.IsZeroFifelineBet = true;
             Console.WriteLine($"{nameof(ZeroSixline)} : {bet}");
-        }
-        
-
-        Thread.Sleep(1000);
+        }      
 
         if (!RouletteManager.IsSevenSixlineBet)
         {
@@ -61,11 +94,14 @@ public class HeroesRouletteEngine : HeroesEngineBase
             SelectBetNumbers(SevenSixline);
             Input(bet);
             SubmitBet();
+            if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
+            {
+                Console.WriteLine("No zone selected warning.");
+                throw new InvalidOperationException("No zone selected warning.");
+            }
             RouletteManager.IsSevenSixlineBet = true;
             Console.WriteLine($"{nameof(SevenSixline)} : {bet}");
         }
-
-        Thread.Sleep(1000);
 
         if (!RouletteManager.IsSecondDozenBet)
         {
@@ -73,11 +109,14 @@ public class HeroesRouletteEngine : HeroesEngineBase
             SelectBetNumbers(SecondDozenSelector);
             Input(bet);
             SubmitBet();
+            if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
+            {
+                Console.WriteLine("No zone selected warning.");
+                throw new InvalidOperationException("No zone selected warning.");
+            }
             RouletteManager.IsSecondDozenBet = true;
             Console.WriteLine($"{nameof(SecondDozenSelector)} : {bet}");
-        }
-
-        Thread.Sleep(1000);
+        }       
 
         if (!RouletteManager.IsThirdDozenBet)
         {
@@ -85,10 +124,20 @@ public class HeroesRouletteEngine : HeroesEngineBase
             SelectBetNumbers(ThirdDozenSelector);
             Input(bet);
             SubmitBet();
+            if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
+            {
+                Console.WriteLine("No zone selected warning.");
+                throw new InvalidOperationException("No zone selected warning.");
+            }
             RouletteManager.IsThirdDozenBet = true;
             Console.WriteLine($"{nameof(ThirdDozenSelector)} : {bet}");
         }
+
+        Started = true;
+        Finished = true;
     }
+
+
 
     public string GetLastWinningNumber()
     {
