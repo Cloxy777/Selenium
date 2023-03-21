@@ -5,6 +5,8 @@ namespace Selenium.Heroes.Roulette;
 
 public class HeroesRouletteEngine : HeroesEngineBase
 {
+    private const int SleepTime = 300;
+
     private const string SelectTileWarning = "Please choose a tile or crossing to bet on";
     private const string IncorrectBetWarning = "Incorrect bet";
 
@@ -20,34 +22,34 @@ public class HeroesRouletteEngine : HeroesEngineBase
 
     public void SelectBetNumbers(string selector)
     {
-        Thread.Sleep(1000);
+        Thread.Sleep(SleepTime);
         var roulettePoint = Awaiter.Until(x => x.FindElement(By.XPath(selector)));
         roulettePoint.Click();
-        Thread.Sleep(1000);
+        Thread.Sleep(SleepTime);
     }
 
     public void Input(decimal bet)
     {
-        Thread.Sleep(1000);
+        Thread.Sleep(SleepTime);
         // <input type="text" name="bet" size="4" value="0" alt="" title="Stake" maxlength="5" style="width:72px;">
         var input = Awaiter.Until(x => x.FindElement(By.XPath("//input[@name='bet' and @type='text']")));
         input.Clear();
         input.SendKeys(((int)bet).ToString());
-        Thread.Sleep(1000);
+        Thread.Sleep(SleepTime);
     }
 
     public void SubmitBet()
     {
-        Thread.Sleep(1000);
+        Thread.Sleep(SleepTime);
         // <input type="submit" value="Bet!" onclick="return checkbet();">
         var submit = Awaiter.Until(x => x.FindElement(By.XPath("//input[@type='submit' and @value='Bet!']")));
         submit.Click();
-        Thread.Sleep(1000);
+        Thread.Sleep(SleepTime);
     }
 
     private bool CheckIfWarning(string warning)
     {
-        Thread.Sleep(1000);
+        Thread.Sleep(SleepTime);
 
         // <h2>Please choose a tile or crossing to bet on</h2>
         var elements = Awaiter.Until(x => x.FindElements(By.XPath($"//h2[text()='{warning}']")));
