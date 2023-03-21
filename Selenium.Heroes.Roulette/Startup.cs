@@ -32,31 +32,24 @@ public class Startup
 
     public static void InternalRun()
     {
-        //RouletteManager.Bet = 200;
-        //var winningNumber1 = Engine.GetLastWinningNumber();
-        //var isWin1 = IsWin(winningNumber1);
-        //RouletteManager.UpdateBet(isWin1);
-
         var isAnyBetMarkersMissed = RouletteManager.IsAnyBetMarkers() && !RouletteManager.IsAllBetMarkers();
         var isInTime = IsFouthMinute() || IsThirdMinute() || IsSecondMinute() || IsFirstMinute();
-        var ok = Engine.Started && !Engine.Finished || Engine.Finished && !Engine.Started;
+        var isTried = Engine.Started && !Engine.Finished || Engine.Finished && !Engine.Started;
 
-        if (isInTime && (DateTime.Now > InternalTreshhold || isAnyBetMarkersMissed) || ok)
+        if (isTried && !isAnyBetMarkersMissed)
+        {
+            var winningNumber = Engine.GetLastWinningNumber();
+            var isWin = IsWin(winningNumber);
+            RouletteManager.UpdateBet(isWin);
+            Console.WriteLine($"Roulette update bet. Bet={RouletteManager.Bet}.");
+        }
+
+        if (isInTime && (DateTime.Now > InternalTreshhold || isAnyBetMarkersMissed) || isTried)
         {
             InternalTreshhold = DateTime.Now.AddMinutes(4);
-
             Console.WriteLine($"Roulette started. InternalTreshhold={InternalTreshhold}.");
-            Console.WriteLine($"Roulette started. Initial bet={RouletteManager.Bet}.");
+            Console.WriteLine($"Roulette started. Bet={RouletteManager.Bet}.");
 
-            if (!isAnyBetMarkersMissed)
-            {
-                var winningNumber = Engine.GetLastWinningNumber();
-                var isWin = IsWin(winningNumber);
-                RouletteManager.UpdateBet(isWin);
-            }
-            
-            Console.WriteLine($"Roulette processing. Initial bet={RouletteManager.Bet}.");
-            
             Engine.MakeBets();
             RouletteManager.ResetBetMarkers();
         }
