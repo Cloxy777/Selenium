@@ -39,9 +39,9 @@ public class Startup
 
         var isAnyBetMarkersMissed = RouletteManager.IsAnyBetMarkers() && !RouletteManager.IsAllBetMarkers();
         var isInTime = IsFouthMinute() || IsThirdMinute() || IsSecondMinute() || IsFirstMinute();
-        var started = Engine.Started && !Engine.Finished;
+        var ok = Engine.Started && !Engine.Finished || Engine.Finished && !Engine.Started;
 
-        if (isInTime && (DateTime.Now > InternalTreshhold || isAnyBetMarkersMissed) || started)
+        if (isInTime && (DateTime.Now > InternalTreshhold || isAnyBetMarkersMissed) || ok)
         {
             InternalTreshhold = DateTime.Now.AddMinutes(4);
 

@@ -133,7 +133,7 @@ public class HeroesRouletteEngine : HeroesEngineBase
             Console.WriteLine($"{nameof(ThirdDozenSelector)} : {bet}");
         }
 
-        Started = true;
+        Started = false;
         Finished = true;
     }
 
