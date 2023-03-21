@@ -28,6 +28,20 @@ public class Startup
         }     
     }
 
+    private static DateTime InternalTreshhold { get; set; } = DateTime.Now;
+
+    public static void InternalRun()
+    {
+        if (IsFouthMinute() && DateTime.Now > InternalTreshhold) 
+        {
+            var winningNumber = Engine.GetLastWinningNumber();
+            var isWin = IsWin(winningNumber);
+            RouletteManager.UpdateBet(isWin);
+            Engine.MakeBets();
+            InternalTreshhold = DateTime.Now.AddMinutes(3);
+        }
+    }
+
     private static bool IsFirstMinute() => DateTime.Now.Minute % 5 == 1;
 
     private static bool IsFouthMinute() => DateTime.Now.Minute % 5 == 4;

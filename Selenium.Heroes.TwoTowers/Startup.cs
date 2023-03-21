@@ -3,6 +3,7 @@ using Selenium.Heroes.Common.Managers;
 using Selenium.Heroes.Worker;
 
 using WorkerStartup = Selenium.Heroes.Worker.Startup;
+using RouletteStartup = Selenium.Heroes.Roulette.Startup;
 
 namespace Selenium.Heroes.TwoTowers;
 
@@ -27,6 +28,8 @@ public class Startup
         var deck = new Deck();
         while (true)
         {
+            RouletteStartup.InternalRun();
+
             if (engine.IsWorkAllowed())
             {
                 Console.WriteLine("Work is allowed.");

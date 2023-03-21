@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Selenium.Heroes.Common\Selenium.Heroes.Common.csproj" />
+    <ProjectReference Include="..\Selenium.Heroes.Roulette\Selenium.Heroes.Roulette.csproj" />
     <ProjectReference Include="..\Selenium.Heroes.Worker\Selenium.Heroes.Worker.csproj" />
   </ItemGroup>
 

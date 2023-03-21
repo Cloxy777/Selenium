@@ -224,7 +224,7 @@ public class Startup
         return maxPoints;
     }
 
-    private static string CreatureTemplate => @"([A-Z][a-z]+\s?[A-Za-z]*) \((\d+)\)";
+    private static string CreatureTemplate => @"([A-Z][a-z]+\s?-?[A-Za-z]*) \((\d+)\)";
 
     private static string[] StartPhraseTemplates => new[]
     {
