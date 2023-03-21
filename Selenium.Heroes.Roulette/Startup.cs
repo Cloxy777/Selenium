@@ -48,7 +48,7 @@ public class Startup
             Console.WriteLine($"Roulette started. InternalTreshhold={InternalTreshhold}.");
             Console.WriteLine($"Roulette started. Initial bet={RouletteManager.Bet}.");
 
-            if (isAnyBetMarkersMissed)
+            if (!isAnyBetMarkersMissed)
             {
                 var winningNumber = Engine.GetLastWinningNumber();
                 var isWin = IsWin(winningNumber);
