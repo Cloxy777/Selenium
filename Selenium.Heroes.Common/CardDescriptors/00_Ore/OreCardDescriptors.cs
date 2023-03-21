@@ -299,7 +299,7 @@ public class BIG_VEIN_CardDescriptor : CardDescriptor
     {
         var actualCardEffect = base.GetActualCardEffect(playerManager, enemyManager, cardDescriptors, cardDescriptor);
 
-        if (playerManager.Player.Mana > enemyManager.Player.Mines)
+        if (playerManager.Player.Mines > enemyManager.Player.Mines)
         {
             actualCardEffect.ResourceEffects = new List<ResourceEffect>
             {
