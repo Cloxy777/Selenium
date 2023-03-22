@@ -30,7 +30,7 @@ public class Startup
         }     
     }
 
-    private static DateTime NextRun { get; set; } = DateTime.Now.AddMinutes(2);
+    private static DateTime NextRun { get; set; } = DateTime.Now;
 
     private static bool IsNextRun => DateTime.Now > NextRun;
 
