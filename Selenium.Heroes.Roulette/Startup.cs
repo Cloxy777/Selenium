@@ -30,7 +30,9 @@ public class Startup
         }     
     }
 
-    private static DateTime NextRun { get; set; } = DateTime.Now;
+    private static DateTime NextRun { get; set; } = DateTime.Now.AddMinutes(2);
+
+    private static bool IsNextRun => DateTime.Now > NextRun;
 
     public static int Left => 5 - DateTime.Now.Minute % 5;
 
@@ -38,8 +40,7 @@ public class Startup
     {       
         var isInTimeRange = IsFouthMinute() || IsThirdMinute() || IsSecondMinute() || IsFirstMinute();
         
-
-        if (RouletteManager.IsFinished())
+        if (IsNextRun && RouletteManager.IsFinished())
         {
             var winningNumber = Engine.GetLastWinningNumber();
             var isWin = IsWin(winningNumber);
@@ -48,7 +49,7 @@ public class Startup
             Console.WriteLine($"Roulette update bet. Bet={RouletteManager.Bet}.");
         }
 
-        if (isInTimeRange && DateTime.Now > NextRun || RouletteManager.IsStarted())
+        if ((isInTimeRange && IsNextRun) || (RouletteManager.IsStarted() && !RouletteManager.IsFinished()))
         {
             NextRun = DateTime.Now.AddMinutes(Left);
             Console.WriteLine($"Roulette started. NextRun={NextRun}.");
@@ -63,7 +64,7 @@ public class Startup
 
     private static bool IsThirdMinute() => DateTime.Now.Minute % 5 == 3;
 
-    private static bool IsFouthMinute() => DateTime.Now.Minute % 5 == 4;
+    private static bool IsFouthMinute() => DateTime.Now.Minute % 5 == 4 && DateTime.Now.Second < 15;
 
     private static bool IsWin(string numberText)
     {

@@ -42,6 +42,11 @@ public class Startup
 
             }
 
+            if (engine.IsRoulettePage())
+            {
+                engine.NavigateToMain();
+            }
+
             var isCardGamePage = engine.IsCardGamePage();
 
             if (!isCardGamePage)

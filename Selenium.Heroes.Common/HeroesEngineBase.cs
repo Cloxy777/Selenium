@@ -74,6 +74,19 @@ public abstract class HeroesEngineBase
     }
 
 
+    public bool IsRoulettePage()
+    {
+        var actualUrl = Driver.Url;
+
+        //https://www.lordswm.com/roulette.php
+        var regex = @"https:\/\/www\.lordswm\.com\/roulette\.php";
+
+        var match = Regex.Match(actualUrl, regex, RegexOptions.IgnoreCase);
+
+        return match.Success;
+    }
+
+
     public bool IsTavernPage()
     {
         var actualUrl = Driver.Url;

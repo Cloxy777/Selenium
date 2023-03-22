@@ -11,7 +11,7 @@ public static class RouletteManager
 
     public static void Mark(Markers marker)
     {
-        Markers = Markers & marker;
+        Markers = Markers | marker;
     }
 
     public static void ResetMarkers()
@@ -46,12 +46,12 @@ public static class RouletteManager
 [Flags]
 public enum Markers
 {
-    None,
-    Started,
-    IsZeroFifelineBet,
-    IsSevenSixlineBet,
-    IsSecondDozenBet,
-    IsThirdDozenBet,
-    Finished,
+    None = 1,
+    Started = 2,
+    IsZeroFifelineBet = 4,
+    IsSevenSixlineBet = 8,
+    IsSecondDozenBet = 16,
+    IsThirdDozenBet = 32,
+    Finished = 64,
 }
 
