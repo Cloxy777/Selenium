@@ -13,12 +13,12 @@ public class Startup
    
         while (true)
         {
-            if (IsFirstMinute() && RouletteManager.IsAnyBetMarkers())
+            if (IsFirstMinute() && RouletteManager.IsStarted())
             {
                 var winningNumber = Engine.GetLastWinningNumber();
                 var isWin = IsWin(winningNumber);
                 RouletteManager.UpdateBet(isWin);
-                RouletteManager.ResetBetMarkers();
+                RouletteManager.ResetMarkers();
             }
 
             if (IsFouthMinute())
@@ -30,31 +30,30 @@ public class Startup
         }     
     }
 
-    private static DateTime InternalTreshhold { get; set; } = DateTime.Now;
+    private static DateTime NextRun { get; set; } = DateTime.Now;
+
+    public static int Left => 5 - DateTime.Now.Minute % 5;
 
     public static void InternalRun()
     {       
-        var isInTime = IsFouthMinute() || IsThirdMinute() || IsSecondMinute() || IsFirstMinute();
+        var isInTimeRange = IsFouthMinute() || IsThirdMinute() || IsSecondMinute() || IsFirstMinute();
         
-        // In case when we started and immediately failed.
-        var isStarted = Engine.Started && !Engine.Finished;
 
-        if (!isStarted && RouletteManager.IsNoneBetMarkers())
+        if (RouletteManager.IsFinished())
         {
             var winningNumber = Engine.GetLastWinningNumber();
             var isWin = IsWin(winningNumber);
             RouletteManager.UpdateBet(isWin);
+            RouletteManager.ResetMarkers();
             Console.WriteLine($"Roulette update bet. Bet={RouletteManager.Bet}.");
         }
 
-        if (isInTime && DateTime.Now > InternalTreshhold || isStarted)
+        if (isInTimeRange && DateTime.Now > NextRun || RouletteManager.IsStarted())
         {
-            InternalTreshhold = DateTime.Now.AddMinutes(4);
-            Console.WriteLine($"Roulette started. InternalTreshhold={InternalTreshhold}.");
-            Console.WriteLine($"Roulette started. Bet={RouletteManager.Bet}.");
+            NextRun = DateTime.Now.AddMinutes(Left);
+            Console.WriteLine($"Roulette started. NextRun={NextRun}.");
 
             Engine.MakeBets();
-            RouletteManager.ResetBetMarkers();
         }
     }
 

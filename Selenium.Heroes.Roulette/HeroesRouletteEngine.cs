@@ -62,9 +62,6 @@ public class HeroesRouletteEngine : HeroesEngineBase
         return false;
     }
 
-    public bool Started { get; set; } = false;
-
-    public bool Finished { get; set; } = false;
 
     public void MakeBets()
     {
@@ -73,10 +70,9 @@ public class HeroesRouletteEngine : HeroesEngineBase
         var minimalBet = (decimal)RouletteManager.Bet;
         var bet = minimalBet;
 
-        Started = true;
-        Finished = false;
+        RouletteManager.Mark(Markers.Started);
 
-        if (!RouletteManager.IsZeroFifelineBet)
+        if (!RouletteManager.HasMarker(Markers.IsZeroFifelineBet))
         {
             SelectBetNumbers(ZeroSixline);
             Input(bet);
@@ -86,11 +82,12 @@ public class HeroesRouletteEngine : HeroesEngineBase
                 Console.WriteLine("No zone selected warning.");
                 throw new InvalidOperationException("No zone selected warning.");
             }
-            RouletteManager.IsZeroFifelineBet = true;
-            Console.WriteLine($"{nameof(ZeroSixline)} : {bet}");
-        }      
 
-        if (!RouletteManager.IsSevenSixlineBet)
+            RouletteManager.Mark(Markers.IsZeroFifelineBet);
+            Console.WriteLine($"{nameof(ZeroSixline)} : {bet}");
+        }
+
+        if (!RouletteManager.HasMarker(Markers.IsSevenSixlineBet))
         {
             bet = minimalBet * 1.17m;
             SelectBetNumbers(SevenSixline);
@@ -101,11 +98,12 @@ public class HeroesRouletteEngine : HeroesEngineBase
                 Console.WriteLine("No zone selected warning.");
                 throw new InvalidOperationException("No zone selected warning.");
             }
-            RouletteManager.IsSevenSixlineBet = true;
+
+            RouletteManager.Mark(Markers.IsSevenSixlineBet);
             Console.WriteLine($"{nameof(SevenSixline)} : {bet}");
         }
 
-        if (!RouletteManager.IsSecondDozenBet)
+        if (!RouletteManager.HasMarker(Markers.IsSecondDozenBet))
         {
             bet = minimalBet * 2.34m;
             SelectBetNumbers(SecondDozenSelector);
@@ -116,11 +114,12 @@ public class HeroesRouletteEngine : HeroesEngineBase
                 Console.WriteLine("No zone selected warning.");
                 throw new InvalidOperationException("No zone selected warning.");
             }
-            RouletteManager.IsSecondDozenBet = true;
-            Console.WriteLine($"{nameof(SecondDozenSelector)} : {bet}");
-        }       
 
-        if (!RouletteManager.IsThirdDozenBet)
+            RouletteManager.Mark(Markers.IsSecondDozenBet);
+            Console.WriteLine($"{nameof(SecondDozenSelector)} : {bet}");
+        }
+
+        if (!RouletteManager.HasMarker(Markers.IsThirdDozenBet))
         {
             bet = minimalBet * 2.34m;
             SelectBetNumbers(ThirdDozenSelector);
@@ -131,15 +130,13 @@ public class HeroesRouletteEngine : HeroesEngineBase
                 Console.WriteLine("No zone selected warning.");
                 throw new InvalidOperationException("No zone selected warning.");
             }
-            RouletteManager.IsThirdDozenBet = true;
+
+            RouletteManager.Mark(Markers.IsThirdDozenBet);
             Console.WriteLine($"{nameof(ThirdDozenSelector)} : {bet}");
         }
 
-        Started = false;
-        Finished = true;
+        RouletteManager.Mark(Markers.Finished);
     }
-
-
 
     public string GetLastWinningNumber()
     {

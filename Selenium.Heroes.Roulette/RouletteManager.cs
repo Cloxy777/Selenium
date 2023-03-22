@@ -2,52 +2,56 @@
 
 public static class RouletteManager
 {
-    private const int MinBet = 100;
+    private const int MinBet = 145;
 
     public static int Bet { get; set; } = MinBet;
 
-    public static bool IsZeroFifelineBet { get; set; } = false;
-    public static bool IsSevenSixlineBet { get; set; } = false;
-    public static bool IsSecondDozenBet { get; set; } = false;
-    public static bool IsThirdDozenBet { get; set; } = false;
 
-    public static void ResetBetMarkers()
+    private static Markers Markers { get; set; } = Markers.None;
+
+    public static void Mark(Markers marker)
     {
-        IsZeroFifelineBet = false;
-        IsSevenSixlineBet = false;
-        IsSecondDozenBet = false;
-        IsThirdDozenBet = false;
+        Markers = Markers & marker;
     }
 
-    public static bool IsNoneBetMarkers()
+    public static void ResetMarkers()
     {
-        return !IsZeroFifelineBet &&
-            !IsSevenSixlineBet &&
-            !IsSecondDozenBet &&
-            !IsThirdDozenBet;
+        Markers = Markers.None;
     }
 
-    public static bool IsAnyBetMarkers()
+    public static bool IsStarted()
     {
-        return IsZeroFifelineBet ||
-            IsSevenSixlineBet ||
-            IsSecondDozenBet ||
-            IsThirdDozenBet;
+        return HasMarker(Markers.Started);
     }
 
-    public static bool IsAllBetMarkers()
+    public static bool IsFinished()
     {
-        return IsZeroFifelineBet &&
-            IsSevenSixlineBet &&
-            IsSecondDozenBet &&
-            IsThirdDozenBet;
+        return HasMarker(Markers.Finished);
+    }
 
+    public static bool HasMarker(Markers marker)
+    {
+        return Markers.HasFlag(marker);
     }
 
     public static void UpdateBet(bool success)
     {
         Bet = success ? MinBet : Bet * 2;
         if (Bet > MinBet * 4) Bet = MinBet * 4;
-        if (Bet == 0) Bet = MinBet;
+        if (Bet < MinBet) Bet = MinBet;
     }
 }
+
+
+[Flags]
+public enum Markers
+{
+    None,
+    Started,
+    IsZeroFifelineBet,
+    IsSevenSixlineBet,
+    IsSecondDozenBet,
+    IsThirdDozenBet,
+    Finished,
+}
+
