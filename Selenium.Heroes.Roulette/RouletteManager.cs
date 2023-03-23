@@ -2,7 +2,7 @@
 
 public static class RouletteManager
 {
-    private const int MinBet = 145;
+    private const int MinBet = 500;
 
     public static int Bet { get; set; } = MinBet;
 
@@ -37,7 +37,7 @@ public static class RouletteManager
     public static void UpdateBet(bool success)
     {
         Bet = success ? MinBet : Bet * 2;
-        if (Bet > MinBet * 4) Bet = MinBet * 4;
+        if (Bet > MinBet * 8) Bet = MinBet;
         if (Bet < MinBet) Bet = MinBet;
     }
 }
@@ -52,6 +52,8 @@ public enum Markers
     IsSevenSixlineBet = 8,
     IsSecondDozenBet = 16,
     IsThirdDozenBet = 32,
-    Finished = 64,
+    Black = 64,
+    Even = 128,
+    Finished = 256,
 }
 

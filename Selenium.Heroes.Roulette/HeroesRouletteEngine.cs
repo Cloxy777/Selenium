@@ -14,6 +14,9 @@ public class HeroesRouletteEngine : HeroesEngineBase
     private const string SecondDozenSelector = "//img[@title='2nd Dozen']";
     private const string FirstDozenSelector = "//img[@title='1rd Dozen']";
 
+    private const string BlackSelector = "//img[@title='BLACK']";
+    private const string EvenSelector = "//img[@title='EVEN']";
+
     // <img src="https://dcdn2.lordswm.com/i/roul/kd.png" onclick="putbet(this)" alt="" title="Sixline 7-12" width="12" height="12" onmouseover="ch(this)" class="" style="cursor: pointer;">
     private const string SevenSixline = "//img[@title='Sixline 7-12']";
 
@@ -72,9 +75,9 @@ public class HeroesRouletteEngine : HeroesEngineBase
 
         RouletteManager.Mark(Markers.Started);
 
-        if (!RouletteManager.HasMarker(Markers.IsZeroFifelineBet))
+        if (!RouletteManager.HasMarker(Markers.Even))
         {
-            SelectBetNumbers(ZeroSixline);
+            SelectBetNumbers(EvenSelector);
             Input(bet);
             SubmitBet();
             if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
@@ -83,57 +86,87 @@ public class HeroesRouletteEngine : HeroesEngineBase
                 throw new InvalidOperationException("No zone selected warning.");
             }
 
-            RouletteManager.Mark(Markers.IsZeroFifelineBet);
-            Console.WriteLine($"{nameof(ZeroSixline)} : {bet}");
+            RouletteManager.Mark(Markers.Even);
+            Console.WriteLine($"{nameof(EvenSelector)} : {bet}");
         }
 
-        if (!RouletteManager.HasMarker(Markers.IsSevenSixlineBet))
-        {
-            bet = minimalBet * 1.17m;
-            SelectBetNumbers(SevenSixline);
-            Input(bet);
-            SubmitBet();
-            if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
-            {
-                Console.WriteLine("No zone selected warning.");
-                throw new InvalidOperationException("No zone selected warning.");
-            }
+        //if (!RouletteManager.HasMarker(Markers.Black))
+        //{
+        //    SelectBetNumbers(BlackSelector);
+        //    Input(bet);
+        //    SubmitBet();
+        //    if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
+        //    {
+        //        Console.WriteLine("No zone selected warning.");
+        //        throw new InvalidOperationException("No zone selected warning.");
+        //    }
 
-            RouletteManager.Mark(Markers.IsSevenSixlineBet);
-            Console.WriteLine($"{nameof(SevenSixline)} : {bet}");
-        }
+        //    RouletteManager.Mark(Markers.Black);
+        //    Console.WriteLine($"{nameof(BlackSelector)} : {bet}");
+        //}
 
-        if (!RouletteManager.HasMarker(Markers.IsSecondDozenBet))
-        {
-            bet = minimalBet * 2.34m;
-            SelectBetNumbers(SecondDozenSelector);
-            Input(bet);
-            SubmitBet();
-            if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
-            {
-                Console.WriteLine("No zone selected warning.");
-                throw new InvalidOperationException("No zone selected warning.");
-            }
+        //if (!RouletteManager.HasMarker(Markers.IsZeroFifelineBet))
+        //{
+        //    SelectBetNumbers(ZeroSixline);
+        //    Input(bet);
+        //    SubmitBet();
+        //    if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
+        //    {
+        //        Console.WriteLine("No zone selected warning.");
+        //        throw new InvalidOperationException("No zone selected warning.");
+        //    }
 
-            RouletteManager.Mark(Markers.IsSecondDozenBet);
-            Console.WriteLine($"{nameof(SecondDozenSelector)} : {bet}");
-        }
+        //    RouletteManager.Mark(Markers.IsZeroFifelineBet);
+        //    Console.WriteLine($"{nameof(ZeroSixline)} : {bet}");
+        //}
 
-        if (!RouletteManager.HasMarker(Markers.IsThirdDozenBet))
-        {
-            bet = minimalBet * 2.34m;
-            SelectBetNumbers(ThirdDozenSelector);
-            Input(bet);
-            SubmitBet();
-            if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
-            {
-                Console.WriteLine("No zone selected warning.");
-                throw new InvalidOperationException("No zone selected warning.");
-            }
+        //if (!RouletteManager.HasMarker(Markers.IsSevenSixlineBet))
+        //{
+        //    bet = minimalBet * 1.17m;
+        //    SelectBetNumbers(SevenSixline);
+        //    Input(bet);
+        //    SubmitBet();
+        //    if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
+        //    {
+        //        Console.WriteLine("No zone selected warning.");
+        //        throw new InvalidOperationException("No zone selected warning.");
+        //    }
 
-            RouletteManager.Mark(Markers.IsThirdDozenBet);
-            Console.WriteLine($"{nameof(ThirdDozenSelector)} : {bet}");
-        }
+        //    RouletteManager.Mark(Markers.IsSevenSixlineBet);
+        //    Console.WriteLine($"{nameof(SevenSixline)} : {bet}");
+        //}
+
+        //if (!RouletteManager.HasMarker(Markers.IsSecondDozenBet))
+        //{
+        //    bet = minimalBet * 2.34m;
+        //    SelectBetNumbers(SecondDozenSelector);
+        //    Input(bet);
+        //    SubmitBet();
+        //    if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
+        //    {
+        //        Console.WriteLine("No zone selected warning.");
+        //        throw new InvalidOperationException("No zone selected warning.");
+        //    }
+
+        //    RouletteManager.Mark(Markers.IsSecondDozenBet);
+        //    Console.WriteLine($"{nameof(SecondDozenSelector)} : {bet}");
+        //}
+
+        //if (!RouletteManager.HasMarker(Markers.IsThirdDozenBet))
+        //{
+        //    bet = minimalBet * 2.34m;
+        //    SelectBetNumbers(ThirdDozenSelector);
+        //    Input(bet);
+        //    SubmitBet();
+        //    if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
+        //    {
+        //        Console.WriteLine("No zone selected warning.");
+        //        throw new InvalidOperationException("No zone selected warning.");
+        //    }
+
+        //    RouletteManager.Mark(Markers.IsThirdDozenBet);
+        //    Console.WriteLine($"{nameof(ThirdDozenSelector)} : {bet}");
+        //}
 
         RouletteManager.Mark(Markers.Finished);
     }

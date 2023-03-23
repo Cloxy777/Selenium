@@ -42,88 +42,88 @@ public class Startup
 
             }
 
-            if (engine.IsRoulettePage())
-            {
-                engine.NavigateToMain();
-            }
+            //if (engine.IsRoulettePage())
+            //{
+            //    engine.NavigateToMain();
+            //}
 
-            var isCardGamePage = engine.IsCardGamePage();
+            //var isCardGamePage = engine.IsCardGamePage();
 
-            if (!isCardGamePage)
-            {
-                TurnCounter.Number = 1;
-                Console.WriteLine($"Turn number = {TurnCounter.Number}.");
+            //if (!isCardGamePage)
+            //{
+            //    TurnCounter.Number = 1;
+            //    Console.WriteLine($"Turn number = {TurnCounter.Number}.");
 
-                if (!engine.IsRegistered())
-                {
-                    engine.RegisterChallenge();
+            //    if (!engine.IsRegistered())
+            //    {
+            //        engine.RegisterChallenge();
 
-                    Console.WriteLine("Game registered.");
+            //        Console.WriteLine("Game registered.");
 
-                    Thread.Sleep(seconds * 1000);
-                    continue;
-                }
+            //        Thread.Sleep(seconds * 1000);
+            //        continue;
+            //    }
 
-                if (engine.IsPlayerFound())
-                {
-                    engine.SubmitPlayer();
+            //    if (engine.IsPlayerFound())
+            //    {
+            //        engine.SubmitPlayer();
 
-                    Console.WriteLine("Player found.");
+            //        Console.WriteLine("Player found.");
 
-                    Thread.Sleep(seconds * 1000);
-                    continue;
-                }
+            //        Thread.Sleep(seconds * 1000);
+            //        continue;
+            //    }
 
-                Console.WriteLine("Not in the card game.");
-                Thread.Sleep(seconds * 1000);
-                continue;
-            }
+            //    Console.WriteLine("Not in the card game.");
+            //    Thread.Sleep(seconds * 1000);
+            //    continue;
+            //}
 
-            // Provide some time window for worker.
-            if (engine.IsGameFinished())
-            {
-                deck = new Deck();
-                engine.Continue();
+            //// Provide some time window for worker.
+            //if (engine.IsGameFinished())
+            //{
+            //    deck = new Deck();
+            //    engine.Continue();
 
-                Console.WriteLine("Run worker..");
-                WorkerStartup.InternalRun();
+            //    Console.WriteLine("Run worker..");
+            //    WorkerStartup.InternalRun();
 
-                Console.WriteLine("Continue card game..");
-                Thread.Sleep(seconds * 1000);
-                continue;
-            }
+            //    Console.WriteLine("Continue card game..");
+            //    Thread.Sleep(seconds * 1000);
+            //    continue;
+            //}
 
-            if (!engine.IsOurTurn() || (!engine.TimeIsInRange(0, 38) && !engine.TimeIsInRange(42, 118)))
-            {
-                Console.WriteLine("Not our turn.");
-                Thread.Sleep(seconds * 1000);
-                continue;
-            }
+            //if (!engine.IsOurTurn() || (!engine.TimeIsInRange(0, 38) && !engine.TimeIsInRange(42, 118)))
+            //{
+            //    Console.WriteLine("Not our turn.");
+            //    Thread.Sleep(seconds * 1000);
+            //    continue;
+            //}
 
-            var player = engine.GetPlayerInfo();
-            var enemy = engine.GetEnemyInfo();
-            var cardDescriptors = engine.GetCardDescriptors();
+            //var player = engine.GetPlayerInfo();
+            //var enemy = engine.GetEnemyInfo();
+            //var cardDescriptors = engine.GetCardDescriptors();
 
-            deck = deck.Draw(cardDescriptors);
-            var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors, deck);
+            //deck = deck.Draw(cardDescriptors);
+            //var decisionMaker = new DecisionMaker(player, enemy, cardDescriptors, deck);
 
-            var turn = decisionMaker.CreateTurn();
+            //var turn = decisionMaker.CreateTurn();
 
-            var move = turn.Moves.First();
-            Play(move, deck, engine);
-            Thread.Sleep(seconds * 1000);
+            //var move = turn.Moves.First();
+            //Play(move, deck, engine);
+            //Thread.Sleep(seconds * 1000);
 
-            if (turn.Moves.Count == 3)
-            {
-                move = turn.Moves[1];
-                Play(move, deck, engine);
-                Thread.Sleep(seconds * 1000);
-            }
+            //if (turn.Moves.Count == 3)
+            //{
+            //    move = turn.Moves[1];
+            //    Play(move, deck, engine);
+            //    Thread.Sleep(seconds * 1000);
+            //}
 
-            if (turn.Moves.Count == 1)
-            {
-                TurnCounter.Number++;
-            }
+            //if (turn.Moves.Count == 1)
+            //{
+            //    TurnCounter.Number++;
+            //}
 
             Console.WriteLine($"Turn number = {TurnCounter.Number}.");
             Thread.Sleep(seconds * 1000);
