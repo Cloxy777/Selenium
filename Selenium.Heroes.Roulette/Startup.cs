@@ -40,7 +40,7 @@ public class Startup
     {       
         var isInTimeRange = IsFouthMinute() || IsThirdMinute() || IsSecondMinute() || IsFirstMinute();
         
-        if (IsNextRun && RouletteManager.IsFinished())
+        if (isInTimeRange && IsNextRun && RouletteManager.IsFinished())
         {
             var winningNumber = Engine.GetLastWinningNumber();
             var isWin = IsWin(winningNumber);
