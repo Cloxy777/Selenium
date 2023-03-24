@@ -43,7 +43,7 @@ public class Startup
         if (isInTimeRange && IsNextRun && RouletteManager.IsFinished())
         {
             var winningNumber = Engine.GetLastWinningNumber();
-            var isWin = IsEvenWin(winningNumber);
+            var isWin = RouletteManager.SelectBetType() == BetType.Even ? IsEvenWin(winningNumber) : IsOddWin(winningNumber);
             RouletteManager.UpdateBet(isWin);
             RouletteManager.ResetMarkers();
             Console.WriteLine($"Roulette update bet. Bet={RouletteManager.Bet}.");
@@ -85,6 +85,26 @@ public class Startup
 
     //    return success;
     //}
+
+    private static bool IsOddWin(string numberText)
+    {
+        var winningNumbers = new[]
+        {
+            "",
+            "",
+            "1",    "",    "3",   "",   "No",   "",
+            "7",    "",    "9",   "",   "11",   "",
+            "13",   "",   "15",   "",   "17",   "",
+            "19",   "",   "21",   "",   "23",   "",
+            "25",   "",   "27",   "",   "29",   "",
+            "31",   "",   "33",   "",   "35",   "",
+        };
+
+        var success = winningNumbers.Any(x => x.Equals(numberText, StringComparison.OrdinalIgnoreCase));
+        Console.WriteLine($"Win: {success}.");
+
+        return success;
+    }
 
     private static bool IsEvenWin(string numberText)
     {
