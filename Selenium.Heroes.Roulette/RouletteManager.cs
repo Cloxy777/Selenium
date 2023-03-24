@@ -1,13 +1,24 @@
 ﻿namespace Selenium.Heroes.Roulette;
 
+public enum BetType
+{
+    Even,
+    Odd
+}
+
 public static class RouletteManager
 {
-    private const int MinBet = 500;
+    private const int MinBet = 125;
 
     public static int Bet { get; set; } = MinBet;
 
 
     private static Markers Markers { get; set; } = Markers.None;
+
+    public static BetType SelectBetType()
+    {
+        return Bet == MinBet * (2 ^ 5) ? BetType.Odd : BetType.Even;
+    }
 
     public static void Mark(Markers marker)
     {
@@ -37,7 +48,7 @@ public static class RouletteManager
     public static void UpdateBet(bool success)
     {
         Bet = success ? MinBet : Bet * 2;
-        if (Bet > MinBet * 8) Bet = MinBet;
+        if (Bet > MinBet * 32) Bet = MinBet;
         if (Bet < MinBet) Bet = MinBet;
     }
 }

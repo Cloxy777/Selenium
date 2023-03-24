@@ -15,7 +15,9 @@ public class HeroesRouletteEngine : HeroesEngineBase
     private const string FirstDozenSelector = "//img[@title='1rd Dozen']";
 
     private const string BlackSelector = "//img[@title='BLACK']";
+
     private const string EvenSelector = "//img[@title='EVEN']";
+    private const string OddSelector = "//img[@title='ODD']";
 
     // <img src="https://dcdn2.lordswm.com/i/roul/kd.png" onclick="putbet(this)" alt="" title="Sixline 7-12" width="12" height="12" onmouseover="ch(this)" class="" style="cursor: pointer;">
     private const string SevenSixline = "//img[@title='Sixline 7-12']";
@@ -77,7 +79,11 @@ public class HeroesRouletteEngine : HeroesEngineBase
 
         if (!RouletteManager.HasMarker(Markers.Even))
         {
-            SelectBetNumbers(EvenSelector);
+            var selectBet = RouletteManager.SelectBetType();
+            var selector = selectBet == BetType.Even ? EvenSelector : OddSelector;
+            Console.WriteLine($"SelectBet: {selectBet}.");
+
+            SelectBetNumbers(selector);
             Input(bet);
             SubmitBet();
             if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
