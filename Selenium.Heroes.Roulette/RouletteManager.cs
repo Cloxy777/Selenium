@@ -50,7 +50,14 @@ public static class RouletteManager
 
     public static void UpdateBet(bool success)
     {
-        CurrentLost = success ? 0 : CurrentLost + Bet;
+        if (success)
+        {
+            CurrentLost = 0;
+            Bet = MinBet;
+            return;
+        }
+
+        CurrentLost = CurrentLost + Bet;
         Console.WriteLine($"Lost : {CurrentLost}.");
 
         Bet = GetBetPossibleWin() <= GetFurtherLost() ? Bet * 2 : Bet;
