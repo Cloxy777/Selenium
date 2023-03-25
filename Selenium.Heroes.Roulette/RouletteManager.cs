@@ -8,13 +8,11 @@ public enum BetType
 
 public static class RouletteManager
 {
-    private const int MinBet = 100;
+    private const int MinBet = 125;
 
     private const int MaxBet = 4000;
 
     public static int Bet { get; set; } = MinBet;
-
-    private static int Looses { get; set; }
 
     private static int CurrentLost { get; set; }
 
