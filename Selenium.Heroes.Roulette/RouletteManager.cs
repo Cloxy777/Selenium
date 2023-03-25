@@ -8,7 +8,9 @@ public enum BetType
 
 public static class RouletteManager
 {
-    private const int MinBet = 125;
+    private const int MinBet = 100;
+
+    private const int MaxBet = 4000;
 
     public static int Bet { get; set; } = MinBet;
 
@@ -17,7 +19,7 @@ public static class RouletteManager
 
     public static BetType SelectBetType()
     {
-        return Bet == MinBet * (2 ^ 5) ? BetType.Odd : BetType.Even;
+        return Bet == MaxBet ? BetType.Odd : BetType.Even;
     }
 
     public static void Mark(Markers marker)
@@ -48,7 +50,7 @@ public static class RouletteManager
     public static void UpdateBet(bool success)
     {
         Bet = success ? MinBet : Bet * 2;
-        if (Bet > MinBet * 32) Bet = MinBet;
+        if (Bet > MaxBet) Bet = MinBet;
         if (Bet < MinBet) Bet = MinBet;
     }
 }
