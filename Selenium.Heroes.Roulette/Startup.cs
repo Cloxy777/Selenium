@@ -1,9 +1,13 @@
-﻿namespace Selenium.Heroes.Roulette;
+﻿using Newtonsoft.Json;
+
+namespace Selenium.Heroes.Roulette;
 
 // TODO: check if bet made on UI.
 
 public class Startup
 {
+    public const string FinishFullPath = @"..\..\..\finish.json";
+
     public static HeroesRouletteEngine Engine { get; set; } = new HeroesRouletteEngine();
 
     public static void Run() 
@@ -36,8 +40,15 @@ public class Startup
 
     public static int Left => 5 - DateTime.Now.Minute % 5;
 
+    public static bool Finish { get; set; } = false;
+
     public static void InternalRun()
-    {       
+    {
+        if (Finish)
+        {
+            return;
+        }
+
         var isInTimeRange = IsFouthMinute() || IsThirdMinute() || IsSecondMinute() || IsFirstMinute();
         
         if (isInTimeRange && IsNextRun && RouletteManager.IsFinished())
@@ -46,6 +57,13 @@ public class Startup
             var isWin = IsSplitWin(winningNumber);
             RouletteManager.UpdateBet(isWin);
             RouletteManager.ResetMarkers();
+
+            if (isWin)
+            {
+                var jsonContent = File.ReadAllText(FinishFullPath);
+                Finish = JsonConvert.DeserializeObject<bool?>(jsonContent) ?? throw new Exception("Finish not parsed.");
+                Console.WriteLine($"Finish: {Finish}.");
+            }
         }
 
         if ((isInTimeRange && IsNextRun) || (RouletteManager.IsStarted() && !RouletteManager.IsFinished()))

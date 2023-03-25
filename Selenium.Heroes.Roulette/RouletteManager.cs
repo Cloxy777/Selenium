@@ -16,6 +16,8 @@ public static class RouletteManager
 
     private static int Looses { get; set; }
 
+    private static int CurrentLost { get; set; }
+
     private static Markers Markers { get; set; } = Markers.None;
 
     public static BetType SelectBetType()
@@ -50,15 +52,19 @@ public static class RouletteManager
 
     public static void UpdateBet(bool success)
     {
-        Looses = success ? 0 : Looses + 1;
-        Console.WriteLine($"Looses : {Looses}.");
+        CurrentLost = success ? 0 : CurrentLost + Bet;
+        Console.WriteLine($"Lost : {CurrentLost}.");
 
-        Bet = Looses % 15 == 0 ? Bet * 2 : MinBet;
+        Bet = GetBetPossibleWin() <= GetFurtherLost() ? Bet * 2 : Bet;
         Console.WriteLine($"Bet : {Bet}.");
 
         if (Bet > MaxBet) Bet = MinBet;
         if (Bet < MinBet) Bet = MinBet;
     }
+
+    public static int GetBetPossibleWin() => Bet * 18;
+
+    public static int GetFurtherLost() => CurrentLost + Bet;
 }
 
 
