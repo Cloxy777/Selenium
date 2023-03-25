@@ -14,6 +14,7 @@ public static class RouletteManager
 
     public static int Bet { get; set; } = MinBet;
 
+    private static int Looses { get; set; }
 
     private static Markers Markers { get; set; } = Markers.None;
 
@@ -49,7 +50,12 @@ public static class RouletteManager
 
     public static void UpdateBet(bool success)
     {
-        Bet = success ? MinBet : Bet * 2;
+        Looses = success ? 0 : Looses + 1;
+        Console.WriteLine($"Looses : {Looses}.");
+
+        Bet = Looses % 15 == 0 ? Bet * 2 : MinBet;
+        Console.WriteLine($"Bet : {Bet}.");
+
         if (Bet > MaxBet) Bet = MinBet;
         if (Bet < MinBet) Bet = MinBet;
     }
@@ -67,6 +73,8 @@ public enum Markers
     IsThirdDozenBet = 32,
     Black = 64,
     Even = 128,
-    Finished = 256,
+    Odd = 256,
+    Split = 512,
+    Finished = 1024,
 }
 

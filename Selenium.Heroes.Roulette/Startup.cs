@@ -16,7 +16,7 @@ public class Startup
             if (IsFirstMinute() && RouletteManager.IsStarted())
             {
                 var winningNumber = Engine.GetLastWinningNumber();
-                var isWin = IsEvenWin(winningNumber);
+                var isWin = IsSplitWin(winningNumber);
                 RouletteManager.UpdateBet(isWin);
                 RouletteManager.ResetMarkers();
             }
@@ -43,10 +43,9 @@ public class Startup
         if (isInTimeRange && IsNextRun && RouletteManager.IsFinished())
         {
             var winningNumber = Engine.GetLastWinningNumber();
-            var isWin = RouletteManager.SelectBetType() == BetType.Even ? IsEvenWin(winningNumber) : IsOddWin(winningNumber);
+            var isWin = IsSplitWin(winningNumber);
             RouletteManager.UpdateBet(isWin);
             RouletteManager.ResetMarkers();
-            Console.WriteLine($"Roulette update bet. Bet={RouletteManager.Bet}.");
         }
 
         if ((isInTimeRange && IsNextRun) || (RouletteManager.IsStarted() && !RouletteManager.IsFinished()))
@@ -66,62 +65,16 @@ public class Startup
 
     private static bool IsFouthMinute() => DateTime.Now.Minute % 5 == 4 && DateTime.Now.Second < 15;
 
-    //private static bool IsWin(string numberText)
-    //{
-    //    var winningNumbers = new[]
-    //    {
-    //        "00",
-    //        "0",
-    //        "1",    "2",    "3",    "No",   "No",   "No",
-    //        "7",    "8",    "9",    "10",   "11",   "12",
-    //        "13",   "14",   "15",   "16",   "17",   "18",
-    //        "19",   "20",   "21",   "22",   "23",   "24",
-    //        "25",   "26",   "27",   "28",   "29",   "30",
-    //        "31",   "32",   "33",   "34",   "35",   "36",
-    //    };
-
-    //    var success = winningNumbers.Any(x => x.Equals(numberText, StringComparison.OrdinalIgnoreCase));
-    //    Console.WriteLine($"Win: {success}.");
-
-    //    return success;
-    //}
-
-    private static bool IsOddWin(string numberText)
+    private static bool IsSplitWin(string numberText)
     {
         var winningNumbers = new[]
         {
-            "",
-            "",
-            "1",    "",    "3",   "",   "No",   "",
-            "7",    "",    "9",   "",   "11",   "",
-            "13",   "",   "15",   "",   "17",   "",
-            "19",   "",   "21",   "",   "23",   "",
-            "25",   "",   "27",   "",   "29",   "",
-            "31",   "",   "33",   "",   "35",   "",
+            "00",
+            "0"
         };
 
         var success = winningNumbers.Any(x => x.Equals(numberText, StringComparison.OrdinalIgnoreCase));
         Console.WriteLine($"Win: {success}.");
-
-        return success;
-    }
-
-    private static bool IsEvenWin(string numberText)
-    {
-        var winningNumbers = new[]
-        {
-            "",
-            "",
-            "",     "2",    "",     "4",    "",     "6",
-            "",     "8",    "",     "10",   "",     "12",
-            "",     "14",   "",     "16",   "",     "18",
-            "",     "20",   "",     "22",   "",     "24",
-            "",     "26",   "",     "28",   "",     "30",
-            "",     "32",   "",     "34",   "",     "36",
-        };
-
-        var success = winningNumbers.Any(x => x.Equals(numberText, StringComparison.OrdinalIgnoreCase));
-        Console.WriteLine($"Win: {success}. {DateTime.Now}");
 
         return success;
     }
