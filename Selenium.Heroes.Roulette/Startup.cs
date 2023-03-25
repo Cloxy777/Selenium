@@ -6,7 +6,7 @@ namespace Selenium.Heroes.Roulette;
 
 public class Startup
 {
-    public const string FinishFullPath = @"..\..\..\finish.json";
+    public const string FinishFullPath = @".\finish.json";
 
     public static HeroesRouletteEngine Engine { get; set; } = new HeroesRouletteEngine();
 
