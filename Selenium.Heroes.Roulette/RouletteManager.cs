@@ -8,7 +8,7 @@ public enum BetType
 
 public static class RouletteManager
 {
-    private const int MinBet = 125;
+    private const int MinBet = 4000;
 
     private const int MaxBet = 4000;
 
@@ -50,21 +50,18 @@ public static class RouletteManager
 
     public static void UpdateBet(bool success)
     {
-        if (success)
-        {
-            CurrentLost = 0;
-            Bet = MinBet;
-            return;
-        }
+        //if (success)
+        //{
+        //    CurrentLost = 0;
+        //    Bet = MinBet;
+        //    return;
+        //}
 
-        CurrentLost = CurrentLost + Bet;
-        Console.WriteLine($"Lost : {CurrentLost}.");
+        //CurrentLost = CurrentLost + Bet;
+        //Console.WriteLine($"Lost : {CurrentLost}.");
 
-        Bet = GetBetPossibleWin() <= GetFurtherLost() ? Bet * 2 : Bet;
-        Console.WriteLine($"Bet : {Bet}.");
-
-        if (Bet > MaxBet) Bet = MinBet;
-        if (Bet < MinBet) Bet = MinBet;
+        //Bet = GetBetPossibleWin() <= GetFurtherLost() ? Bet * 2 : Bet;
+        //Console.WriteLine($"Bet : {Bet}.");
     }
 
     public static int GetBetPossibleWin() => Bet * 18;
@@ -86,6 +83,7 @@ public enum Markers
     Even = 128,
     Odd = 256,
     Split = 512,
-    Finished = 1024,
+    Number = 1024,
+    Finished = 2048,
 }
 

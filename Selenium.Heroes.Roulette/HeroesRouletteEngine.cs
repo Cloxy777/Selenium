@@ -21,6 +21,8 @@ public class HeroesRouletteEngine : HeroesEngineBase
 
     private const string SplitSelector = "//img[@title='Split 0, 00']";
 
+    private const string ThirtyFourSelector = "//img[@title='Straight up 34']";
+
     // <img src="https://dcdn2.lordswm.com/i/roul/kd.png" onclick="putbet(this)" alt="" title="Sixline 7-12" width="12" height="12" onmouseover="ch(this)" class="" style="cursor: pointer;">
     private const string SevenSixline = "//img[@title='Sixline 7-12']";
 
@@ -79,9 +81,9 @@ public class HeroesRouletteEngine : HeroesEngineBase
 
         RouletteManager.Mark(Markers.Started);
 
-        if (!RouletteManager.HasMarker(Markers.Split))
+        if (!RouletteManager.HasMarker(Markers.Number))
         {
-            SelectBetNumbers(SplitSelector);
+            SelectBetNumbers(ThirtyFourSelector);
             Input(bet);
             SubmitBet();
             if (CheckIfWarning(SelectTileWarning) || CheckIfWarning(IncorrectBetWarning))
@@ -90,8 +92,8 @@ public class HeroesRouletteEngine : HeroesEngineBase
                 throw new InvalidOperationException("No zone selected warning.");
             }
 
-            RouletteManager.Mark(Markers.Split);
-            Console.WriteLine($"{nameof(SplitSelector)} : {bet}");
+            RouletteManager.Mark(Markers.Number);
+            Console.WriteLine($"{nameof(ThirtyFourSelector)} : {bet}");
         }
 
         RouletteManager.Mark(Markers.Finished);
