@@ -20,7 +20,7 @@ public class Startup
             if (IsFirstMinute() && RouletteManager.IsStarted())
             {
                 var winningNumber = Engine.GetLastWinningNumber();
-                var isWin = IsSplitWin(winningNumber);
+                var isWin = IsNumberWin(winningNumber);
                 RouletteManager.UpdateBet(isWin);
                 RouletteManager.ResetMarkers();
             }
@@ -54,7 +54,7 @@ public class Startup
         if (isInTimeRange && IsNextRun && RouletteManager.IsFinished())
         {
             var winningNumber = Engine.GetLastWinningNumber();
-            var isWin = IsSplitWin(winningNumber);
+            var isWin = IsNumberWin(winningNumber);
             RouletteManager.UpdateBet(isWin);
             RouletteManager.ResetMarkers();
 
@@ -83,12 +83,11 @@ public class Startup
 
     private static bool IsFouthMinute() => DateTime.Now.Minute % 5 == 4 && DateTime.Now.Second < 15;
 
-    private static bool IsSplitWin(string numberText)
+    private static bool IsNumberWin(string numberText)
     {
         var winningNumbers = new[]
         {
-            "00",
-            "0"
+            "34"
         };
 
         var success = winningNumbers.Any(x => x.Equals(numberText, StringComparison.OrdinalIgnoreCase));
